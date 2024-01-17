@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export const SideBar = () => {
   return (
-    <div>
+    <Wrap>
         <SideBarWrap>
             <ButtonWrap>
                 <Write>
@@ -24,6 +24,6 @@ export const SideBar = () => {
                 </Call>
             </ButtonWrap>
         </SideBarWrap>
-    </div>
+    </Wrap>
   )
 }

@@ -2,12 +2,12 @@ import styled from "@emotion/styled";
 
 export const MainWrap = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content:center;  
-    width: 1980px;
-    height: 100vh;
+    width: 1260px;
+    margin: 0 auto;
+    gap: 130px;
     .section-1 {
-        width: 1300px;
-        height: 100px;
     }
 
     .title {
@@ -27,6 +27,7 @@ export const MainWrap = styled.div`
     }
     .mySwiper {
         top: 40px;
+        width: 1260px;
     .desc-wrap {
         line-height: 30px;
         text-align: left;
@@ -54,6 +55,10 @@ export const MainWrap = styled.div`
         }
     }
     }    
+    .section-2, .section-3, .section-4{
+        gap: 1000px;
+        
+    }
 `
 export const BtWrap = styled.div`
     display: flex;
@@ -83,7 +88,7 @@ export const MoreBtWrap = styled.div`
 `
 export const MoreBt = styled.button`
     top: 100px;
-    padding-top: 17px;
+    padding-top: 20px;
     display: flex;
     justify-content: space-evenly;
     border: 3px solid #2C39B5;
@@ -110,5 +115,5 @@ export const MoreBt = styled.button`
         &:hover img {
             content: url("../images/arrow1.svg");
             
-        }
+        }    
 `

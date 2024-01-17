@@ -15,6 +15,8 @@ const LazyAddEditPage = lazy(() => import("./pages/addedit/AddEditPage"));
 
 const LazyMainPage = lazy(() => import("./pages/main/MainPage"));
 
+const LazyMainMorePage = lazy(() => import("./pages/main/MainMorePage"));
+
 const LazyPayPage = lazy(() => import("./pages/pay/PayPage"));
 
 const LazyDetailsPage = lazy(() => import("./pages/details/DetailsPage"));
@@ -30,6 +32,14 @@ const App = () => {
             element={
               <Suspense fallback={<Loading />}>
                 <LazyMainPage />
+              </Suspense>
+            }
+          ></Route>
+          <Route
+            path="main/more"
+            element={
+              <Suspense fallback={<Loading />}>
+                <LazyMainMorePage />
               </Suspense>
             }
           ></Route>

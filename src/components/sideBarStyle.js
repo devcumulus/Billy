@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
 
+export const Wrap = styled.div`
+    position: fixed;
+    top: 300px;
+    right: 50px;
+`
+
 export const SideBarWrap = styled.div`
     width: 65px;
     height: 400px;

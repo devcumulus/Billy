@@ -1,10 +1,14 @@
 import React from 'react'
 import { MoreBt, MoreBtWrap } from './mainStyle'
+import MainMore from './MainMore'
 
-const MoreButton = () => {
+
+
+const MoreButton = (e) => {
+  const handleClick = e => { MainMore }
   return (
     <MoreBtWrap>
-        <MoreBt>MORE
+        <MoreBt onClick={() => handleClick(e)}>MORE
             <img src='../images/arrow.svg' alt=''/>
         </MoreBt>
     </MoreBtWrap>
