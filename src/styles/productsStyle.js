@@ -318,6 +318,7 @@ export const Possession = styled.div`
     padding-right: 10px;
     width: 206.173px;
     height: 40px;
+  
   }
 `;
 
@@ -392,6 +393,7 @@ export const BtnColorSub = styled.button`
 
 export const TransactionS = styled.div`
   padding-left: 450px;
+
   margin-right: 450px;
   display: flex;
   p {
@@ -408,7 +410,7 @@ export const TransactionS = styled.div`
   }
   .Ladeltst {
     display: flex;
-    margin-right: 129px;
+    margin-right: 116px;
   }
   input {
     width: 725px;
@@ -419,7 +421,6 @@ export const TransactionS = styled.div`
     padding: 6px;
     padding-left: 10px;
     padding-right: 10px;
-    color: #777
   }
   #btn {
     width: 105px;
@@ -428,7 +429,6 @@ export const TransactionS = styled.div`
     border: 1px solid #2c39b5;
     background: #fff;
     margin-right: 15px;
-    color: #777;
   }
 `;
 export const LadelButton = styled.div`
@@ -441,11 +441,3 @@ export const LadelButton = styled.div`
     margin-left: 55px;
   }
 `;
-
-export const Deadline = styled.div`
-  margin-right: 450px;
-  padding-left: 450px;
-  padding-bottom: 60px;
-  display: flex;
-
-`

@@ -29,8 +29,6 @@ import FormComponent from "./FormComponent";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const { RangePicker } = DatePicker;
-
 // 엑시오스 기본데이터
 const initSample = {
   mainPic: "",
@@ -138,8 +136,6 @@ const Products = () => {
   const validationSchema = yup.object({
     title: yup
       .string("상품명을 입역해주세요.")
-      .min(5, "5자 이상 입력하세요.")
-      .max(6, "6자까지만 입력하세요 ")
       .required("상품명은 필수입니다."),
     contents: yup
       .string("내용을 입력하세요.")
@@ -309,7 +305,27 @@ const Products = () => {
                 <ladel htmlFor="amounts" className="Ladelamu">
                   <p className="amu">보증금</p> <p className="pt">*</p>
                 </ladel>
- 
+                {/* 라디오 버튼은 여러개 중에 오로지 1개만 선택이 가능 함. 같은지 다른지 파악하는 것은 name 속성의 단어가 같은지를 비교 */}
+                {/* <input
+                  type="text"
+                  name="amounts"
+                  id="amounts"
+                  placeholder="금액을 입력해주세요"
+                  className="dd"
+                ></input>
+              </div>
+              <div className="smallmap">
+                {radioData.map(radio => (
+                  <RadioButton
+                    key={radio.id}
+                    name={radio.name}
+                    value={radio.value}
+                    checked={selectedValue === radio.value}
+                    onChange={handleRadioChange}
+                    className="small"
+                  />
+                ))}
+                <p className="guarantee"> 보증금 : {selectedValue}</p> */}
                 <div className="one" style={{ display: "flex" }}>
                   <div>
                     <div style={{ display: "flex" }}>
@@ -364,7 +380,7 @@ const Products = () => {
               <ladel htmlFor="transaction" className="Ladeltst">
                 <p className="tst">거래가능주소</p> <p>*</p>
               </ladel>
-              <input type="button" value="주소 검색" id="btn" />
+              <input type="button" value="우편 검색" id="btn" />
               <input
                 type="text"
                 name="transaction"
@@ -373,19 +389,14 @@ const Products = () => {
                 value="우편주소를 검색해주세요"
               />
             </TransactionS>
-
             <div>
               <div>
                 <ladel htmlFor="transaction" className="Ladeltst">
                   <p className="tst">대여 기한 성정</p> <p>*</p>
                 </ladel>
-                <Space direction="vertical" size={12}>
-                  <RangePicker />
-                </Space>
                 {/* 준서형 달력 떙겨오기 */}
               </div>
             </div>
-            
             <BtSection>
               <CancelBt type="button" onClick={handleCancel}>
                 취소
@@ -394,6 +405,13 @@ const Products = () => {
                 저장
               </SaveBt>
             </BtSection>
+
+            {/* 확인 버튼 */}
+            <div>
+              모든 검증을 통과했는지 파악 : {formState.isValid ? "OK" : "NO"}
+            </div>
+
+            <FormComponent />
           </form>
         </div>
       </GoodsWrap>
