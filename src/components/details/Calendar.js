@@ -3,15 +3,16 @@ import { DatePicker } from "antd";
 import { CalendarOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import koKR from "antd/lib/date-picker/locale/ko_KR";
 
-const Calendar = ({ onDateSelect }) => {
+const Calendar = ({ onDateSelect, marginBottom }) => {
   const [selectedDateRange, setSelectedDateRange] = useState([]);
   const calendarContainerRef = useRef(null);
 
-  const handleDateRangeChange = dates => {
+  const handleDateRangeChange = (dates, dateStrings) => {
     setSelectedDateRange(dates);
-    const rentalStartDate = dates[0]?.format("YYYY-MM-DD"); // 시작일
-    const rentalEndDate = dates[1]?.format("YYYY-MM-DD"); // 종료일
-    onDateSelect(rentalStartDate, rentalEndDate); // 선택된 날짜 범위를 부모 컴포넌트로 전달
+
+    if (typeof onDateSelect === "function") {
+      onDateSelect(dateStrings[0], dateStrings[1]);
+    }
   };
 
   const inputStyle = {
@@ -20,7 +21,7 @@ const Calendar = ({ onDateSelect }) => {
     borderRadius: "10px",
     border: "1px solid #2C39B5",
     flexShrink: 0,
-    marginBottom: "40px",
+    marginBottom: marginBottom ? marginBottom : "40px",
   };
 
   const calendarPopupStyle = {
@@ -45,12 +46,12 @@ const Calendar = ({ onDateSelect }) => {
       <DatePicker.RangePicker
         onChange={handleDateRangeChange}
         value={selectedDateRange}
+        format="YYYY/MM/DD"
         style={inputStyle}
         placeholder={["시작일", "종료일"]}
         suffixIcon={<CalendarOutlined style={{ color: "#2C39B5" }} />}
         popupStyle={calendarPopupStyle}
         getCalendarContainer={() => calendarContainerRef.current}
-        format="YYYY년-MM월-DD일"
         locale={koKR}
         separator={
           <span style={{ color: "#2C39B5", marginLeft: "5px" }}>

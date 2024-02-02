@@ -1,26 +1,11 @@
 import React, { useState } from "react";
 import { StyledButton } from "../../styles/details/DetailsComponentStyles";
-import { getFav } from "../../api/details/details_api";
 
-function Like({ productId }) {
+function Like() {
   const [liked, setLiked] = useState(false);
 
-  const toggleLike = async () => {
-    try {
-      // 상태 업데이트를 이전 값에 의존하지 않도록 함수형 업데이트를 사용합니다.
-      setLiked(prevLiked => !prevLiked);
-
-      // 찜 상태에 따라 API를 호출하여 찜 기능을 처리합니다.
-      if (!liked) {
-        await getFav(productId);
-        console.log("Added to favorites");
-      } else {
-        await getFav(productId);
-        console.log("Added to favorites");
-      }
-    } catch (error) {
-      console.error("Error toggling like:", error);
-    }
+  const toggleLike = () => {
+    setLiked(!liked);
   };
 
   return (

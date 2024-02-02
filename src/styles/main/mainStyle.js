@@ -29,8 +29,8 @@ export const MainWrap = styled.div`
     .like {
       position: absolute;
       border: none;
-      right: 20px;
-      top: -40px;
+      right: 15px;
+      top: 10px;
       z-index: 1;
       width: 30px;
       height: 30px;

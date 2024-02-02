@@ -8,7 +8,7 @@ const useCustomLogin = () => {
   // RTK 상태값 읽기
   const loginState = useSelector(state => state.loginSlice);
   // 로그인 상태값 파악
-  const isLogin = sessionStorage.getItem('isLogin') === 'true';
+  const isLogin = loginState.result == "1" ? true : false;
   // 로그인 기능
   const doLogin = async ({ loginParam, successFn, failFn, errorFn }) => {
     const action = await dispatch(

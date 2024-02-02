@@ -57,14 +57,16 @@ const handleTogglePassword = () => {
   const handleWithdraw = async () => {
     try {
       let result = await patchWithdraw(id, password, phone);
-      console.log(result.data);
-      return result.data;
+      console.log(result);
+      // setData(result);
+      // 탈퇴 후 필요한 다른 동작을 수행할 수 있습니다.
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(() => {
 
+  useEffect(() => {
+    
   }, []);
 
   return (

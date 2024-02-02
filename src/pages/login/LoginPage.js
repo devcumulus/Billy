@@ -12,9 +12,7 @@ import {
   PwBox,
 } from "../../styles/login/LoginPageStyle";
 import useCustomLogin from "../../hooks/useCustomLogin";
-import JoinPopUp, {
-  ModalBackground,
-} from "../../components/joinpopup/JoinPopUp";
+import JoinPopUp from "../../components/joinpopup/JoinPopUp";
 import IdFind from "../../components/login/IdFind";
 import { useNavigate } from "react-router-dom";
 import PwFind from "../../components/login/PwFind";
@@ -88,8 +86,8 @@ const LoginPage = () => {
   // 회원가입 페이지 이동
   const navigate = useNavigate();
   const handleJoin = () => {
-    navigate(`/join/1`);
-  };
+    navigate(`/join/1`)
+  }
 
   return (
     <Layout>
@@ -124,7 +122,17 @@ const LoginPage = () => {
                 txt="아이디 또는 비밀번호를 확인해주세요."
                 onConfirm={closeModal}
               />
-              <ModalBackground></ModalBackground>
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  background: "rgba(0, 0, 0, 0.5)",
+                  zIndex: 999,
+                }}
+              ></div>
             </>
           )}
           <div
@@ -138,8 +146,18 @@ const LoginPage = () => {
             <li onClick={handleIdFind}>아이디 찾기</li>
             {idFindModal && (
               <>
-                <IdFind closeModal={closeIdFindModal} />
-                <ModalBackground></ModalBackground>
+                <IdFind closeModal={closeIdFindModal}  />
+                <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0, 0, 0, 0.5)",
+                zIndex: 999,
+              }}
+            ></div>
               </>
             )}
             <DivisionLine></DivisionLine>

@@ -1,55 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import DaumPostcode from "react-daum-postcode";
 import {
   BtSection,
   CancelBt,
   ConfirmBt,
   ImageInputBt,
-  InputValid,
   JoinAddressInput,
   JoinBox,
   JoinElement,
   JoinElementInput,
-  JoinElementInputBox,
   JoinElementTxt,
   SaveBt,
 } from "../../styles/join/JoinPageStyle";
-import { JoinHeader } from "../../styles/join/JoinFirstPageStyle";
-import { Modal } from '../../components/address/Address';
-import { useSelector } from 'react-redux';
 import * as yup from "yup";
-import { getMyUser, putMyInfo } from '../../api/my/my_api';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { JoinHeader } from "../../styles/join/JoinFirstPageStyle";
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { yupResolver } from '@hookform/resolvers/yup';
 import JoinPopUp from '../../components/joinpopup/JoinPopUp';
+import { Modal } from '../../components/address/Address';
 
 const MyInfoPage = () => {
-  const [data, setData] = useState([]);
-  const [nickname, setNickname] = useState("");
-  const [address, setAddress] = useState("");
-  const [restAddress, setRestAddress] = useState("");
-
-  // 유저 iuser 값 
-  const iuser = useSelector((state) => state.loginSlice.iuser);
-
-  useEffect(()=>{
-    const fetchData = async () => {
-      try {
-        const result = await getMyUser(iuser);
-        setData(result)
-        setUploadImgBefore(`/pic/${result.storedPic}`)
-        setNickname(result.nick);
-        setAddress(result.addr)
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  },[iuser])
-
  // 이미지 업로드
  const [uploadImgBefore, setUploadImgBefore] = useState(
-  `${process.env.PUBLIC_URL}/images/join/join_img.svg`
+  `${process.env.PUBLIC_URL}/images/join/join_img.svg`,
 );
 const [fileCount, setFileCount] = useState(0);
 const [uploadImgBeforeFile, setUploadImgBeforeFile] = useState(null);
@@ -65,10 +39,6 @@ const handleChangeFileOne = e => {
   }
 };
 
-const handleNicknameChange = (e) => {
-  setNickname(e.target.value);
-};
-
 // 비밀번호 보이기/감추기
 const [showPassword, setShowPassword] = useState(false);
 const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
@@ -81,50 +51,65 @@ const handleTogglePasswordConfirm = () => {
 };
 
 // 주소 검색 모달창
+const [calendarLocation, setCalendarLocation] = useState("");
 const [modalOpen, setModalOpen] = useState(false);
 
-  const handleSelectAddress = data => {
-    const selectedAddress = data.address;
-    setAddress(selectedAddress);
-    setModalOpen(false);
-  };
-  const handleClickButton = () => {
-    setModalOpen(true);
-  };
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-  const handleChangeAddress = e => {
-    setAddress(e.target.value);
-  };
-  const handleChangeRestAddress = e => {
-    setRestAddress(e.target.value);
-  };
+const handleSelectAddress = data => {
+  const { address } = data;
+  // setFormData(prev => ({ ...prev, address })); // 주소를 직접 formData에 설정
+  setCalendarLocation(address);
+  setModalOpen(false);
+};
+const handleClickButton = () => {
+  setModalOpen(true);
+};
+const handleCloseModal = () => {
+  setModalOpen(false);
+};
 
-  const [catchErr, setCatchErr] = useState(false);
-
+// 양식 검증(yup)
+const [formData, setFormData] = useState({
+  photo: "",
+  nickname: "",
+  userId: "",
+  password: "",
+  confirmPassword: "",
+  phoneNumber: "",
+  address: "",
+  email: "",
+});
 const phoneRegExp = /^(\d{3})-(\d{4})-(\d{4})$/;
-  const validationSchema = yup.object().shape({
-    password: yup
-      .string()
-      .required("비밀번호는 필수 입력 사항입니다.")
-      .min(8, "8자 이상 입력하세요.")
-      .max(15, "15자까지만 입력하세요 "),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다.")
-      .required("비밀번호 확인은 필수 입력 사항입니다."),
+const validationSchema = yup.object().shape({
+  photo: yup.string().required("사진은 필수 입력 사항입니다."),
+  nickname: yup
+    .string()
+    .max(15, "15자까지만 입력하세요 ")
+    .required("닉네임은 필수 입력 사항입니다."),
+  password: yup
+    .string()
+    .required("비밀번호는 필수 입력 사항입니다.")
+    .min(8, "8자 이상 입력하세요.")
+    .max(15, "15자까지만 입력하세요 "),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "비밀번호가 일치하지 않습니다.")
+    .required("비밀번호 확인은 필수 입력 사항입니다."),
     phoneNumber: yup
       .string()
       .matches(phoneRegExp, "전화번호가 올바르지 않습니다.")
       .required("휴대폰 번호는 필수 입력 사항입니다."),
-  });
+  address: yup.string().required("주소는 필수 입력 사항입니다."),
+});
 
-  const { register, handleSubmit, formState, watch } = useForm({
-    resolver: yupResolver(validationSchema),
-    mode: "onChange",
-  });
-  const phoneNumber = watch("phoneNumber");
+const { register, handleSubmit, formState } = useForm({
+  defaultValues: formData,
+  resolver: yupResolver(validationSchema),
+  mode: "onChange",
+});
+// 확인 버튼 선택시 실행
+const handleSubmitJoin = data => {
+  console.log(data);
+};
 
 
   // 휴대폰 번호 확인 버튼
@@ -136,56 +121,23 @@ const phoneRegExp = /^(\d{3})-(\d{4})-(\d{4})$/;
     setShowModal(false);
   };
 
-  useEffect(() => {
-  }, [address]);
-
-const handleConfirm = async () => {
-  const formData = new FormData();
-  
-  const dto = new Blob(
-    [
-      JSON.stringify({
-        nick: nickname,
-        upw: watch("password"),
-        phone: watch("phoneNumber"),
-        addr: address,
-        restAddr: restAddress,
-        compCode: 0,
-        compNm: "string",
-        email: data.email
-      })
-    ],
-    { type: "application/json" },
-  )
-  
-  formData.append("dto", dto);
-
-    if (uploadImgBeforeFile) {
-      console.log(uploadImgBeforeFile);
-      const response = await fetch(uploadImgBefore);
-      const blob = await response.blob();
-      const currentDate = new Date();
-      const seconds = Math.floor(currentDate.getTime() / 1000);
-      const file = new File([blob], `image${seconds}.jpg`, { type: "image/jpeg" });
-      
-      formData.append("pic", file);
-    }
-    try {
-      putMyInfo({product: formData});
-    } catch (error) {
-      console.error(error);
-    }
+// 취소 & 저장 버튼
+const navigate = useNavigate();
+const handleCancel = () => {
+};
+const handleConfirm = () => {
 };
 
   return (
     <>
-        <JoinHeader mgtop={"0"} mgbtm={"20px"}>
+        <JoinHeader mgtop={"0"} mgbtm={"0"}>
           <p>회원정보 수정</p>
         </JoinHeader>
-        <JoinBox margin={"0 auto 50px"} onSubmit={handleSubmit(handleConfirm)}>
+        <JoinBox onSubmit={handleSubmit(handleSubmitJoin)}>
           <JoinElement>
             <JoinElementTxt>
               <p>사진</p>
+              <span>*</span>
             </JoinElementTxt>
             <JoinElementInput>
               <label htmlFor="input-file-before">
@@ -200,6 +152,7 @@ const handleConfirm = async () => {
               </label>
               <input
                 type="file"
+                {...register("photo")}
                 accept="image/png, image/gif, image/jpeg"
                 onClick={() => {
                   document.getElementById("input-file-before").click();
@@ -212,229 +165,227 @@ const handleConfirm = async () => {
               />
             </JoinElementInput>
           </JoinElement>
-
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.photo?.message}
+          </div>
           <JoinElement>
             <JoinElementTxt>
               <p>닉네임</p>
+              <span>*</span>
             </JoinElementTxt>
             <JoinElementInput width="440px">
               <input
                 type="text"
+                {...register("nickname")}
                 placeholder="15자 이내"
-                value={nickname}
-                onChange={handleNicknameChange}
               />
               <ConfirmBt>중복 확인</ConfirmBt>
             </JoinElementInput>
           </JoinElement>
-
-           <JoinElement>
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.nickname?.message}
+          </div>
+          <JoinElement>
+            <JoinElementTxt>
+              <p>아이디</p>
+              <span>*</span>
+            </JoinElementTxt>
+            <JoinElementInput>
+              <div
+                {...register("userId")}
+              ></div>
+            </JoinElementInput>
+          </JoinElement>
+          <JoinElement>
             <JoinElementTxt>
               <p>비밀번호</p>
+              <span>*</span>
             </JoinElementTxt>
-            <JoinElementInputBox>
-              <JoinElementInput>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  minLength={8}
-                  maxLength={15}
-                  placeholder="특수문자 포함 8~15자 이내"
-                  name="password"
-                  {...register("password")}
-                />
-                <button
-                  type="button"
-                  style={{
-                    background: "transparent",
-                    border: `none`,
-                    width: `0px`,
-                    height: `0px`,
-                  }}
-                  onClick={handleTogglePassword}
-                >
-                  {showPassword ? (
-                    <img
-                      src="/images/join/eye_open.png"
-                      style={{
-                        width: `20px`,
-                        height: `20px`,
-                        border: `none`,
-                        transform: "translate(-150%, 40%)",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src="/images/join/eye_close.png"
-                      style={{
-                        width: `20px`,
-                        height: `20px`,
-                        border: `none`,
-                        transform: "translate(-150%, 40%)",
-                      }}
-                    />
-                  )}
-                </button>
-              </JoinElementInput>
-              <InputValid>{formState.errors.password?.message}</InputValid>
-            </JoinElementInputBox>
+            <JoinElementInput>
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
+                placeholder="특수문자 포함 8~15자 이내"
+              />
+              <button
+                type="button"
+                style={{
+                  background: "transparent",
+                  border: `none`,
+                  width: `0px`,
+                  height: `0px`,
+                }}
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? (
+                  <img
+                    src="/images/join/eye_open.png"
+                    style={{
+                      width: `20px`,
+                      height: `20px`,
+                      border: `none`,
+                      transform: "translate(-150%, 40%)",
+                    }}
+                  />
+                ) : (
+                  <img
+                    src="/images/join/eye_close.png"
+                    style={{
+                      width: `20px`,
+                      height: `20px`,
+                      border: `none`,
+                      transform: "translate(-150%, 40%)",
+                    }}
+                  />
+                )}
+              </button>
+            </JoinElementInput>
           </JoinElement>
-
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.password?.message}
+          </div>
           <JoinElement>
             <JoinElementTxt>
               <p>비밀번호 확인</p>
+              <span>*</span>
             </JoinElementTxt>
-            <JoinElementInputBox>
-              <JoinElementInput>
-                <input
-                  type={showPasswordConfirm ? "text" : "password"}
-                  minLength={8}
-                  maxLength={15}
-                  placeholder="비밀번호 확인"
-                  name="confirmPassword"
-                  {...register("confirmPassword")}
-                />
-                <button
-                  type="button"
-                  style={{
-                    background: "transparent",
-                    border: `none`,
-                    width: `0px`,
-                    height: `0px`,
-                  }}
-                  onClick={handleTogglePasswordConfirm}
-                >
-                  {showPasswordConfirm ? (
-                    <img
-                      src="/images/join/eye_open.png"
-                      style={{
-                        width: `20px`,
-                        height: `20px`,
-                        border: `none`,
-                        transform: "translate(-150%, 40%)",
-                      }}
-                    />
-                  ) : (
-                    <img
-                      src="/images/join/eye_close.png"
-                      style={{
-                        width: `20px`,
-                        height: `20px`,
-                        border: `none`,
-                        transform: "translate(-150%, 40%)",
-                      }}
-                    />
-                  )}
-                </button>
-              </JoinElementInput>
-              <InputValid>
-                {formState.errors.confirmPassword?.message}
-              </InputValid>
-            </JoinElementInputBox>
+            <JoinElementInput>
+              <input
+                type={showPasswordConfirm ? "text" : "password"}
+                {...register("confirmPassword")}
+                placeholder="비밀번호 확인"
+              />
+              <button
+                type="button"
+                style={{
+                  background: "transparent",
+                  border: `none`,
+                  width: `0px`,
+                  height: `0px`,
+                }}
+                onClick={handleTogglePasswordConfirm}
+              >
+                {showPasswordConfirm ? (
+                  <img
+                    src="/images/join/eye_open.png"
+                    style={{
+                      width: `20px`,
+                      height: `20px`,
+                      border: `none`,
+                      transform: "translate(-150%, 40%)",
+                    }}
+                  />
+                ) : (
+                  <img
+                    src="/images/join/eye_close.png"
+                    style={{
+                      width: `20px`,
+                      height: `20px`,
+                      border: `none`,
+                      transform: "translate(-150%, 40%)",
+                    }}
+                  />
+                )}
+              </button>
+            </JoinElementInput>
           </JoinElement>
-
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.confirmPassword?.message}
+          </div>
           <JoinElement>
             <JoinElementTxt>
               <p>휴대폰 번호</p>
+              <span>*</span>
             </JoinElementTxt>
-            <JoinElementInputBox>
-              <JoinElementInput width="440px">
-                <input
-                  type="text"
-                  placeholder="예) 010-0000-0000"
-                  name="phoneNumber"
-                  // value={phoneNumber}
-                  // onChange={handleChangePhoneNumber}
-                  {...register("phoneNumber")}
-                />
-                <ConfirmBt onClick={phoneNumberConfirm} type="button">
-                  휴대폰 인증
-                </ConfirmBt>
-              </JoinElementInput>
-              <InputValid>{formState.errors.phoneNumber?.message}</InputValid>
-            </JoinElementInputBox>
-            {showModal && (
-              <>
-                {formState.errors.phoneNumber || phoneNumber === "" ? (
-                  <JoinPopUp
-                    txt="휴대폰 인증에 실패하셨습니다."
-                    onConfirm={closeModal}
-                  />
-                ) : (
-                  <JoinPopUp
+            <JoinElementInput width="440px">
+              <input
+                type="text"
+                {...register("phoneNumber")}
+                placeholder="예) 010-0000-0000"
+              />
+              <ConfirmBt onClick={phoneNumberConfirm}>휴대폰 인증</ConfirmBt>
+              {showModal && (
+                <>
+                  {formState.errors.phoneNumber ? (
+                    <JoinPopUp
+                      txt="휴대폰 인증에 실패하셨습니다."
+                      onConfirm={closeModal}
+                    />
+                  ) : (
+                    <JoinPopUp
                     txt="휴대폰 인증이 완료되었습니다."
-                    onConfirm={closeModal}
-                  />
-                )}
+                      onConfirm={closeModal}
+                    />
+                  )}
 
-                <div
-                  style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    background: "rgba(0, 0, 0, 0.5)",
-                    zIndex: 999,
-                  }}
-                ></div>
-              </>
-            )}
+                  <div
+                    style={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      background: "rgba(0, 0, 0, 0.5)",
+                      zIndex: 999,
+                    }}
+                  ></div>
+                </>
+              )}
+            </JoinElementInput>
           </JoinElement>
-         
-         <JoinElement>
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.phoneNumber?.message}
+          </div>
+          <JoinElement>
             <JoinElementTxt>
               <p>주소</p>
+              <span>*</span>
             </JoinElementTxt>
-            <JoinElementInputBox>
-              <JoinAddressInput>
-                <input
-                  type="text"
-                  value={address}
-                  placeholder="주소 검색을 해주세요."
-                  onClick={handleClickButton}
-                  readOnly
-                  name="address"
-                  onChange={handleChangeAddress}
-                  // {...register("address")}
-                />
-                <input
-                  type="text"
-                  value={restAddress}
-                  placeholder="상세 주소를 입력해주세요."
-                  name="restAddress"
-                  onChange={handleChangeRestAddress}
-                />
+            <JoinAddressInput>
+              <ConfirmBt onClick={handleClickButton}>주소 검색</ConfirmBt>
+              <input
+                type="text"
+                {...register("address")}
+                value={calendarLocation}
+                placeholder="주소 검색을 해주세요."
+                // onClick={handleClickButton}
+                readOnly
+              />
+              <input placeholder="상세 주소를 입력해주세요." />
 
-                {modalOpen && (
-                  <Modal handleClose={handleCloseModal}>
-                    <DaumPostcode
-                      onComplete={handleSelectAddress}
-                      autoClose={false}
-                    />
-                  </Modal>
-                )}
-              </JoinAddressInput>
-              {catchErr && address === "" && (
-                <InputValid>주소를 검색해주세요.</InputValid>
+              {modalOpen && (
+                <Modal handleClose={handleCloseModal}>
+                  <DaumPostcode
+                    onComplete={handleSelectAddress}
+                    autoClose={false}
+                  />
+                </Modal>
               )}
-            </JoinElementInputBox>
+            </JoinAddressInput>
           </JoinElement>
-
+          <div style={{ color: "red", fontSize: "13px" }}>
+            {formState.errors.address?.message}
+          </div>
           <JoinElement>
             <JoinElementTxt>
               <p>이메일</p>
+              <span>*</span>
             </JoinElementTxt>
-            <JoinElementInput lineHight={"32px"}>
-              <div>
-                {data.email}
-              </div>
+            <JoinElementInput>
+              <div
+                {...register("email")}
+              ></div>
             </JoinElementInput>
           </JoinElement>
-          <BtSection mgtop={"50px"} mgbtm={"20px"}>
-            <CancelBt type='reset'>취소</CancelBt>
-            <SaveBt type="submit">저장</SaveBt>
-        </BtSection>
         </JoinBox>
+        <BtSection>
+          <CancelBt onClick={handleCancel}>취소</CancelBt>
+          {formState.isValid ? (
+            <SaveBt onClick={handleConfirm}>저장</SaveBt>
+          ) : (
+            <SaveBt>취소</SaveBt>
+          )}
+        </BtSection>
     </>
   )
 }

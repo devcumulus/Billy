@@ -38,15 +38,15 @@ export const SearchForm = styled.form`
 `;
 export const SearchWord = styled.input`
   display: flex;
-  width: 550px;
+  width: 500px;
   height: 50px;
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
   border: none;
-  
   color: rgb(0, 0, 0);
-  font-size: 25px;
+  font-family: Roboto;
+  font-size: 30px;
   font-style: normal;
   line-height: 24px; /* 80% */
   letter-spacing: 0.5px;

@@ -72,6 +72,7 @@ const IdFind = ({ closeModal }) => {
           <CancelBt onClick={closeModal}>닫기</CancelBt>
           <SaveBt onClick={() => loginUserId(userNum)}>확인</SaveBt>
           {/* 사용자 정보 : {userList.iauth} : {userList.uid} */}
+          {/* {userNum === userList?.phone && userList?.uid} */}
         </BtSection>
       </LoginBox>
     </IdFindStyle>

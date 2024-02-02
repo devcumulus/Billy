@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { Common } from "../../styles/CommonStyles";
-import { getMyBuySell, getMyRental, getMyUser } from "../../api/my/my_api";
-import { useSelector } from "react-redux";
+import { getMyBuySell, getMyRental } from "../../api/my/my_api";
 
 const ProfileDiv = styled.div`
   display: flex;
@@ -70,15 +69,13 @@ const MyProfile = () => {
   const [result, setResult] = useState([]);
   const [data, setData] = useState([]);
 
-  const iuser = useSelector((state) => state.loginSlice.iuser);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let result = await getMyUser(iuser);
-        const buyData = await getMyRental(1, 1);
-        const sellData = await getMyRental(1, 2);
-        const rentalData2 = sellData.filter(item => item.istatus === 1);
+        let result = await getMyRental(1, 1);
+        const buyData = await getMyBuySell(1, 1);
+        const sellData = await getMyBuySell(2,1);
+        const rentalData2 = await getMyRental(1, 2);
         setResult(result);
         setData([buyData.length, sellData.length, rentalData2.length]);
       } catch (error) {
@@ -94,10 +91,10 @@ const MyProfile = () => {
     <ProfileDiv>
       <ProfileLeft>
         <ProfileImg>
-          <img src={`/pic/${result.storedPic}`} />
+          <img src={`/pic/${result[0]?.userStoredPic}`} />
         </ProfileImg>
         <div>
-          <h1>{result.nick}</h1>
+          <h1>{result[0]?.targetNick}</h1>
         </div>
       </ProfileLeft>
       <ProfileRight>

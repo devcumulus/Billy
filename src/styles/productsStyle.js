@@ -11,6 +11,7 @@ export const PriceDiv = styled.div`
   width: 86rem;
   input {
     width: 20rem !important;
+    margin-right: 8px;
   }
   span {
     margin-left: 5px;
@@ -22,6 +23,33 @@ export const PriceDiv = styled.div`
     width: 20rem;
     text-align: center;
     font-size: 1.4rem;
+  }
+  .controlBt {
+    display: flex;
+
+    button {
+      display: flex;
+    }
+  }
+  .upBt {
+    width: 36px;
+    height: 20px;
+    border-radius: 3px 3px 0px 0px;
+    border: 1px solid #2c39b5;
+    color: #4e4949;
+    background: #fff;
+    font-size: medium;
+    text-align: center;
+  }
+  .downBt {
+    width: 36px;
+    height: 20px;
+    border-radius: 0px 0px 3px 3px;
+    border: 1px solid #2c39b5;
+    color: #4e4949;
+    background: #fff;
+    font-size: medium;
+    text-align: center;
   }
 `;
 
@@ -60,7 +88,6 @@ export const ListDiv = styled.div`
       border: 1px solid ${Common.color.primary};
       color: #000;
       font-size: 1.6rem;
-    
     }
     input.showSpinner {
       width: 20rem;
@@ -68,6 +95,7 @@ export const ListDiv = styled.div`
   }
   textarea {
     width: 86rem;
+    resize: none;
     height: 28rem;
     border-radius: 5px;
     border: 1px solid ${Common.color.primary};
@@ -129,6 +157,7 @@ export const ProductImgMap = styled.div`
   display: flex;
   flex-wrap: wrap !important;
   width: 500px;
+  margin-left: 20px;
   img {
     width: 9rem;
     height: 9rem;

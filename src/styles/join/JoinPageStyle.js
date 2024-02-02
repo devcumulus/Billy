@@ -11,10 +11,9 @@ export const JoinBox = styled.form`
   /* height: 700px; */
   border-radius: 10px;
   border: 1px solid #2c39b5;
-  margin: ${props => props.margin ? props.margin : "0 auto 100px"};
+  margin: 0 auto 100px;
   padding: 60px 90px;
 `;
-
 export const JoinElement = styled.div`
   display: flex;
   justify-content: space-between;
@@ -79,7 +78,7 @@ export const JoinElementInput = styled.div`
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    line-height: ${props => (props.lineHight ? props.lineHight : "normal")};
+    line-height: normal;
   }
   /* input[type="file"] {
     width: 180px;
@@ -104,7 +103,6 @@ export const InputValid = styled.div`
 export const ImageInputBt = styled.button`
   background: transparent;
   border: none;
-  cursor: pointer;
 `;
 export const JoinAddressInput = styled.div`
   display: block;
@@ -125,26 +123,12 @@ export const JoinAddressInput = styled.div`
     line-height: normal;
   }
 `;
-export const ShowPasswordBt =styled.button`
-background: transparent;
-border: none;
-width: 0px;
-height: 0px;
-`;
-export const ShowPasswordImg = styled.img`
-  width: 20px !important;
-  height: 20px !important;
-  border: none !important;
-  transform: translate(-150%, 40%);
-  cursor: pointer;
-`;
 export const ConfirmBt = styled.button`
   width: 105px;
   height: 36px;
   border-radius: 5px;
   border: 1px solid #2c39b5;
   background: #2c39b5;
-  cursor: pointer;
 
   color: #fff;
   font-size: 16px;
@@ -179,7 +163,6 @@ export const CancelBt = styled.button`
   border-radius: 10px;
   background: #f2f2ff;
   border: none;
-  cursor: pointer;
 
   color: #2c39b5;
   font-size: 22px;
@@ -190,5 +173,4 @@ export const CancelBt = styled.button`
 export const SaveBt = styled(CancelBt)`
   background: #2c39b5;
   color: #fff;
-  cursor: pointer;
 `;

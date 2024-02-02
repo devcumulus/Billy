@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { SideBar } from "../../components/SideBar";
 import { MoreWrap } from "../../styles/main/mainMoreStyle";
 import { Pagination } from "antd";
 import Layout from "../../layouts/Layout";
 import { getMoreProduct } from "../../api/main/mainMore_api";
-import Like from "../../components/details/Like";
 
 const initData = [
   {
@@ -215,75 +213,63 @@ const region = [
   },
 ];
 
-const MainMorePage = () => {
-  const location = useLocation();
-  console.log(location);
-  const { pathname, state } = location;
-  const urlParseArr = pathname.split("/");
-  const parseMainCategory = parseInt(urlParseArr[2]);
-  const parseSubCategory = parseInt(urlParseArr[3]);
-  const parsePageNum = parseInt(urlParseArr[4]);
-  // console.log(" 목록페이지 주소 분리 처리 ===============");
-  // console.log("parseMainCategory : ", parseMainCategory);
-  // console.log("subCategory : ", parseSubCategory);
-  // console.log("parsePageNum : ", parsePageNum);
-  // const [moreProductData, setMoreProductData] = useState([btList]); // 상품 데이터 상태 추가
-  const navigate = useNavigate(); // useNavigate 훅을 사용하여 navigate 함수 가져오기
-  // 중분류 값
-  const [id, setId] = useState(parseSubCategory);
-  // 페이지 번호
-  const [pageNum, setPageNum] = useState(parsePageNum);
-  // 페이지넘버(페이지네이션)
-  const [current, setCurrent] = useState(parsePageNum);
-  const [pageSize, setPageSize] = useState(5);
-  // 화면 출력 데이터
-  const [datas, setDatas] = useState([]);
-  // 지역 선택 관리
-  const [regionNum, setRegionListNum] = useState(0);
+const MainMorePage = ({id, btList}) => {
+   const [moreProductData, setMoreProductData] = useState([btList]); // 상품 데이터 상태 추가
+   const [datas, setDatas] = useState([])
 
-  // 02-01 소연
+  // 페이지 넘버
+  const [pageNum, setPageNum] = useState(1);
+  const params = useParams();
+  console.log(params.id)
+
+
+   // 자주 호출하는 함수는 외부로 코드 위치 정리필요
+   // 각 카테고리별 내용을 출력하는 목록을 갱신하는 용도
+  
+
   useEffect(() => {
     // if(params.id){
     //   fetchData(params.id)
     // }
     const fetchData = async () => {
       try {
-        const res = await getMoreProduct(parseMainCategory, id, pageNum); // API 호출
-        // console.log(pageNum);
-        // setMoreProductData(res); // 데이터 설정
+        const res = await getMoreProduct(params.id, pageNum); // API 호출
+        console.log(pageNum);
         console.log(res);
-        // 반드시 API 확인 필요
-        if (res) {
-          setDatas(res);
-        } else {
-          // 샘플진행
-          setDatas(initData);
-        }
+        // setMoreProductData(res); // 데이터 설정
+        setDatas(res)
       } catch (error) {
         console.log(error);
       }
+  
     };
-    console.log(datas);
-    fetchData();
-  }, [id, pageNum]);
+    fetchData()
+  }, []);
 
-  const handleRegionChange = e => {
+
+
+  // 페이지넘버(페이지네이션)
+  const [current, setCurrent] = useState(0);
+
+  const [data, setData] = useState([]);
+
+  const [regionNum, setRegionListNum] = useState(0);
+
+  const onChange = page => {
+    setCurrent(page);
+    // page 값에 따라 데이터 요청
+    // const res = await ...
+    // 응답값 data 에 세팅해주기
+    // setData(res)
+  };
+
+  const handleRegionChange = (e) => {
     const regionIndex = region.findIndex(item => item.title === e.target.value);
     setRegionListNum(regionIndex);
   };
 
-  const handlePageChange = _tempPage => {
-    // 페이지 변경 시 주소값을 업데이트하고 해당 페이지로 이동
-    // navigate(`/more/${id}/${params.id}?page=${params.pageNum}`);
-    // 페이지 번호 업데이트
-    // setPageNum(page);
-    // 페이지 번호 업데이트
-    setPageNum(_tempPage);
-    navigate(`/more/${_tempPage}/${parseMainCategory}/${id}`);
-  };
-
   //추후 초기 값 세팅 필요
-  useEffect(() => {}, []);
+  useEffect(() => {},[]);
 
   return (
     <Layout>
@@ -291,8 +277,8 @@ const MainMorePage = () => {
       <MoreWrap>
         <div className="header-wrap">
           <div className="header-cate-wrap">
-            <div>{state.title}</div>
-            <div>{datas.length}개</div>
+            <div>스마트 워치</div>
+            <div>몇개</div>
           </div>
           <div>
             <div className="bt-wrap">
@@ -306,45 +292,49 @@ const MainMorePage = () => {
               <select onChange={handleRegionChange}>
                 {region.map((item, index) => {
                   return (
-                    <option key={`regionTitle${index}`}>{item.title}</option>
-                  );
+                  <option
+                  key={`regionTitle${index}`}>
+                    {item.title}
+                  </option>
+                  )
                 })}
               </select>
               <select>
                 {region[regionNum].list.map((item, index) => {
-                  return <option key={`regionList${index}`}>{item}</option>;
+                  return (
+                    <option
+                    key={`regionList${index}`}>
+                    {item}
+                    </option>
+                  )
                 })}
               </select>
             </div>
           </div>
         </div>
         <div className="main-wrap">
-          {datas &&
-            datas.map((item, index) => (
+          {datas && datas.map((item, index) => {
+            return (
               <div className="item-wrap" key={`MainMore-item-${index}`}>
                 <img src={`/pic/${item.prodMainPic}`} alt="" />
                 <div className="like">
-                  <Like productId={item.iproduct} />
+                  <button>
+                    <img src="/images/main/like.svg" />
+                  </button>
                 </div>
                 <div className="desc-wrap">
                   <span className="desc-title">{item.title}</span>
                   <hr></hr>
-                  <div className="desc-price">
-                    {item.price.toLocaleString()}
-                  </div>
+                  <div className="desc-price">{item.price}</div>
                   <div className="desc-addr">{item.addr}</div>
                   <div className="view">조회수{item.view}</div>
                 </div>
               </div>
-            ))}
+            );
+          })}
         </div>
         <div className="pagination">
-          <Pagination
-            current={current}
-            onChange={handlePageChange}
-            total={datas.length}
-            pageSize={pageSize}
-          />
+          <Pagination current={current} onChange={onChange} total={50} />
         </div>
       </MoreWrap>
     </Layout>

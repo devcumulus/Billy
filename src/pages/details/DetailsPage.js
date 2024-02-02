@@ -8,7 +8,7 @@ import { getProduct } from "../../api/details/details_api";
 import Calendar from "../../components/details/Calendar";
 import Like from "../../components/details/Like";
 import SellerProfile from "../../components/details/SellerProfile";
-
+import { Modal } from "antd"; // Ant Design 모달 컴포넌트 추가
 import Pay from "../../components/details/Pay";
 import {
   SubContainer,
@@ -56,10 +56,11 @@ import {
 const DetailsPage = () => {
   const [showPayModal, setShowPayModal] = useState(false);
   const [productData, setProductData] = useState(null);
-  const [rentalDays, setRentalDays] = useState(1); // 기본값으로 1일 설정
+  const [detailContent, setDetailContent] = useState("");
+  const [rentalDays, setRentalDays] = useState(0);
   const [paymentData, setPaymentData] = useState({
     rentPrice: 0,
-    rentalDays: 1, // 기본값으로 1일 설정
+    rentalDays: 0,
     deposit: 0,
   });
 
@@ -68,8 +69,8 @@ const DetailsPage = () => {
   };
 
   const handleDateSelect = (startDate, endDate) => {
-    const timeDiff = Math.abs(new Date(endDate) - new Date(startDate));
-    const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 시작일을 포함하여 계산
+    const timeDiff = Math.abs(endDate - startDate);
+    const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
     setRentalDays(days);
 
     const rentPrice = productData.rentalPrice || 0;
@@ -85,14 +86,9 @@ const DetailsPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const mainicategory = "2";
-        const subicategory = "1";
-        const iproduct = "137";
-        const response = await getProduct(
-          mainicategory,
-          subicategory,
-          iproduct,
-        );
+        const icategory = "1";
+        const iproduct = "25";
+        const response = await getProduct(icategory, iproduct);
         setProductData(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -128,9 +124,8 @@ const DetailsPage = () => {
             </Title>
 
             <PriceContainer>
-              <Price>{productData.rentalPrice.toLocaleString()} 원</Price>
-              <RentalText>일일대여가</RentalText>
-              <RentalText>(재고:{productData.inventory})</RentalText>
+              <Price>{productData.price.toLocaleString()} 원</Price>
+              <RentalText>{productData.rentalDuration}</RentalText>
             </PriceContainer>
             <ViewCount>조회수 {productData.view.toLocaleString()}</ViewCount>
             <AddressContainer>
@@ -144,7 +139,7 @@ const DetailsPage = () => {
                   <PurchaseDateText>{productData.buyDate}</PurchaseDateText>
                 </InfoLine>
                 <div>
-                  <DepositText>보증금 (50%~100%)</DepositText>
+                  <DepositText>보증금</DepositText>
                   <DepositDetailText>
                     {productData.deposit.toLocaleString()} 원
                   </DepositDetailText>
@@ -152,7 +147,7 @@ const DetailsPage = () => {
               </InfoContainer>
             </AddressContainer>
             <Container>
-              <Like productId={productData.iproduct} />
+              <Like />
               <BtnChat>채팅하기</BtnChat>
               <BtnPay onClick={togglePayModal}>결제하기</BtnPay>
             </Container>
@@ -169,10 +164,7 @@ const DetailsPage = () => {
         </SubContainer>
         <MainContainer>
           <ProductContent>상품내용</ProductContent>
-          {/* 렌탈가능일 : {productData.rentalStartDate}~{" "}
-          {productData.rentalEndDate} */}
         </MainContainer>
-
         <MiniContainer>
           <Caution>
             <CautionContent>
@@ -198,15 +190,18 @@ const DetailsPage = () => {
             </CautionContent>
           </Caution>
           <Detail>{productData.contents}</Detail>
-
           <PayContainer>
             <Calendar onDateSelect={handleDateSelect} />
             <PayRow>
               <PayLabel>
-                {productData.rentalPrice.toLocaleString()} 원 x {rentalDays}일
+                {productData.rentalPrice.toLocaleString()} 원 x{" "}
+                {paymentData.rentalDays}일
               </PayLabel>
               <PayValue>
-                {(productData.rentalPrice * rentalDays).toLocaleString()} 원
+                {(
+                  productData.rentalPrice * paymentData.rentalDays
+                ).toLocaleString()}{" "}
+                원
               </PayValue>
             </PayRow>
             <PayRow>
@@ -218,7 +213,7 @@ const DetailsPage = () => {
               <PayLabel>총 합계</PayLabel>
               <PayValue>
                 {(
-                  productData.rentalPrice * rentalDays +
+                  productData.rentalPrice * paymentData.rentalDays +
                   productData.deposit
                 ).toLocaleString()}{" "}
                 원
@@ -227,7 +222,9 @@ const DetailsPage = () => {
           </PayContainer>
         </MiniContainer>
 
-        <MyMap x={productData.x} y={productData.y} />
+        {productData.x && productData.y && (
+          <MyMap x={productData.x} y={productData.y} />
+        )}
 
         <Profile reviews={productData.reviews} starCount={productData.rating} />
       </PageWrapper>

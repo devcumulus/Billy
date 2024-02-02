@@ -1,64 +1,56 @@
-import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState, useEffect, useNavigate } from "react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getProduct, getProductDetail } from "../../api/main/main_api"; // API 호출 함수 import
+import MoreButton from "./MoreButton";
 import {
   BtSlideNext,
   BtSlidePrev,
   SlideBtWrap,
 } from "../../styles/main/SlideButton";
 import { BtWrap } from "../../styles/main/mainStyle";
-import Like from "../details/Like";
-import MoreButton from "./MoreButton";
+import { getMoreProduct, getProduct } from "../../api/main/main_api"; // API 호출 함수 import
 
-const ProductSlide = ({ btList, title, desc, id, data }) => {
+const ProductSlide = ({ btList, title, desc, id }) => {
+  const [productData, setProductData] = useState([]); // 상품 데이터 상태 추가
+
+  // 최초 각 카테고별 목록을 출력함.
+  // 컴포넌트가 마운트될 때 API 호출하여 상품 데이터 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getProduct(id); // API 호출
+        // console.log(res);
+        setProductData(res); // 데이터 설정
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData(); // 함수 호출
+  }, []);
+
+  const pageNum = 1;
+
   // 게시물 클릭 시 detail 페이지로 이동
-  const navigate = useNavigate(`/details/`); // useNavigate 훅을 사용하여 navigate 함수 가져오기
-  // 전달 받은 목록데이터
-  const [productData, setProductData] = useState(data); // 상품 데이터 상태 추가
-  // 활성화된 중분류 카테고리 버튼 번호 관리
+  // const navigate = useNavigate(`/details/`);
+  
+  // 초기값 세팅
   const [focus, setFocus] = useState(0);
-  // Swiper
+
+  const handleClickLike = {};
+
   const swiperRefs = useRef([useRef(1), useRef(2), useRef(3), useRef(4)]);
 
-  // 중분류 메뉴 버튼 클릭시 처리
-  const handleClickList = async (mainCategoryId, subCategoryId) => {
+
+  const handleClickList = async categoryId => {
     try {
-      const res = await getProduct(mainCategoryId, subCategoryId);
+      const res = await getMoreProduct(categoryId, pageNum);
       console.log("res : ", res);
       setProductData(res);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  
-  // const navigate = useNavigate(`/details/`);
-  const handlePageChange = _item => {
-    const url = `/details/${id}/${focus+1}/${_item.iproduct}`
-    console.log("wowo", _item);
-    const serverData = {
-      mainCategoryId: id,
-      subCategoryId: focus + 1,
-      iproduct: _item.iproduct,
-    };
-    console.log(serverData);
-    const res = getProductDetail(serverData);
-    navigate(url);
-
-    // const res = getProductDetail(serverData);
-    console.log(res);
-
-    // 02-01 소연 팀장 전달
-    // const location = useLocation();
-    // console.log(location);
-    // const { state } = location;
-    // console.log(state);
-    // 페이지 변경 시 주소값을 업데이트하고 해당 페이지로 이동
-    // navigate(`/more/${id}/${params.id}?page=${page}`);
-    // 페이지 번호 업데이트
   };
 
   return (
@@ -74,7 +66,7 @@ const ProductSlide = ({ btList, title, desc, id, data }) => {
                 className={focus === index ? "focus" : ""}
                 onClick={() => {
                   setFocus(index);
-                  handleClickList(id, item.id);
+                  handleClickList(item.id);
                 }}
               >
                 {item.title}
@@ -82,7 +74,7 @@ const ProductSlide = ({ btList, title, desc, id, data }) => {
             );
           })}
         </BtWrap>
-
+        
         <Swiper
           slidesPerView={4}
           spaceBetween={20}
@@ -97,26 +89,23 @@ const ProductSlide = ({ btList, title, desc, id, data }) => {
           className="mySwiper"
           modules={[Navigation]}
         >
-          {productData &&
-            productData.map((item, index) => (
-              <SwiperSlide key={`cameraSlide${index}`}>
-                <div onClick={() => handlePageChange(item)}>
-                  <div className="like">
-                    <Like productId={productData.iproduct} />
-                  </div>
-                  <img src={`/pic/${item.prodMainPic}`} alt="" />
-                  <div className="desc-wrap">
-                    <span className="desc-title">{item.title}</span>
-                    <hr></hr>
-                    <div className="desc-price">
-                      {item.price.toLocaleString()}
-                    </div>
-                    <div className="desc-ad">{item.addr}</div>
-                    <div className="view">조회수{item.view}</div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
+          {productData && productData.map((item, index) => (
+            <SwiperSlide key={`cameraSlide${index}`}>
+              <div className="like">
+                <button onClick={() => handleClickLike()}>
+                  <img src="/images/details/like.svg" alt="like" />
+                </button>
+              </div>
+              <img src = {`/pic/${item.prodMainPic}`} alt="" />
+              <div className="desc-wrap">
+                <span className="desc-title">{item.title}</span>
+                <hr></hr>
+                <div className="desc-price">{item.price}</div>
+                <div className="desc-ad">{item.addr}</div>
+                <div className="view">조회수{item.view}</div>
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
         <SlideBtWrap>
           <BtSlidePrev
@@ -138,13 +127,7 @@ const ProductSlide = ({ btList, title, desc, id, data }) => {
         </SlideBtWrap>
 
         <div>
-          <MoreButton
-            categoryId={id}
-            subCategoryId={focus + 1}
-            pageNum={1}
-            title={btList[focus].title}
-            onClick={handlePageChange}
-          />
+          <MoreButton categoryId={btList[focus].id} />
         </div>
       </div>
     </div>

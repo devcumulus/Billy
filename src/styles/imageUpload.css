@@ -1,0 +1,9 @@
+.ant-upload-list {
+  width: 860px;
+  height: 400px;
+}
+
+.ant-upload-list-item {
+  width: 200px;
+  height: 200px !important;
+}

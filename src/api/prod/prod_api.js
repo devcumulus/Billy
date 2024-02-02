@@ -4,18 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { jwtAxios } from "../../util/jwtUtil";
 const path = `${SERVER_URL}/api/prod`;
 
-const failPostDatas = () => {
+export const failPostDatas = () => {
   const navigate = useNavigate();
   navigate("/");
 };
 
-export const postprod = async () => {
+// 로그인
+
+export const postprod = async ({ product, successFn, failFn, errorFn }) => {
   try {
-    const res = await jwtAxios.post(`${path}`);
-    return res;
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const res = await jwtAxios.post(`${path}`, product, header);
+    const resStatus = res.status.toString();
+    if (resStatus.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("업로드 실패입니다.");
+    }
   } catch (error) {
-    console.log(error);
-    failPostDatas("/");
+    errorFn(error);
   }
 };
 

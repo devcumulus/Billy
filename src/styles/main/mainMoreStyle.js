@@ -11,25 +11,31 @@ export const MoreWrap = styled.div`
     width: 1260px;
     display: flex;
     justify-content: space-between;
+    /* background-color: lightblue; */
     padding-bottom: 30px;
     
 
   .header-cate-wrap {
     display: flex;
     justify-content: space-between;
-    max-width: 100%;
-    gap: 10px;
+    width: 150px;
     height: 30px;
+    /* max-width: 1260px; */
+    /* padding-bottom: 80px; */
     font-size: 20px;
+    /* background: lightgray; */
   }
   .bt-wrap {
+    /* width: 200px; */
     display: flex;
     justify-content: flex-end;
+    /* background: lightcoral; */
     padding-bottom: 20px;
     >div{
       display: flex;
       width: 150px;
       justify-content: space-evenly;
+      /* background: gold; */
     }
     button {
       border: none;
@@ -50,10 +56,12 @@ export const MoreWrap = styled.div`
       width: 310px;
       display: flex;
       justify-content: space-between;
+      /* background: lightgreen; */
       select {
         width: 150px;
         height: 30px;
         border: 2px solid #2c39b5;
+        /* background: #2c39b5; */
       }
     }
 }
@@ -75,6 +83,7 @@ export const MoreWrap = styled.div`
       }
       hr {
         width: 280px;
+        /* background-color: #2C39B5; */
         border: 1px solid #2c39b5;
         margin: 0;
       }

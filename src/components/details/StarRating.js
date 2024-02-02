@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 
 const StarContainer = styled.div`
@@ -9,28 +9,13 @@ const StarContainer = styled.div`
 const StarIcon = styled.span`
   font-size: 20px;
   color: ${({ filled }) => (filled ? "#FFD700" : "#ccc")};
-  cursor: ${({ clickable }) => (clickable ? "pointer" : "default")};
 `;
 
-const StarRating = ({ totalStars, rating, onRate, isReviewing }) => {
-  const [clickedStars, setClickedStars] = useState(rating);
-
-  const handleClick = index => {
-    if (isReviewing) {
-      setClickedStars(index + 1);
-      onRate(index + 1);
-    }
-  };
-
+const StarRating = ({ totalStars, rating }) => {
   return (
     <StarContainer>
       {[...Array(totalStars)].map((_, index) => (
-        <StarIcon
-          key={index}
-          filled={index < clickedStars}
-          clickable={isReviewing}
-          onClick={() => handleClick(index)}
-        >
+        <StarIcon key={index} filled={index < rating}>
           &#9733;
         </StarIcon>
       ))}
