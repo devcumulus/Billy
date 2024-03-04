@@ -10,7 +10,7 @@ import { ModalBackground } from "../../joinpopup/JoinPopUp";
 
 const MyInterestList = () => {
   const [data, setData] = useState([]);
-  const [viewMore, setViewMore] = useState(3);
+  const [viewMore, setViewMore] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState();
 
@@ -31,7 +31,7 @@ const MyInterestList = () => {
     try {
       const favResult = await getFav(iproduct);
 
-      const updatedResult = await getMyInterest(1);
+      const updatedResult = await getMyInterest(viewMore);
       setData(updatedResult);
 
     } catch (error) {
@@ -40,7 +40,7 @@ const MyInterestList = () => {
   };
 
   const handleLoadMore = () => {
-    setViewMore((prevViewMore) => prevViewMore + 3);
+    setViewMore((prevViewMore) => prevViewMore + 1);
   };
 
   const handleDeleteClick = (item) => {
@@ -66,22 +66,22 @@ const MyInterestList = () => {
         <div>
         </div>
       </MyListTop>
-      {data.slice(0, viewMore).map((item, index) => (
+      {data && data.map((item, index) => (
         <React.Fragment key={index}>
             <MyListMid>
               <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>
                 <MyListMidImg>
-                  <img src={`/pic/${item.prodPic}`}alt={item.title} />
+                  <img src={`/pic/${item.pic}`}alt={item.title} />
                 </MyListMidImg>
                 <MyListMidTxt>
                   <div>
                     <h2>{item.title}</h2>
                   </div>
                   <div>
-                    <p>{item.price} 원</p>
+                    <p>{item.rentalPrice} 원</p>
                   </div>
                   <div>
-                    <span>{item.deposit}</span>
+                    <span>{item.contents}</span>
                   </div>
                 </MyListMidTxt>
               </Link>

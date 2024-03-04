@@ -7,9 +7,12 @@ import {
   ReportSearchWord,
   ReportTitle,
 } from "../../styles/admin/AdminReportPageStyle";
-import ReportContent from "../../components/admin/ReportContent";
+import {
+  ReportDoneContent,
+  ReportYetContent,
+} from "../../components/admin/ReportContent";
 import { ModalBackground } from "../../components/joinpopup/JoinPopUp";
-import { getDispute } from "../../api/admin/admin_report_api";
+import { getDispute, postDispute } from "../../api/admin/admin_report_api";
 
 const stateCate = [
   {
@@ -258,13 +261,44 @@ const AdminReportPage = ({ activeBtn }) => {
     reportListData();
   }, [page, div, search, category, state]);
 
-  // 상태변경 or 상태확인 버튼 클릭
-  const [contentModal, setContentModal] = useState(false);
-  const handleClickState = () => {
-    setContentModal(true);
+  // 데이터 연동(신고 수락 or 반려)
+  const [type, setType] = useState(null);
+  const [idispute, setIdispute] = useState(null);
+  const handleClickOk = () => {
+    setType(1);
+    setContentYetModal(false);
   };
-  const closeContentModal = () => {
-    setContentModal(false);
+  const handleClickNo = () => {
+    setType(-1);
+    setContentYetModal(false);
+  };
+
+  useEffect(() => {
+    const stateData = async () => {
+      await postDispute(idispute, type);
+    };
+    stateData();
+  }, [idispute, type]);
+
+  // 상태변경 or 상태확인 버튼 클릭
+  const [contentYetModal, setContentYetModal] = useState(false);
+  const [contentDoneModal, setContentDoneModal] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState(null);
+
+  const handleClickYet = (detail, idispute) => {
+    setSelectedDetail(detail);
+    setIdispute(idispute);
+    setContentYetModal(true);
+  };
+  const closeContentYetModal = () => {
+    setContentYetModal(false);
+  };
+  const handleClickDone = detail => {
+    setSelectedDetail(detail);
+    setContentDoneModal(true);
+  };
+  const closeContentDoneModal = () => {
+    setContentDoneModal(false);
   };
 
   // 페이지네이션
@@ -275,9 +309,23 @@ const AdminReportPage = ({ activeBtn }) => {
 
   return (
     <>
-      {contentModal && (
+      {contentYetModal && (
         <>
-          <ReportContent onClose={closeContentModal} />
+          <ReportYetContent
+            onClose={closeContentYetModal}
+            detail={selectedDetail}
+            Bt_No={handleClickNo}
+            Bt_Ok={handleClickOk}
+          />
+          <ModalBackground />
+        </>
+      )}
+      {contentDoneModal && (
+        <>
+          <ReportDoneContent
+            onClose={closeContentDoneModal}
+            detail={selectedDetail}
+          />
           <ModalBackground />
         </>
       )}
@@ -343,9 +391,9 @@ const AdminReportPage = ({ activeBtn }) => {
             <tr>
               <th>아이디</th>
               <th>닉네임</th>
-              <th>신고항목</th>
+              <th>신고 카테고리</th>
               <th>신고일자</th>
-              <th>신고한 아이디</th>
+              <th>신고한 유저</th>
               <th>벌점</th>
               <th>상태</th>
               <th>
@@ -355,41 +403,38 @@ const AdminReportPage = ({ activeBtn }) => {
               {/* <th>조회</th> */}
             </tr>
           </thead>
-          {reportList.map(item => (
+          {reportList.map((item, index) => (
             <tbody
-              key={item.id}
+              key={item.idispute}
               style={{
-                backgroundColor: item.id % 2 === 0 ? "#FFF7F7" : "inherit",
+                backgroundColor: index % 2 === 0 ? "inherit" : "#FFF7F7",
               }}
             >
-              <tr
-              // onClick={() => handleSlideDown(item.id)}
-              >
-                <td>{item.uid}</td>
-                <td>{item.nick}</td>
+              <tr>
+                <td>{item.reportedUserUid}</td>
+                <td>{item.reportedUserNick}</td>
                 <td style={{ cursor: "pointer" }}>{item.category}</td>
                 <td>{item.createdAt}</td>
-                <td>{item.ireporter}</td>
+                <td>{item.reporterUid}</td>
                 <td>{item.penalty}</td>
                 <td>{item.status} </td>
                 <td>
-                  {item.state === "미처리" ? (
-                    <button onClick={handleClickState}>확인</button>
+                  {item.status === "대기중" ? (
+                    <button
+                      onClick={() => handleClickYet(item.detail, item.idispute)}
+                    >
+                      확인
+                    </button>
                   ) : (
-                    <button onClick={handleClickState}>확인</button>
+                    <button onClick={() => handleClickDone(item.detail)}>
+                      확인
+                    </button>
                   )}
                 </td>
                 {/* <td>
                   <button>이동</button>
                 </td> */}
               </tr>
-              {/* {contentOpen === item.id && (
-                <tr>
-                  <td colSpan={8} style={{ padding: "15px 0" }}>
-                    {item.content}
-                  </td>
-                </tr>
-              )} */}
             </tbody>
           ))}
         </table>
@@ -399,7 +444,6 @@ const AdminReportPage = ({ activeBtn }) => {
           current={page}
           onChange={handlePageChange}
           total={reportLength}
-          // size={Math.floor(reportLength / 12) + 1}
           pageSize={12}
         />
       </div>

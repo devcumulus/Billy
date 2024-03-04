@@ -49,7 +49,7 @@ export const MyListMid = styled.div`
   margin-top: 2.3rem;
   height: 12rem;
   width: 98rem;
-  a > h2 {
+  h2, a > h2 {
     position: absolute;
     top: 4rem;
     right: 40rem;
@@ -60,6 +60,7 @@ export const MyListMid = styled.div`
   a {
     display: flex;
     gap: 2rem;
+    cursor: pointer;
   }
 `;
 
@@ -98,7 +99,7 @@ export const MyListMidTxt = styled.div`
   }
   p {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 400;
     height: 2.5rem;
   }
   span {
@@ -166,7 +167,7 @@ export const MyListMidLast = styled.div`
 export const MyReservationBtDiv = styled.div`
     display: flex ;
     justify-content: space-between !important;
-    width: 11rem !important; 
+    width: ${props => props.width ? props.width : "11rem"} !important; 
 `
 
 export const MyReviewDiv = styled.div`
@@ -239,6 +240,7 @@ export const MyManagementBt = styled.button`
 export const MyManagementBtHover = styled(MyManagementBt)`
   background-color: ${Common.color.primary} !important;
   color: #fff;
+  width: ${props => props.width ? props.width : "50px"};
 `
 export const CompManagementBt = styled.button`
   width: 110px;

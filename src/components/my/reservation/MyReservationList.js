@@ -16,19 +16,52 @@ import {
 } from "../../../styles/my/MyList";
 import { Link } from "react-router-dom";
 import MyMoreButton from "../MyMoreButton";
-import { getMyRental } from "../../../api/my/my_api";
+import { getCode, getMyRental, getReserve } from "../../../api/my/my_api";
+import { ModalBackground } from "../../joinpopup/JoinPopUp";
+import MyReservationModal from "./MyReservationModal";
+
+const contentData = [
+  {
+    "iproduct": 0,
+    "ipayment": 0,
+    "deposit": 0,
+    "totalPrice": 0,
+    "rentalEndDate": "2024-02-28",
+    "rentalStartDate": "2024-02-28",
+    "duration": 0,
+    "createdAt": "2024-02-28",
+    "status": "string",
+    "iuser": 0,
+    "nick": "string",
+    "userPic": "string",
+    "proStoredPic": "string"
+  }
+]
 
 const MyReservationList = ({ activeBtn }) => {
   const [activeButton, setActiveButton] = useState(true);
   const [data, setData] = useState([]);
-  const [viewMore, setViewMore] = useState(3);
+  const [viewMore, setViewMore] = useState(1);
+  const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = buttonType => {
     setActiveButton(buttonType);
+    setViewMore(1)
   };
 
-  const handleLoadMore = () => {
-    setViewMore(prevViewMore => prevViewMore + 3);
+  const handleLoadMore = async () => {
+    try {
+      let result;
+        if (activeBtn === "예약 내역" && activeButton === true) {
+          result = await getReserve(1, viewMore + 1);
+        } else if (activeBtn === "예약 내역" && activeButton === false) {
+          result = await getReserve(2, viewMore + 1)
+        }
+      setData(prevData => [...prevData, ...result]);
+      setViewMore(prevViewMore => prevViewMore + 1);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -36,11 +69,12 @@ const MyReservationList = ({ activeBtn }) => {
       try {
         let result;
         if (activeBtn === "예약 내역" && activeButton === true) {
-          result = await getMyRental(1, 1);
+          result = await getReserve(1, viewMore);
         } else if (activeBtn === "예약 내역" && activeButton === false) {
-          result = await getMyRental(1, 2);
-        } 
-        setData(result);
+          result = await getReserve(2, viewMore)
+        }
+        // setData(result);
+        setData(contentData)
       } catch (error) {
         console.error(error);
       }
@@ -49,7 +83,32 @@ const MyReservationList = ({ activeBtn }) => {
     fetchData();
   }, [activeButton, activeBtn]);
 
+  const openModal = () => {
+    setShowModal(true);
+  }
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const onConfirm = async (selectCode) => {
+    try {
+      const result = await getCode(selectCode);
+      setData(result);
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
+    <>
+    {showModal && (
+      <>
+      <MyReservationModal closeModal={closeModal} onConfirm={onConfirm}/>
+      <ModalBackground></ModalBackground>
+      </>
+    )}
     <MyListDiv>
       <MyListTop>
         <h2>예약 내역</h2>
@@ -69,11 +128,10 @@ const MyReservationList = ({ activeBtn }) => {
         </div>
       </MyListTop>
       {data &&
-        data.slice(0, viewMore).map((item, index) => (
+        data.map((item, index) => (
           <React.Fragment key={index}>
             {activeBtn === "예약 내역" && (
                 <MyListMid>
-                  <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>
                     <MyListMidImg>
                       <img
                         src={`/pic/${item.productStoredPic}`}
@@ -94,23 +152,23 @@ const MyReservationList = ({ activeBtn }) => {
                         </span>
                       </div>
                     </MyListMidTxt>
-                  </Link>
-                  <MyListMidLast size={"1.2rem"}>
+                  <MyListMidLast  size={"1.4rem"}>
                     <p>{item.rentalStartDate}</p>
-                    <MyReservationBtDiv>
+                    <MyReservationBtDiv width={"15rem"}>
                         <MyManagementBt>취소</MyManagementBt>
-                        <MyManagementBtHover>결제</MyManagementBtHover>
+                        <MyManagementBtHover width={"80px"} onClick={openModal}>식별코드</MyManagementBtHover>
+                        
                     </MyReservationBtDiv>
                   </MyListMidLast>
                 </MyListMid>
             )}
           </React.Fragment>
         ))}
-
       <MyListBottom>
         <MyMoreButton handleLoadMore={handleLoadMore} />
       </MyListBottom>
     </MyListDiv>
+  </>
   );
 };
 

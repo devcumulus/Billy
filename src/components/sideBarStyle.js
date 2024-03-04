@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Common } from "../styles/CommonStyles";
 
 export const Wrap = styled.div`
-  z-index: 999;
+  z-index: 99;
   position: fixed;
   top: 300px;
   right: 50px;

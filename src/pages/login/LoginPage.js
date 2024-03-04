@@ -34,7 +34,7 @@ const LoginPage = () => {
   };
 
   // 커스터훅 사용하기
-  const { doLogin, isLogin, moveToPath } = useCustomLogin();
+  const { doLogin, isLogin, moveToPath, userAuth } = useCustomLogin();
 
   const dispatch = useDispatch();
 
@@ -77,9 +77,10 @@ const LoginPage = () => {
     navigate(`/join/step_1`);
   };
 
-  const successFn = result => {
-    console.log("성공", result);
-    moveToPath("/");
+  const successFn = async(result) => {
+    {
+      result.auth == 1 ? moveToPath("/") : moveToPath("/admin");
+    }
   };
 
   const failFn = result => {

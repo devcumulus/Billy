@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { Common } from "../../styles/CommonStyles";
-import { getMyRental, getMyReview, getMyUser } from "../../api/my/my_api";
+import { getMyRental, getMyReview, getMyUser, getProd } from "../../api/my/my_api";
 import { useSelector } from "react-redux";
 
 const ProfileDiv = styled.div`
@@ -75,15 +75,17 @@ const MyProfile = () => {
 
   const iuser = useSelector((state) => state.loginSlice.iuser);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         let result = await getMyUser(iuser);
-        const buyData = await getMyRental(1, 1);
-        const sellData = await getMyRental(1, 2);
+        const buyData = await getMyRental(1,1,1);
+        const sellData = await getMyRental(1,-1,1);
         const reviewData = await getMyReview(1);
+        const prodData = await getProd(1);
         setResult(result);
-        setData([buyData.length, sellData.length, reviewData.length]);
+        setData([buyData.length, sellData.length, reviewData.length, prodData.length]);
       } catch (error) {
         console.error("Error fetching rental data:", error);
         // 에러 처리 로직 추가
@@ -101,7 +103,7 @@ const MyProfile = () => {
         </ProfileImg>
         <div>
           <h1>{result.nick}</h1>
-          <p>통합별점: {result.rating} / 벌점: {result.rating}</p> 
+          <p>통합별점: {result.rating} / 벌점: {result.penalty}</p> 
           <p>주소: {result.addr} {result.restAddr}</p>
           <p>전화번호: {result.phone}</p>
           <p>이메일: {result.email}</p>
@@ -122,7 +124,7 @@ const MyProfile = () => {
         </div>
         <div>
           <p>등록 상품</p>
-          <span>{data[2]}</span>
+          <span>{data[3]}</span>
         </div>
       </ProfileRight>
     </ProfileDiv>

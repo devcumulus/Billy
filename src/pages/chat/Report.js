@@ -17,6 +17,7 @@ import {
 } from "../../styles/chat/ReportStyles";
 
 const reportOptions = [
+
   {
     label: "분쟁",
     options: [
@@ -35,6 +36,7 @@ const reportOptions = [
       { value: "8", label: "제품 분실" },
     ],
   },
+
 ];
 
 const customStyles = {

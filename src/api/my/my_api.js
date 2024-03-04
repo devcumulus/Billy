@@ -12,9 +12,9 @@ const failPostDatas = () => {
 
 
 
-export const getMyRental = async (page,role) => {
+export const getMyRental = async (role,status,page) => {
   try {
-    const url = `${path}/prod?page=${page}&role=${role}`;
+    const url = `${path}/prod?role=${role}&status=${status}&page=${page}`;
     const res = await jwtAxios.get(url);
     return res.data;
   } catch (error) {
@@ -56,6 +56,28 @@ export const getProdReview = async () => {
   }
 }
 
+export const getMyBoard = async () => {
+  try {
+    const url = `${path}/board?`;
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/");
+  }
+}
+
+export const getMyDispute = async (page) => {
+  try {
+    const url = `${path}/dispute?page=${page}`;
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/");
+  }
+}
+
 export const getMyUser = async (iuser) => {
   try {
     const url = `${path2}/user?tar=${iuser}`;
@@ -89,3 +111,68 @@ export const patchWithdraw = async (data) => {
   }
 };
 
+export const patchDispute = async (idispute) => {
+  try {
+    const url = `${path}/dispute?idispute=${idispute}`
+    const res = await jwtAxios.patch(url)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+ 
+export const getReserve = async (role,page) => {
+  try {
+    const url = `${path}/reserve?role=${role}&page=${page}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const getProd = async (page) => {
+  try {
+    const url = `${path}/prod2?page=${page}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const deleteMyBoard = async (iboard) => {
+  try {
+    const url = `${path2}/board/${iboard}`
+    const res = await jwtAxios.delete(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/");
+  }
+}
+
+export const getCode = async (code) => {
+  try {
+    const url = `${path2}/pay/code?code=${code}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const getPaymentData = async (ipayment) => {
+  try {
+    const url = `${path2}/pay/${ipayment}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}

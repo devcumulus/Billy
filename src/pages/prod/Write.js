@@ -71,7 +71,7 @@ const initState = {
   // restAddr: "", // 나머지 주소
   price: "", //가격
   rentalPrice: "", //임대 가격
-  depositPer: "50", //보증금 비율
+  depositPer: "", //보증금 비율
 
   buyDate: "", //구매날짜
   rentalStartDate: "", //임대시작
@@ -82,7 +82,8 @@ const initState = {
     subCategory: "1", //하위 카테고리
   },
 
-  inventory: 1, // 재고
+  inventory: 0, // 재고
+  hashtag: "#",
 };
 // 검증 코드 yup
 const validationSchema = yup.object({
@@ -183,6 +184,12 @@ const Write = () => {
   const [textareaValue, setTextareaValue] = useState("");
   const [textareaValues, setTextareaValues] = useState("");
   const [btData, setBtData] = useState([]);
+
+  // # 이외에 기호 안들어가게 만든 조건식
+  const [inputHash, setInputHash] = useState("");
+  const [inputHash1, setInputHash1] = useState("");
+  const [inputHash2, setInputHash2] = useState("");
+  const [inputHash3, setInputHash3] = useState("");
 
   // 카테고리
   const [btListPk, setBtListPk] = useState(btlist);
@@ -348,7 +355,8 @@ const Write = () => {
 
   // 확인 버튼 선택시 실행
   const handleSubmitMy = async data => {
-    // console.log(data);
+    console.log(data);
+    console.log("gogog");
     const formData = new FormData();
     const dto = new Blob(
       [
@@ -391,6 +399,7 @@ const Write = () => {
       formData.append("pics", file);
     });
     await Promise.all(imagePromises);
+    console.log("뭔데");
     postprod({ product: formData, successFn, failFn, errorFn });
   };
 
@@ -411,17 +420,13 @@ const Write = () => {
     // failPostDatas("/");
   };
   const handleReset = () => {
-    setValue("price", "");
-    setValue("rentalPrice", "");
-    setValue("depositPer", "50"); // hook-form의 전용 함수를 사용하여 depositPer 값을 50으로 설정
-    setValue("title", "");
-    setValue("contents", "");
-    setValue("inventory", 0);
+    setValue("title", ""); //제목
+    setValue("contents", ""); //내용
+    setValue("rentalPrice", ""); //대여금
 
     setValue("restAddress", "");
     setValue("adress", "");
-
-    setValueDeposit(50); // state 값을 50으로 설정
+    setValue("hashTags", ""); //태그
   };
   //취소 버튼시 메인으로
   const quest = useNavigate();
@@ -432,6 +437,7 @@ const Write = () => {
   const [catchErr, setCatchErr] = useState(false);
   const handleNotValid = e => {
     setCatchErr(true);
+    console.log("gogo44444g");
   };
   //현재 날짜 추적 이전 날짜 막는 코드
   const [selectedDateRangeAll, setSelectedDateRangeAll] = useState(null);
@@ -441,13 +447,41 @@ const Write = () => {
   const disabledDate = current => {
     return current && current < moment().startOf("day");
   };
+  //태그관련
+  const handleInputChangeHash = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash(newValue);
+  };
+  const handleInputChangeHash1 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash1(newValue);
+  };
+  const handleInputChangeHash2 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash2(newValue);
+  };
+  const handleInputChangeHash3 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash3(newValue);
+  };
+  // 공백을 제거하는 함수 만들기
+  let [str, setStr] = useState("");
+  const handleChangeS = e => {
+    let newValue = e.target.value.trim(); // 입력 값에서 공백을 제거한 후 새로운 변수에 할당
+    setStr(newValue); // state 변수(str) 업데이트
+  };
+
+  str = str.trim();
+  let arr = str.split(" ");
+  let result = arr.join("");
+  // console.log(result);
 
   return (
     <Layout>
       <SideBar />
       <AllWidth>
         <div>
-          <Mytitle title={"기본 정보"} />
+          <Mytitle title={"등록 정보"} />
         </div>
         <div>
           <form onSubmit={handleSubmit(handleSubmitMy)}>
@@ -604,19 +638,7 @@ const Write = () => {
                 </BtWrap>
               </div>
             </ListDiv>
-            {/* <ListDiv>
-              <label htmlFor="price">
-                <p>대여가격</p> <p>*</p>
-              </label>
-              <div>
-                <input
-                  type="number"
-                  id="price"
-                  {...register("rentalPrice")}
-                  placeholder="₩ 대여 가격을 입력해주세요"
-                />
-              </div>
-            </ListDiv> */}
+
             <ListDiv direction={"column"}>
               <label htmlFor="detail">
                 <p>상품내용</p> <p>*</p>
@@ -641,84 +663,47 @@ const Write = () => {
                   </div>
                 </div>
 
-                {/* <h2>({textareaValue.length}/1500)</h2> */}
                 <h2>최대 1500자입니다.</h2>
               </div>
             </ListDiv>
             <ListDiv>
               <label>
-                <p>가격</p> <p>*</p>
+                <p>해쉬태그</p> <p>*</p>
               </label>
               <PriceDiv>
-                <div>
-                  <div>
-                    <input
-                      type="number"
-                      placeholder="숫자만 입력 가능합니다"
-                      {...register("price")}
-                    />
-                    <span>원</span>
-                  </div>
-                  <div style={{ color: "red", textAlign: "center" }}>
-                    {formState.errors.price?.message}
-                  </div>
-                  <p>제품의 가격을 입력해주세요</p>
-                </div>
-                <div>
-                  <div className="controlBt">
-                    <input
-                      type="number"
-                      step="10"
-                      {...register("depositPer")}
-                      placeholder="버튼을 클릭 해주세요"
-                      readOnly
-                    />
-                    <div>
-                      <button
-                        onClick={handleIncrease}
-                        className="upBt"
-                        type="button"
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={handleDecrease}
-                        className="downBt"
-                        type="button"
-                      >
-                        -
-                      </button>
-                    </div>
-                    <span>%</span>
-                  </div>
+                <input
+                  type="text"
+                  // value={inputHash}
+                  // onChange={handleInputChangeHash}
+                  placeholder="#태그를작성해주세요"
+                  {...register("hash")}
+                ></input>
 
-                  <div style={{ color: "red" }}>
-                    {formState.errors.depositPer?.message}
-                  </div>
-                  <p>
-                    보증금 50 ~ 100%
-                    <hr /> 10단위로 선택 가능합니다
-                  </p>
-                </div>
-                <div>
-                  <div>
-                    <input
-                      type="number"
-                      placeholder="숫자만 입력 가능합니다"
-                      {...register("rentalPrice")}
-                    />
-                    <span>원</span>
-                  </div>
-                  <div style={{ color: "red" }}>
-                    {formState.errors.rentalPrice?.message}
-                  </div>
-                  <p>1일 대여가격</p>
-                </div>
+                <input
+                  type="text"
+                  value={inputHash1}
+                  onChange={handleInputChangeHash1}
+                  placeholder="#닌테도"
+                ></input>
+                <input
+                  type="text"
+                  value={inputHash2}
+                  onChange={handleInputChangeHash2}
+                  placeholder="#이벤트"
+                ></input>
+                <input
+                  type="text"
+                  // value={inputHash3}
+                  // onChange={handleInputChangeHash3}
+                  value={str}
+                  onChange={e => handleChangeS(e)}
+                  placeholder="#전자제품"
+                />
               </PriceDiv>
             </ListDiv>
             <ListDiv>
               <label htmlFor="quantity">
-                <p>소유수량</p> <p>*</p>
+                <p>1일 대여가격</p> <p>*</p>
               </label>
               <div>
                 <div>
@@ -786,7 +771,7 @@ const Write = () => {
                         <ArrowRightOutlined style={{ fontSize: "18px" }} />
                       </span>
                     }
-                    defaultPickerValue={today} // 시작일을 오늘 날짜로 설정
+                    defaultValue={today} // 시작일을 오늘 날짜로 설정
                     disabledDate={disabledDate} // 오늘 이전 날짜를 비활성화
                   />
 

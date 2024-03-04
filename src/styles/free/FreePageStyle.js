@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Pagination } from "antd";
 
 export const FreePageStyle = styled.div`
   width: 1260px;
@@ -74,6 +75,7 @@ export const FreeMain = styled.div`
     text-align: center;
     font-size: 14px;
     background: #fff;
+    cursor: pointer;
   }
 `;
 
@@ -109,33 +111,26 @@ export const BtSection = styled.div`
 
     color: #fff;
     font-size: 16px;
+    cursor: pointer;
   }
 `;
 
-export const PaginationContainer = styled.div`
-  text-align: center;
-  margin-top: 20px;
-`;
-export const PaginationButton = styled.button`
-  padding: 5px 10px;
-  font-size: 16px;
-  margin-right: 10px;
-  background-color: #ffffff;
-  border: none;
-  cursor: pointer;
-  &.active {
-    font-weight: bold;
-    background-color: #ffffff;
+export const PaginationBlue = styled(Pagination)`
+  .ant-pagination-item-active {
+    border-color: #2c39b5;
+    background-color: #2c39b5;
+  }
+  .ant-pagination-item-active a {
     color: #fff;
-    background-color: #ffd4d4;
   }
-
-  &:hover {
-    background-color: #ffd4d4;
+  .ant-pagination-item-active:hover {
+    border-color: #2c39b5;
+    background-color: #2c39b5;
   }
-
-  &.next-page,
-  &.last-page {
-    margin-right: 20px;
+  .ant-pagination-item-active a:hover {
+    color: #fff;
+  }
+  .ant-pagination-options {
+    display: none;
   }
 `;

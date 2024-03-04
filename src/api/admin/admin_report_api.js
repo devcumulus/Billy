@@ -19,7 +19,7 @@ export const getDispute = async (
     if (category) {
       url += `&category=${category}`;
     }
-    if (state) {
+    if (state!==null) {
       url += `&status=${state}`;
     }
 

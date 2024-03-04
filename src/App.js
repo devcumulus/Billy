@@ -50,6 +50,8 @@ const LazyWrite = lazy(() => import("./pages/prod/Write"));
 const LazyModify = lazy(() => import("./pages/prod/Modify"));
 //기업등록
 const LazyEnterprise = lazy(() => import("./pages/promootion/EnterpriseWrite"));
+const LazyModifyu = lazy(() => import("./pages/prod/Modify"));
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -59,6 +61,15 @@ const App = () => {
           element={
             <Suspense fallback={<Loading />}>
               <LazyMainPage />
+            </Suspense>
+          }
+        ></Route>
+        {/* 수정페이지 추후삭제 */}
+        <Route
+          path="/Modify"
+          element={
+            <Suspense fallback={<Loading />}>
+              <LazyModifyu />
             </Suspense>
           }
         ></Route>

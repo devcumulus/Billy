@@ -35,6 +35,7 @@ const loginSlice = createSlice({
       console.log("logout");
       removeCookie("member", "/");
       sessionStorage.removeItem('isLogin');
+      sessionStorage.removeItem('userAuth');
       return { ...initState };
     },
   },
@@ -47,6 +48,7 @@ const loginSlice = createSlice({
         if (!payload.error) {
           setCookie("member", JSON.stringify(payload));
           sessionStorage.setItem('isLogin', 'true');
+          sessionStorage.setItem('userAuth', action.payload.auth);
           return {...state, isLogin: true, iuser: payload.iuser }
         } else {
           console.log(payload.error);

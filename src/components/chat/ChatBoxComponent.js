@@ -11,7 +11,9 @@ import {
   ChatMessage,
   ButtonContainer,
   ChatBtn,
+
   ChatMessageWrapper,
+
 } from "../../styles/chat/ChatStyles";
 import Modal from "./Modal"; // 모달 컴포넌트 불러오기
 
@@ -19,6 +21,9 @@ const ChatBoxComponent = ({ selectedProfile, messages }) => {
   const [inputMessage, setInputMessage] = useState(""); // State to store input message
   const [chatMessages, setChatMessages] = useState([]); // State to store chat messages
   const [modalOpen, setModalOpen] = useState(false);
+
+
+
 
   const handleInputChange = e => {
     setInputMessage(e.target.value); // Update input message state
@@ -36,7 +41,9 @@ const ChatBoxComponent = ({ selectedProfile, messages }) => {
   };
 
   const openModal = () => {
+
     setModalOpen(prevModalOpen => !prevModalOpen);
+
   };
 
   const closeModal = () => {
@@ -71,9 +78,10 @@ const ChatBoxComponent = ({ selectedProfile, messages }) => {
 
               <p>{selectedProfile.productContent}</p>
             </ProfileInfoContainer>
-            sadf
+
             <ChatText>
               {modalOpen && <Modal onClose={closeModal} />}
+
               <ChatBoxContent>
                 {chatMessages.map((message, index) => (
                   <ChatMessageWrapper
@@ -97,6 +105,7 @@ const ChatBoxComponent = ({ selectedProfile, messages }) => {
                   </ChatMessageWrapper>
                 ))}
               </ChatBoxContent>
+
             </ChatText>
           </ChatBoxContent>
           <ChatInput
@@ -106,7 +115,6 @@ const ChatBoxComponent = ({ selectedProfile, messages }) => {
             onChange={handleInputChange} // Handle input change
             onKeyPress={handleKeyPress} // Handle Enter key press
           />
-          {/* 버튼에 margin-left: auto를 적용하여 오른쪽 끝으로 배치 */}
         </ChatBoxContainer>
       ) : (
         <NoChatSelectedMessage>

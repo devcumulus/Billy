@@ -8,55 +8,85 @@ import { MainWrap } from "../../styles/main/mainStyle";
 import { getMoreProduct, getProduct, getProductFirst } from "../../api/main/main_api";
 
 const initData = [
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
-  // {
-  //   image: "../images/main/camera.jpeg",
-  //   title: "인스탁스 미니12 폴라로이드 즉석 카메라",
-  //   price: "150,000 원",
-  //   address: "대구광역시 달서구 상인동",
-  //   view: 10,
-  // },
+  [
+    {
+      "iuser": 0,
+      "nick": "string",
+      "userPic": "string",
+      "iauth": 0,
+      "iproduct": 0,
+      "title": "string",
+      "prodMainPic": "string",
+      "rentalPrice": 0,
+      "rentalStartDate": "2024-03-03T06:19:29.673Z",
+      "rentalEndDate": "2024-03-03T06:19:29.673Z",
+      "addr": "string",
+      "restAddr": "string",
+      "view": 0,
+      "istatus": 0,
+      "prodLike": 0,
+      "isLiked": 0,
+      "categories": {
+        "mainCategory": 1,
+        "subCategory": 1
+      },
+      "hashTags": [
+        {
+          "id": 0,
+          "tag": "string"
+        }
+      ]
+    }
+  ],
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
+  {
+    image: "../images/main/camera.jpeg",
+    title: "인스탁스 미니12 폴라로이드 즉석 카메라",
+    price: "150,000 원",
+    address: "대구광역시 달서구 상인동",
+    view: 10,
+  },
 ];
 
 const btList = [

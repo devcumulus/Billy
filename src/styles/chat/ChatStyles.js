@@ -33,6 +33,7 @@ export const ChatProfileBox = styled.div`
   cursor: pointer; /* 클릭 가능하도록 커서 스타일 지정 */
   pointer-events: auto; /* 클릭 이벤트 활성화 */
 `;
+
 export const ChatBtn = styled.img`
   font-size: 14px;
   position: absolute;
@@ -93,7 +94,9 @@ export const ChatBoxContainer = styled.div`
 `;
 
 export const ChatBoxContent = styled.div`
+
   /* width: 600px; */
+
   max-width: 100%;
   max-height: 550px;
   height: auto;
@@ -118,12 +121,14 @@ export const ChatInput = styled.input`
   font-size: 16px;
   background: #f2f2ff;
   padding-left: 10px;
+
+
 `;
 
 export const ProfileInfoContainer = styled.div`
   display: inline-block;
   margin-left: 10px;
-  /* margin-right: 200px; */
+
 `;
 
 export const ChatText = styled.div`
@@ -133,7 +138,9 @@ export const ChatText = styled.div`
   margin-bottom: 5px;
   overflow-y: auto;
   overflow-x: hidden;
+
   padding-right: 10px;
+
 `;
 
 export const ProfileName = styled.p`

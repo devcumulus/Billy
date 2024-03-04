@@ -35,7 +35,7 @@ const Header = ({ searchName, pageNum }) => {
   const [sc, setSc] = useState("");
   const searchWordRef = useRef(null);
   const searchBtRef = useRef(null);
-  
+
   const handleChangeSearch = e => {
     setSearch(e.target.value);
   };
@@ -45,8 +45,8 @@ const Header = ({ searchName, pageNum }) => {
     sessionStorage.setItem("searchValue", search);
     const sendData = {
       search: search,
-      mc:mc,
-      sc:sc,
+      mc: mc,
+      sc: sc,
       pageNum: 1,
     };
     searchGet({ sendData, successFn, failFn, errFn });
@@ -59,7 +59,7 @@ const Header = ({ searchName, pageNum }) => {
     }
   };
   const successFn = result => {
-    console.log("검색 성공", result);
+    // console.log("검색 성공", result);
     const searchValue = sessionStorage.getItem("searchValue");
 
     let url = `/search?search=${search}`;
@@ -81,7 +81,6 @@ const Header = ({ searchName, pageNum }) => {
     console.log("검색 서버에러", result);
   };
 
-
   // 검색 카테고리 선택
   const [selectedValue, setSelectedValue] = useState("");
   const [selectedSubCate, setSelectedSubCate] = useState([
@@ -99,7 +98,7 @@ const Header = ({ searchName, pageNum }) => {
     );
 
     if (selectedMainCategory) {
-      const selectedSubCategoryId = selectedMainCategoryId-1;
+      const selectedSubCategoryId = selectedMainCategoryId - 1;
       const selectedSubCategory = subCate[selectedSubCategoryId];
 
       setSelectedSubCate(selectedSubCategory);
@@ -221,7 +220,8 @@ const Header = ({ searchName, pageNum }) => {
   // 로그인 & 로그아웃
   const loginState = useSelector(state => state.loginSlice);
   // console.log(loginState);
-  const { moveToPath, isLogin, doLogout } = useCustomLogin();
+  const { moveToPath, isLogin, doLogout, userAuth } = useCustomLogin();
+  // console.log(userAuth)
 
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -294,7 +294,7 @@ const Header = ({ searchName, pageNum }) => {
                     </option>
                     {mainCate.map(item => {
                       return (
-                        <option key={item.id} value={item.id }>
+                        <option key={item.id} value={item.id}>
                           {item.title}
                         </option>
                       );
@@ -327,14 +327,25 @@ const Header = ({ searchName, pageNum }) => {
           <LoginState>
             <button onClick={handleLogout}>로그아웃</button>
             <DivisionLine></DivisionLine>
-            <Link
-              to="/my"
-              onClick={() => {
-                handleMy("대여중");
-              }}
-            >
-              <button>마이페이지</button>
-            </Link>
+            {userAuth == 1 ? (
+              <Link
+                to="/my"
+                onClick={() => {
+                  handleMy("대여중");
+                }}
+              >
+                <button>마이페이지</button>
+              </Link>
+            ) : (
+              <Link
+                to="/admin"
+                // onClick={() => {
+                //   handleMy("대여중");
+                // }}
+              >
+                <button>관리자페이지</button>
+              </Link>
+            )}
           </LoginState>
         ) : (
           <LoginState>

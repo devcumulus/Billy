@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { LoginState } from "../../styles/header/HeaderStyle";
 import { DivisionLine } from "../../styles/login/LoginPageStyle";
 import { AdminTitle } from "../../styles/admin/AdminPageStyle";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const AllWidth = styled.div`
   width: 1260px;
@@ -55,6 +56,13 @@ const AdminPage = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  // 로그아웃
+  const { moveToPath, isLogin, doLogout } = useCustomLogin();
+  const handleLogout = () => {
+    doLogout();
+    moveToPath("/");
+  };
 
   // 메인페이지로 이동
   const handleMain = () => {
@@ -109,7 +117,7 @@ const AdminPage = () => {
         <AdminTitle>
           <h1>관리자 페이지</h1>
           <LoginState>
-            <button>로그아웃</button>
+            <button onClick={handleLogout}>로그아웃</button>
             <DivisionLine color="#C14B45"></DivisionLine>
             <button onClick={handleMain}>메인페이지</button>
           </LoginState>

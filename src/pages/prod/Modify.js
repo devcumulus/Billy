@@ -14,7 +14,7 @@ import koKR from "antd/lib/date-picker/locale/ko_KR";
 import DaumPostcode from "react-daum-postcode";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { GetProd, postprod } from "../../api/prod/prod_api";
+import { GetProd, postprod, putProd } from "../../api/prod/prod_api";
 import { Modal } from "../../components/address/Address";
 import { BtSection, CancelBt, SaveBt } from "../../styles/join/JoinPageStyle";
 import {
@@ -28,6 +28,8 @@ import {
   ProductImgMap,
   Resets,
 } from "../../styles/prod/productsStyle";
+// 오늘 날짜 추적
+import moment from "moment";
 
 // 항목 카테고리 리스트
 const btlist = [
@@ -145,9 +147,9 @@ const validationSchema = yup.object({
   //   .string("내용을 입력하세요.")
   //   .max(50, "50자까지만 입력하세요 ")
   //   .required(" 상세 주소는 필수 입력 사항입니다."),
-  mainPic: yup
-    .string("제품사진을 선택해주세요.")
-    .required("제품사진은 최소 1개이상 필수 입력 사항입니다."),
+  // mainPic: yup
+  //   .string("제품사진을 선택해주세요.")
+  //   .required("제품사진은 최소 1개이상 필수 입력 사항입니다."),
 });
 
 const Modify = () => {
@@ -178,29 +180,59 @@ const Modify = () => {
   const productId = parseInt(searchParams.get("productId"));
   // get 한목록 가져오기
   // const [stays, setStays] = useState(initStateData);
+  // const [productData, setProductData] = useState(initStateData);
   const [productData, setProductData] = useState(initStateData);
+
+  // 최초 데이터 로딩시 처리
+  const resReadData = _data => {
+    // 상품정보를 읽어서 상태로 저장한다.
+    console.log("새롭게 데이터를 초기화 한다. : ", _data);
+    setImageBefore(_data.prodSubPics);
+    setSelectCate(_data.categories.mainCategory - 1);
+    setChangeBtn(_data.categories.subCategory - 1);
+    setAddress(_data.addr);
+    setRestAddress(_data.restAddr);
+
+    setValue("title", _data.title);
+    setValue("contents", _data.contents);
+    setValue("price", parseInt(_data.price));
+    // 체크 필요
+    setValue("depositPer", parseInt(_data.deposit));
+
+    setValue("rentalPrice", parseInt(_data.rentalPrice));
+    setValue("inventory", parseInt(_data.inventory));
+
+    setBuyDateNow(dayjs(_data.buyDate));
+    setValue("buyDate", dayjs(_data.buyDate));
+
+    setValue("rentalStartDate", _data.rentalStartDate);
+    setValue("rentalEndDate", _data.rentalEndDate);
+
+    // <img src={`/pic/${item.prodPics}`} alt="" />
+    setUploadImgBefore(`/pic/${_data.prodMainPic}`);
+  };
+  const fetchData = async () => {
+    try {
+      const response = await GetProd(mainCategory, subCategory, productId);
+
+      setProductData(response.data);
+      resReadData(response.data);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await GetProd(mainCategory, subCategory, productId);
-        // 상품정보를 읽어서 상태로 저장한다.
-        setProductData(response.data);
-        setImageBefore(response.data.prodSubPics);
-        setSelectCate(response.data.categories.mainCategory - 1);
-        setChangeBtn(response.data.categories.subCategory - 1);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
     fetchData();
   }, []);
 
   // 폼 관련 데이터 처리
   const { register, handleSubmit, formState, setValue } = useForm({
-    defaultValues: productData,
+    // 개별 값으로 가져오므로 처리함.
+    // defaultValues: productData,
     resolver: yupResolver(validationSchema),
     mode: "onChange",
   });
+
   const [address, setAddress] = useState("");
   const [restAddress, setRestAddress] = useState("");
   const handleChangeAddress = e => {
@@ -224,6 +256,12 @@ const Modify = () => {
   const [textareaValue, setTextareaValue] = useState("");
   const [textareaValues, setTextareaValues] = useState("");
   const [btData, setBtData] = useState([]);
+
+  // # 이외에 기호 안들어가게 만든 조건식
+  const [inputHash, setInputHash] = useState("");
+  const [inputHash1, setInputHash1] = useState("");
+  const [inputHash2, setInputHash2] = useState("");
+  const [inputHash3, setInputHash3] = useState("");
 
   // 카테고리
   const [btListPk, setBtListPk] = useState(btlist);
@@ -272,7 +310,14 @@ const Modify = () => {
   const removeImgList = _index => {
     // console.log(_index);
     // console.log(fileCount);
-    if (fileCount === 1) {
+    // 이미지가 무조건 1장은 있으므로 등록이 되었다.
+    // 그래서 총 개수로 제어를 하는 코드로 변경을 시도한다.
+    console.log(
+      "=================== 테스트중 imageBefore.length : ",
+      imageBefore.length,
+    );
+    // if (fileCount === 1) {
+    if (imageBefore.length === 1) {
       alert("상품 대표 이미지는 최소 1개 이상 등록 하셔야 합니다.");
       return false;
     }
@@ -285,7 +330,7 @@ const Modify = () => {
   };
   //버튼 감시자
   useEffect(() => {
-    // console.log(imageBefore);
+    console.log("========== 이미지 바뀐 경우 : ", imageBefore);
     setValue("mainPic", imageBefore[0]);
     setValue("pics", imageBefore);
   }, [imageBefore]);
@@ -298,8 +343,8 @@ const Modify = () => {
   };
   //주메뉴 서브메뉴 연결설정
   const handleButtonClick = num => {
-    setValue("icategory.mainCategory", num + 1);
-    setValue("icategory.subCategory", 1);
+    // setValue("icategory.mainCategory", num + 1);
+    // setValue("icategory.subCategory", 1);
     // 상태 업데이트
     setSelectCate(num);
     // 주메뉴가 눌려지면 항상 서브메뉴들은 초기화 한다.
@@ -356,6 +401,7 @@ const Modify = () => {
     var comparisonDate = new Date(dateString);
     // 오늘 날짜가 comparisonDate 이전인지 확인
     if (today > comparisonDate) {
+      setBuyDateNow(dateString);
       setValue("buyDate", dateString);
     } else {
       alert("오늘 이전 날짜를 선택해주세요.");
@@ -379,10 +425,11 @@ const Modify = () => {
   }, [selectCate]);
 
   useEffect(() => {
-    setValue("buyDate", "");
-    setValue("rentalStartDate", "");
-    setValue("rentalEndDate", "");
+    // setValue("buyDate", "");
+    // setValue("rentalStartDate", "");
+    // setValue("rentalEndDate", "");
   }, []);
+
   useEffect(() => {
     setBtData(btListPk[selectCate]);
   }, [selectCate]);
@@ -406,8 +453,10 @@ const Modify = () => {
           rentalEndDate: data.rentalEndDate, // 임대 종료
           icategory: {
             //카테고리숫자
-            mainCategory: data.icategory.mainCategory, //메인카테고리
-            subCategory: data.icategory.subCategory, //하위 카테고리
+            // mainCategory: data.icategory.mainCategory, //메인카테고리
+            mainCategory: selectCate, //메인카테고리
+            // subCategory: data.icategory.subCategory, //하위 카테고리
+            subCategory: changebtn, //하위 카테고리
           },
           inventory: data.inventory,
         }),
@@ -417,8 +466,15 @@ const Modify = () => {
     );
 
     formData.append("dto", dto);
+    // const sendImagDatagogo = data.pics.map(item => console.log(typeof item));
+    const sendImagData = data.pics.filter(item => typeof item === "string");
+    console.log(
+      "데이터를 보내는 경우 신규 데이터만 보내줌. ======== sendImagData",
+      sendImagData,
+    );
 
-    const imagePromises = data.pics.map(async (image, index) => {
+    // const imagePromises = data.pics.map(async (image, index) => {
+    const imagePromises = sendImagData.map(async (image, index) => {
       const response = await fetch(image);
       const blob = await response.blob();
       const currentDate = new Date();
@@ -432,12 +488,12 @@ const Modify = () => {
       formData.append("pics", file);
     });
     await Promise.all(imagePromises);
-    postprod({ product: formData, successFn, failFn, errorFn });
+    putProd({ product: formData, successFn, failFn, errorFn });
   };
 
   const successFn = result => {
     // 성공했을 때 처리
-    console.log("success", result);
+    console.log("수정 성공 : success", result);
     navigate("/");
     // navigator(`/details/${result}`);
     // failPostDatas("/");
@@ -445,16 +501,18 @@ const Modify = () => {
 
   const failFn = result => {
     // 실해했을 때 처리 필요
-    console.log("failFn", result);
+    console.log("수정 실패 : failFn", result);
   };
   const errorFn = result => {
     // 오류 발생시 처리 필요
-    console.log("errorFn", result);
+    console.log("수정 에러 : errorFn", result);
     // failPostDatas("/");
   };
   const handleReset = () => {
-    setValue("depositPer", 50); // hook-form의 전용 함수를 사용하여 depositPer 값을 50으로 설정
-    setValueDeposit(50); // state 값을 50으로 설정
+    // setValue("depositPer", 50); // hook-form의 전용 함수를 사용하여 depositPer 값을 50으로 설정
+    // setValueDeposit(50); // state 값을 50으로 설정
+    // 초기화 하기
+    fetchData();
   };
   //취소 버튼시 메인으로
   const quest = useNavigate();
@@ -466,6 +524,12 @@ const Modify = () => {
   const handleNotValid = e => {
     setCatchErr(true);
   };
+  // 오늘 날짜
+  const today = moment();
+  // 오늘 이전 날짜를 비활성화하는 함수
+  const disabledDate = current => {
+    return current && current < moment().startOf("day");
+  };
 
   //로그인 사용자 정보 담기
   const iuser = useSelector(state => state.loginSlice.iuser);
@@ -474,6 +538,34 @@ const Modify = () => {
     console.log("연동");
     GetProd();
   };
+  //태그관련
+  const handleInputChangeHash = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash(newValue);
+  };
+  const handleInputChangeHash1 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash1(newValue);
+  };
+  const handleInputChangeHash2 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash2(newValue);
+  };
+  const handleInputChangeHash3 = e => {
+    const newValue = e.target.value.replace(/[?.;:|*~`!^\-_+<>@$%&"]/g, "");
+    setInputHash3(newValue);
+  };
+  // 공백을 제거하는 함수 만들기
+  let [str, setStr] = useState("");
+  const handleChangeS = e => {
+    let newValue = e.target.value.trim(); // 입력 값에서 공백을 제거한 후 새로운 변수에 할당
+    setStr(newValue); // state 변수(str) 업데이트
+  };
+
+  str = str.trim();
+  let arr = str.split(" ");
+  let result = arr.join("");
+  // console.log(result);
   return (
     <Layout>
       <SideBar />
@@ -503,9 +595,9 @@ const Modify = () => {
                     <img src={uploadImgBefore} alt="" />
                   </ProductImgBt>
 
-                  <div style={{ color: "red" }}>
+                  {/* <div style={{ color: "red" }}>
                     {formState.errors.mainPic?.message}
-                  </div>
+                  </div> */}
                 </div>
                 <input
                   type="file"
@@ -523,7 +615,11 @@ const Modify = () => {
               <ProductImgMap>
                 {imageBefore.map((item, index) => (
                   <div key={index} onClick={() => removeImgList(index)}>
-                    <img src={`/pic/${item.prodPics}`} alt="" />
+                    {item.ipics ? (
+                      <img src={`/pic/${item.prodPics}`} alt="" />
+                    ) : (
+                      <img src={item} alt="" />
+                    )}
                   </div>
                 ))}
               </ProductImgMap>
@@ -539,10 +635,10 @@ const Modify = () => {
                   <input
                     type="text"
                     id="product"
-                    value={productData.title}
+                    // value={productData.title}
                     maxLength={50}
                     placeholder="상품을 입력해주세요"
-                    // {...register("title")}
+                    {...register("title")}
                   />
 
                   {/* 나머지 컴포넌트들 */}
@@ -649,9 +745,9 @@ const Modify = () => {
                   <textarea
                     id="detail"
                     maxLength={1500}
-                    value={productData.contents}
-                    {...register("contents")}
+                    // value={productData.contents}
                     placeholder="구매시기, 브랜드/모델명, 제품의 상태 (사용감,하자 유무) 등을 입력해 주세요."
+                    {...register("contents")}
                     // value={textareaValue}
                     // onChange={e => {
                     //   handleTextareaChange(e);
@@ -671,81 +767,42 @@ const Modify = () => {
             </ListDiv>
             <ListDiv>
               <label>
-                <p>가격</p> <p>*</p>
+                <p>해쉬태그</p> <p>*</p>
               </label>
               <PriceDiv>
-                <div>
-                  <div>
-                    <input
-                      type="number"
-                      value={productData.price}
-                      placeholder="숫자만 입력 가능합니다"
-                      {...register("price")}
-                    />
-                    <span>원</span>
-                  </div>
-                  <div style={{ color: "red", textAlign: "center" }}>
-                    {formState.errors.price?.message}
-                  </div>
-                  <p>제품의 가격을 입력해주세요</p>
-                </div>
-                <div>
-                  <div className="controlBt">
-                    <input
-                      type="number"
-                      step="10"
-                      value={productData.deposit}
-                      {...register("depositPer")}
-                      placeholder="버튼을 클릭 해주세요"
-                      readOnly
-                    />
-                    <div>
-                      <button
-                        onClick={handleIncrease}
-                        className="upBt"
-                        type="button"
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={handleDecrease}
-                        className="downBt"
-                        type="button"
-                      >
-                        -
-                      </button>
-                    </div>
-                    <span>%</span>
-                  </div>
+                <input
+                  type="text"
+                  // value={inputHash}
+                  // onChange={handleInputChangeHash}
+                  placeholder="#태그를작성해주세요"
+                  {...register("hash")}
+                ></input>
 
-                  <div style={{ color: "red" }}>
-                    {formState.errors.depositPer?.message}
-                  </div>
-                  <p>
-                    보증금 50 ~ 100%
-                    <hr /> 10단위로 선택 가능합니다
-                  </p>
-                </div>
-                <div>
-                  <div>
-                    <input
-                      type="number"
-                      value={productData.rentalPrice}
-                      placeholder="숫자만 입력 가능합니다"
-                      {...register("rentalPrice")}
-                    />
-                    <span>원</span>
-                  </div>
-                  <div style={{ color: "red" }}>
-                    {formState.errors.rentalPrice?.message}
-                  </div>
-                  <p>1일 대여가격</p>
-                </div>
+                <input
+                  type="text"
+                  value={inputHash1}
+                  onChange={handleInputChangeHash1}
+                  placeholder="#닌테도"
+                ></input>
+                <input
+                  type="text"
+                  value={inputHash2}
+                  onChange={handleInputChangeHash2}
+                  placeholder="#이벤트"
+                ></input>
+                <input
+                  type="text"
+                  // value={inputHash3}
+                  // onChange={handleInputChangeHash3}
+                  value={str}
+                  onChange={e => handleChangeS(e)}
+                  placeholder="#전자제품"
+                />
               </PriceDiv>
             </ListDiv>
             <ListDiv>
               <label htmlFor="quantity">
-                <p>소유수량</p> <p>*</p>
+                <p>1일 대여가격</p> <p>*</p>
               </label>
               <div>
                 <div>
@@ -753,7 +810,7 @@ const Modify = () => {
                     className="showSpinner"
                     type="number"
                     id="quantity"
-                    value={productData.inventory}
+                    // value={productData.inventory}
                     placeholder="숫자만 입력"
                     {...register("inventory")}
                   />
@@ -778,6 +835,7 @@ const Modify = () => {
                       <CalendarOutlined style={{ color: "#2C39B5" }} />
                     }
                     onChange={handleChangeBuyDate}
+                    value={buyDateNow}
                     defaultValue={dayjs(productData.buyDate)}
                   />
 
@@ -817,6 +875,8 @@ const Modify = () => {
                         <ArrowRightOutlined style={{ fontSize: "18px" }} />
                       </span>
                     }
+                    defaultPickerValue={today} // 시작일을 오늘 날짜로 설정
+                    disabledDate={disabledDate} // 오늘 이전 날짜를 비활성화
                   />
 
                   <div style={{ color: "red" }}>
@@ -835,7 +895,7 @@ const Modify = () => {
                   type="text"
                   // {...register("addr")}
                   // value={address}
-                  value={productData.addr}
+                  value={address}
                   placeholder="주소 검색을 해주세요."
                   onClick={handleClickButton}
                   id="adress"
@@ -852,8 +912,7 @@ const Modify = () => {
 
                 <input
                   type="text"
-                  // value={restAddress}
-                  value={productData.restAddr}
+                  value={restAddress}
                   placeholder="상세 주소를 입력해주세요."
                   // {...register("restAddr")}
                   name="restAddress"

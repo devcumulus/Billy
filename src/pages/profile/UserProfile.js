@@ -111,19 +111,21 @@ const postData = [
 ];
 
 const initUserData = {
-  y: 1,
-  x: 2,
-  addr: "대구",
-  restAddr: "달서구",
-  nick: "소연",
-  storedPic: "",
-  phone: "010",
-  email: "ㅔㅔㅔ",
-  rating: 4,
-  auth: 1,
-  istatus: 1,
-};
-
+  "y": 0,
+  "x": 0,
+  "addr": "string",
+  "restAddr": "string",
+  "nick": "프론트",
+  "storedPic": "string",
+  "phone": "string",
+  "email": "string",
+  "rating": 0,
+  "auth": "string",
+  "istatus": 0,
+  "status": "string",
+  "penalty": 0,
+  "iauth": 0
+}
 const initListData = [
   {
     "iuser": 0,
@@ -193,7 +195,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     getUserProfile(iuser, successGetFn, errorFn);
-    getProductList(iuser,page, successFn, errorFn);
+    getProductList(iuser, page, successFn, errorFn);
   }, [iuser, page]);
 
 
@@ -264,7 +266,6 @@ const UserProfile = () => {
                   <Demerit>
                     <div>벌점</div>
                     <div className="demerit-score">
-                      <span>-</span>
                       <span
                         style={{
                           color: getPenaltyColor(userData.penalty),

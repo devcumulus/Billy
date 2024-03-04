@@ -34,27 +34,50 @@ import { useNavigate } from "react-router";
 import moment from "moment";
 
 //서버에서 돌려주는 값
-// const initMoreData = {
-//   mainPic: "", //메인 사진
-//   pics: [""], //서브 사진
-//   dto: {
-//     title: "", //재목(50자 한정)
-//     contents: "", // 내용 (1500자 제한)
-//     addr: "", //주소
-//     restAddr: "", // 나머지 주소
-//     price: 0, //가격
-//     rentalPrice: 0, //임대 가격
-//     depositPer: 0, //보증금 비율
-//     buyDate: "2024-01-31", //구매날짜
-//     rentalStartDate: "2024-01-31", //임대시작
-//     rentalEndDate: "2024-01-31", // 임대 종료
-//     icategory: {
-//       //카테고리숫자
-//       mainCategory: 0, //메인카테고리
-//       subCategory: 1, //하위 카테고리
-//     },
-//     inventory: 1, // 제고
+const initState = {
+  mainPic: "", //메인 사진
+  pics: [""], //서브 사진
+  dto: {
+    title: "", //재목(50자 한정)
+    contents: "", // 내용 (1500자 제한)
+    addr: "", //주소
+    restAddr: "", // 나머지 주소
+    price: 0, //가격
+    rentalPrice: 0, //임대 가격
+    depositPer: 0, //보증금 비율
+    buyDate: "2024-01-31", //구매날짜
+    rentalStartDate: "2024-01-31", //임대시작
+    rentalEndDate: "2024-01-31", // 임대 종료
+    icategory: {
+      //카테고리숫자
+      mainCategory: 0, //메인카테고리
+      subCategory: 1, //하위 카테고리
+    },
+    inventory: 0, // 제고
+  },
+};
+
+// 초기값
+// const initState = {
+//   mainPic: "",
+//   pics: [],
+//   title: "", //재목(50자 한정)
+//   contents: "", // 내용 (1500자 제한)
+//   // addr: "", //주소
+//   // restAddr: "", // 나머지 주소
+//   price: "", //가격
+//   rentalPrice: "", //임대 가격
+//   depositPer: "", //보증금 비율
+
+//   buyDate: "", //구매날짜
+//   rentalStartDate: "", //임대시작
+//   rentalEndDate: "", // 임대 종료
+//   icategory: {
+//     //카테고리숫자
+//     mainCategory: "1", //메인카테고리
+//     subCategory: "1", //하위 카테고리
 //   },
+//   hashtag: "#",
 // };
 
 const btlist = [
@@ -64,31 +87,6 @@ const btlist = [
   ["스피커", "이어폰", "헤드폰", "마이크"],
   ["플레이스테이션", "닌텐도", "Wii", "XBOX", "기타"],
 ];
-
-// 초기값
-const initState = {
-  mainPic: "",
-  pics: [],
-  title: "", //재목(50자 한정)
-  contents: "", // 내용 (1500자 제한)
-  // addr: "", //주소
-  // restAddr: "", // 나머지 주소
-  price: "", //가격
-  rentalPrice: "", //임대 가격
-  depositPer: "50", //보증금 비율
-
-  buyDate: "", //구매날짜
-  rentalStartDate: "", //임대시작
-  rentalEndDate: "", // 임대 종료
-  icategory: {
-    //카테고리숫자
-    mainCategory: "1", //메인카테고리
-    subCategory: "1", //하위 카테고리
-  },
-
-  inventory: 1, // 재고
-  hashtag: "#",
-};
 
 // 검증 코드 yup
 const validationSchema = yup.object({
@@ -102,43 +100,29 @@ const validationSchema = yup.object({
     .min(2, "2자 이상 입력하세요")
     .max(1500, "1500자까지만 입력하세요 ")
     .required("내용은 필수 입력 사항입니다."),
-  price: yup
-    .string("내용을 입력하세요.")
-    .min(3, "100원 이상 입력하세요")
-    .required("가격은 필수 입력 사항입니다."),
-  depositPer: yup
-    .string("50% 이상 최대 100% 입력하세요.")
-    .required("보증금은 필수 입력 사항입니다."),
   rentalPrice: yup
     .string("내용을 입력하세요.")
     .min(3, "100원 이상 입력하세요")
     // .max(10, "21억까지만 입력하세요 ")
     .required("하루대여 가격은 필수 입력 사항입니다."),
-  inventory: yup
-    .string("내용을 입력하세요.")
-    .min(1, "1개 이상 입력하세요")
-    .required("소유 수량은 필수 입력 사항입니다."),
-  buyDate: yup
-    .string("내용을 입력하세요.")
-    .required("제품 구매일은 필수 입력 사항입니다."),
   rentalStartDate: yup
     .string("내용을 입력하세요.")
     .required("거래 시작 날짜는 필수 입력 사항입니다."),
   rentalEndDate: yup
     .string("내용을 입력하세요.")
     .required(" / 거래 종료 날짜는 필수 입력 사항입니다."),
-  // addr: yup
-  //   .string("내용 입력하세요.")
-  //   .min(2, "주소를 입력하세요")
-  //   .required(" 거래 주소는 필수 입력 사항입니다."),
-  // restAddr: yup
-  //   .string("내용을 입력하세요.")
-  //   .max(50, "50자까지만 입력하세요 ")
-  //   .required(" 상세 주소는 필수 입력 사항입니다."),
+  addr: yup
+    .string("내용 입력하세요.")
+    .min(2, "주소를 입력하세요")
+    .required(" 거래 주소는 필수 입력 사항입니다."),
+  restAddr: yup
+    .string("나머지 주소를 입력하세요.")
+    .max(50, "50자까지만 입력하세요 ")
+    .required(" 상세 주소는 필수 입력 사항입니다."),
   mainPic: yup
     .string("제품사진을 선택해주세요.")
     .required("제품사진은 최소 1개이상 필수 입력 사항입니다."),
-  hash: yup
+  hashTags: yup
     .string("내용을 입력하세요.")
     .matches(/#/g, "태그에는 # 기호가 반드시 포함되어야 합니다.")
     .min(2, "2자 이상 입력하세요.")
@@ -219,12 +203,6 @@ const Write = () => {
     setAddrModal(false);
   };
 
-  const handleInputChangs = event => {
-    // 최대 50글자까지만 입력을 허용
-    const newValue = event.target.value.slice(0, 50);
-    setTextareaValues(newValue);
-  };
-
   const handleChangeFileOne = e => {
     const file = e.target.files[0];
     // console.log(file);
@@ -277,45 +255,6 @@ const Write = () => {
     setChangeBtn(0);
   };
 
-  const handleTextareaChange = event => {
-    const value = event.target.value;
-    setTextareaValue(value);
-  };
-
-  const handleInputAction = event => {
-    // 최대 1500글자까지만 입력을 허용
-    const newValue = event.target.value.slice(0, 1500);
-    setInputValue(newValue);
-  };
-
-  const handleChange = e => {
-    // parseInt(파싱인트) = 문자열 정수 변환
-    let inputValue = parseInt(e.target.value, 10);
-    // 범위 제한
-    if (!isNaN(inputValue) && inputValue >= 50 && inputValue <= 100) {
-      inputValue = Math.round(inputValue / 10) * 10; //10 배수 증가
-      setValueDeposit(inputValue);
-    }
-  };
-  const handleDecrease = () => {
-    const v = valueDeoposit > 60 ? valueDeoposit - 10 : valueDeoposit;
-    // hook-form 의 전용함수 활용
-    setValue("depositPer", v);
-    // 아래는 값을 보관
-    setValueDeposit(prevValue => (prevValue > 60 ? prevValue - 10 : prevValue));
-
-    // setValueDeposit(prevValue => (prevValue > 60 ? prevValue - 10 : 50));
-  };
-
-  const handleIncrease = () => {
-    const v = valueDeoposit < 100 ? valueDeoposit + 10 : valueDeoposit;
-    // hook-form 의 전용함수 활용
-    setValue("depositPer", v);
-    // 아래는 값을 보관함.
-    setValueDeposit(prevValue =>
-      prevValue < 100 ? prevValue + 10 : prevValue,
-    );
-  };
   const [buyDateNow, setBuyDateNow] = useState(null);
   const handleChangeBuyDate = (date, dateString) => {
     setBuyDateNow(date);
@@ -450,7 +389,8 @@ const Write = () => {
   //   setValue("hashtag", `#`); // hook-form의 전용 함수를 사용하여 depositPer 값을 50으로 설정
   //   setValueDeposit(`#`); // state 값을 50으로 설정
   // };
-
+  //현재 날짜 추적 이전 날짜 막는 코드
+  const [selectedDateRangeAll, setSelectedDateRangeAll] = useState(null);
   // 오늘 날짜
   const [meselectedDateRange, setMeSelectedDateRange] = useState(null);
   const today = moment();
@@ -587,7 +527,6 @@ const Write = () => {
                     {formState.errors.title?.message}
                   </div>
                 </div>
-                {/* <h2>({textareaValues.length}/50)</h2> */}
                 <h2>최대 50자입니다.</h2>
               </div>
             </ListDiv>
@@ -675,26 +614,7 @@ const Write = () => {
                 </BtWrap>
               </div>
             </ListDiv>
-            {/* 기업 회원 돈 입력 */}
-            {/* <ListDiv>
-              <label htmlFor="price">
-                <p>홍부물가격</p> <p>*</p>
-              </label>
-              <div>
-                <input
-                  type="number"
-                  id="price"
-                  {...register("rentalPrice")}
-                  placeholder="₩ 대여 가격을 입력해주세요"
-                />
-                <input
-                  type="number"
-                  id="price"
-                  {...register("rentalPrice")}
-                  placeholder="₩ 대여 가격을 입력해주세요"
-                />
-              </div>
-            </ListDiv> */}
+
             <ListDiv direction={"column"}>
               <label htmlFor="detail">
                 <p>상품내용</p> <p>*</p>
@@ -706,12 +626,6 @@ const Write = () => {
                     maxLength={1500}
                     {...register("contents")}
                     placeholder="구매시기, 브랜드/모델명, 제품의 상태 (사용감,하자 유무) 등을 입력해 주세요."
-                    // value={textareaValue}
-                    // onChange={e => {
-                    //   handleTextareaChange(e);
-                    //   handleInputAction(e);
-                    // }}
-                    // {...register("contents")}
                   />
 
                   <div style={{ color: "red" }}>
@@ -719,13 +633,12 @@ const Write = () => {
                   </div>
                 </div>
 
-                {/* <h2>({textareaValue.length}/1500)</h2> */}
                 <h2>최대 1500자입니다.</h2>
               </div>
             </ListDiv>
             <ListDiv>
               <label>
-                <p>해기태그</p> <p>*</p>
+                <p>해쉬태그</p> <p>*</p>
               </label>
               <PriceDiv>
                 <div>
@@ -735,7 +648,7 @@ const Write = () => {
                         key={input.id}
                         type="text"
                         value={input.value}
-                        onFocus={handleInputChangeHash}
+                        // onFocus={handleInputChangeHash}
                         onChange={e =>
                           handleInputChange(input.id, e.target.value)
                         }
@@ -744,8 +657,8 @@ const Write = () => {
                     ))}
                     <input
                       type="text"
-                      value={inputHash}
-                      onChange={handleInputChangeHash}
+                      // value={inputHash}
+                      // onChange={handleInputChangeHash}
                       placeholder="#태그를작성해주세요"
                       {...register("hash")}
                     ></input>
@@ -779,7 +692,7 @@ const Write = () => {
             </ListDiv>
             <ListDiv>
               <label htmlFor="quantity">
-                <p>소유수량</p> <p>*</p>
+                <p>1일대여가격</p> <p>*</p>
               </label>
               <div>
                 <div>
@@ -830,7 +743,8 @@ const Write = () => {
                   style={{ position: "relative", overflow: "hidden" }}
                 >
                   <DatePicker.RangePicker
-                    onChange={setMeSelectedDateRange}
+                    onChange={handleDateRangeChange}
+                    onFocus={setSelectedDateRangeAll}
                     value={selectedDateRange}
                     format="YYYY-MM-DD"
                     style={inputStyleCalendar}
@@ -846,7 +760,7 @@ const Write = () => {
                         <ArrowRightOutlined style={{ fontSize: "18px" }} />
                       </span>
                     }
-                    // defaultPickerValue={today} // 시작일을 오늘 날짜로 설정
+                    defaultPickerValue={today} // 시작일을 오늘 날짜로 설정
                     disabledDate={disabledDate} // 오늘 이전 날짜를 비활성화
                   />
 

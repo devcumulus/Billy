@@ -50,10 +50,10 @@ export const GetProd = async (mainicategory, subicategory, iproduct) => {
 };
 
 // 초기갑 모두 업데이트
-export const PutProd = async ({ print, successFn, failFn, errorFn }) => {
+export const putProd = async ({ product, successFn, failFn, errorFn }) => {
   try {
     const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const res = await jwtAxios.put(`${path}`, header);
+    const res = await jwtAxios.put(`${path}`, product, header);
     const resStatus = res.status.toString();
     if (resStatus.charAt(0) === "2") {
       successFn(res.data);
@@ -64,6 +64,7 @@ export const PutProd = async ({ print, successFn, failFn, errorFn }) => {
     errorFn(error.response?.status || 500);
   }
 };
+
 // get 기초 코드
 const stay = {
   iuser: 1,

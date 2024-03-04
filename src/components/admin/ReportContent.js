@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
-  const ReportContentStyle = styled.div`
+const ReportContentStyle = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
@@ -10,12 +9,11 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
     z-index: 1000;
 
     width: 600px;
-    height: 500px;
+    /* height: 500px; */
     border-radius: 10px;
     border: 1px solid #e46962;
     background: #fff;
-    padding: 10px;
-    padding-top: 20px;
+    padding: 20px;
   `;
   const ContentTitle = styled.div`
     display: flex;
@@ -43,6 +41,7 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
     margin: 0 auto;
     background: #fff7f7;
     padding: 10px;
+    text-align: start;
     p {
       color: #000;
       font-size: 16px;
@@ -55,6 +54,7 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
     width: 270px;
     margin: 0 auto;
     padding-top: 30px;
+    padding-bottom: 10px;
     button {
       width: 100px;
       height: 40px;
@@ -74,6 +74,9 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
       color: #fff;
     }
   `;
+
+export const ReportYetContent = ({ detail, onClose, Bt_No, Bt_Ok }) => {
+  
   return (
     <ReportContentStyle>
       <ContentTitle>
@@ -82,8 +85,7 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
       </ContentTitle>
       <ContentMain>
         <p>
-          바보준서님이 대여를 하고 연락이 안되는 잠수상태인거 같습니다 저번주
-          토요일에 거래를 했었고 기록이 남아있습니다.
+          {detail}
         </p>
       </ContentMain>
       <BtSection>
@@ -98,4 +100,20 @@ const ReportContent = ({ onClose, Bt_No, Bt_Ok }) => {
   );
 };
 
-export default ReportContent;
+
+export const ReportDoneContent = ({ detail, onClose }) => {
+  
+  return (
+    <ReportContentStyle>
+      <ContentTitle>
+        <p>신고 내용</p>
+        <img src="/images/admin/bt_close.svg" onClick={onClose}></img>
+      </ContentTitle>
+      <ContentMain>
+        <p>
+          {detail}
+        </p>
+      </ContentMain>
+    </ReportContentStyle>
+  );
+};
