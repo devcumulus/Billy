@@ -11,38 +11,48 @@ import {
   ReviewSection,
   SideSection,
   TitleSection,
+  WriterBt,
   WriterSection,
 } from "../../styles/free/FreeDetailsPageStyle";
 import { FreeHeader } from "../../styles/free/FreePageStyle";
 import { GoToListBt } from "../../styles/free/FreeRegisterPageStyle";
 import { useNavigate, useParams } from "react-router-dom";
-import { getFreeData } from "../../api/free/free_api";
+import { deleteFreeData, getFreeData, getLike } from "../../api/free/free_api";
+import { postComment } from "../../api/free/comment_api";
+import { useSelector } from "react-redux";
 
-const contentData = [
-  {
-    title: "하..바보준*님 거래 잘 좀 합시다!!!!!!!!!!!!!!",
-    content: "바보준*님 잘 좀 했으면 좋겠습니다.",
-    date: "2024.02.23",
-    reviews: [
-      {
-        writer: "바보준서",
-        text: "허 어이가 없네 내가 잘해줬더만 그렇게 이야기하기있나 이제 너랑 안봐!!!!! 연락하지마!",
-      },
-      {
-        writer: "바보아니다",
-        text: "그래 다신 연락안할거다 흥! 니도 연락하지마 이미 차단했음",
-      },
-    ],
-  },
-];
+// 로그인 유저 == 게시글 작성자
+const UserButton = ({ userId, currentUserId, onDelete, onModify }) => {
+  const isCurrentUser = userId === currentUserId;
+
+  return (
+    <>
+      {isCurrentUser && (
+        <WriterBt>
+          <button
+            onClick={onModify}
+            style={{ background: "#fff", color: "#2c39b5" }}
+          >
+            수정
+          </button>
+          <button
+            onClick={onDelete}
+            style={{ background: "#2c39b5", color: "#fff" }}
+          >
+            삭제
+          </button>
+        </WriterBt>
+      )}
+    </>
+  );
+};
 
 const FreeDetailsPage = () => {
+  const iuser = useSelector(state => state.loginSlice.iuser);
   // 데이터 연동(상세페이지)
   const [freeData, setFreeData] = useState(null);
   const searchParams = new URLSearchParams(location.search);
   const iboard = parseInt(searchParams.get("iboard"));
-  // const iboard = useParams();
-  console.log(iboard);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +67,72 @@ const FreeDetailsPage = () => {
     fetchData();
   }, [iboard]);
 
+  // 페이지 이동(게시글 수정)
+  const handleModifyFree = () => {
+    navigate(`/free/modify?iboard=${iboard}`)
+  }
+
+  // 데이터 연동(게시글 삭제)
+  const handleDeleteFree = async () => {
+    const confirmDelete = window.confirm("삭제하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        await deleteFreeData(iboard);
+        navigate(`/free`)
+      } catch (error) {
+        console.log("Error deleting product:", error);
+      }
+    }
+  };
+
+  // 데이터 연동(좋아요)
+  // const [like,setLike] = useState(false)
+  // const handleClickLike = () => {
+  //   setLike(prev => !prev)
+  // }
+
+  // useEffect(() => {
+  //   const likeData = async() => {
+  //       await getLike(iboard)
+  //   }
+  //   likeData()
+  // },[like])
+
   // 댓글 작성
+  const [comment, setComment] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    const commentData = async () => {
+      await postComment(iboard, comment);
+    };
+    commentData();
+  }, [comment]);
+
+  // 날짜와 시간만 추출(댓글)
+  const formatDate = dateString => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const hour = String(date.getHours()).padStart(2, "0");
+    const minute = String(date.getMinutes()).padStart(2, "0");
+    const second = String(date.getSeconds()).padStart(2, "0");
+
+    return {
+      date: `${year}-${month}-${day}`,
+      time: `${hour}:${minute}:${second}`,
+    };
+  };
+
+  let date;
+  let time;
+  if (freeData && freeData.createdAt) {
+    const result = formatDate(freeData.createdAt);
+    date = result.date;
+    time = result.time;
+  }
 
   // 페이지 이동
   const navigate = useNavigate();
@@ -77,20 +152,33 @@ const FreeDetailsPage = () => {
             <div style={{ width: "1110px" }}>
               <TitleSection>
                 <h1>{freeData.title}</h1>
-                <h2>{freeData.createdAt}</h2>
+                <h2>
+                  {date} {time}
+                </h2>
               </TitleSection>
 
               <ContentSection>
                 <div>
-                  <img src={`/images/kong.jpg`} alt="업로드이미지1" />
-                  <img src={`/images/kong.jpg`} alt="업로드이미지2" />
-                  <img src={`/images/kong.jpg`} alt="업로드이미지3" />
+                  {freeData.pic.map((item, index) => (
+                    <img
+                      key={index}
+                      src={`/pic/${item.boardPic}`}
+                      alt="업로드이미지"
+                    />
+                  ))}
                 </div>
+
                 <p>{freeData.contents}</p>
+                <UserButton
+                  // userId={freeData.iuser}
+                  // currentUserId={iuser}
+                  onModify={handleModifyFree}
+                  onDelete={handleDeleteFree}
+                />
               </ContentSection>
 
               <ReviewSection>
-                {/* <h1>댓글 {freeData.comments.length}</h1> */}
+                <h1>댓글 {freeData.comments.length}</h1>
                 <ReviewRegister>
                   <p>
                     저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는
@@ -120,22 +208,32 @@ const FreeDetailsPage = () => {
                         // 입력된 글자수와 최대 글자수를 표시하는 부분
                         document.getElementById("counter").innerText =
                           counterText;
+
+                        // textarea의 값이 변경될 때마다 comment 상태를 업데이트
+                        setInputValue(inputText);
                       }}
                     />
                     <span id="counter">0/200</span>
-                    <button>등록</button>
+                    <button onClick={() => setComment(inputValue)}>등록</button>
                   </div>
                 </ReviewRegister>
 
-                {/* {freeData.comments.map(listItem => (
-                  <ReviewList key={listItem.text}>
-                    <img src={`/images/kong.jpg`} alt="유저이미지" />
-                    <div>
-                      <h1>{listItem.writer}</h1>
-                      <p>{listItem.text}</p>
-                    </div>
-                  </ReviewList>
-                ))} */}
+                {freeData.comments.map(listItem => {
+                  const { date, time } = formatDate(listItem.createdAt);
+                  return (
+                    <ReviewList key={listItem.text}>
+                      <img src={`/pic/${listItem.userPic}`} alt="유저이미지" />
+                      <div style={{ width: "900px" }}>
+                        <h1>{listItem.nick}</h1>
+                        <p>{listItem.comment}</p>
+                      </div>
+                      <div style={{ textAlign: "end" }}>
+                        <h2>{date}</h2>
+                        <h2>{time}</h2>
+                      </div>
+                    </ReviewList>
+                  );
+                })}
                 <MoreBt>
                   <img src="/images/free/bt_more.svg" />
                 </MoreBt>
@@ -144,17 +242,23 @@ const FreeDetailsPage = () => {
 
             <SideSection>
               <WriterSection>
-                <img src={`/images/kong.jpg`} alt="작성자 이미지" />
-                <h1>바보준서</h1>
+                <img src={`/pic/${freeData.userPic}`} alt="작성자 이미지" />
+                <h1>{freeData.nick}</h1>
               </WriterSection>
               <ContentState>
                 <h1>댓글</h1>
+                <h1>{freeData.comments.length}</h1>
               </ContentState>
               <ContentState>
                 <h1>좋아요</h1>
+                <div>
+                  <img src="/images/free/like.svg" />
+                  <h1>{freeData.isLiked}</h1>
+                </div>
               </ContentState>
               <ContentState>
                 <h1>조회수</h1>
+                <h1>{freeData.view}</h1>
               </ContentState>
             </SideSection>
           </FreeDetailsMain>

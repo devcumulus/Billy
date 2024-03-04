@@ -9,6 +9,7 @@ export const getFreeList = async ({
   type,
   sort,
   setFreeList,
+  setFreeLength,
 }) => {
   try {
     let url = `${SERVER_URL}/api/board?page=${page}`;
@@ -23,18 +24,31 @@ export const getFreeList = async ({
     }
 
     const res = await jwtAxios.get(url);
-    setFreeList([...res.data]);
+    setFreeList([...res.data.boardList]);
+    setFreeLength(res.data.totalBoardCount);
   } catch (error) {
     console.log(error);
   }
 };
 
 // 게시글 DetailsPage
-export const getFreeData = async (iboard) => {
+export const getFreeData = async iboard => {
   try {
     const url = `${SERVER_URL}/api/board/${iboard}`;
 
     const res = await axios.get(url);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 좋아요
+export const getLike = async iboard => {
+  try {
+    const url = `${SERVER_URL}/api/board/like/${iboard}`;
+
+    const res = await jwtAxios.get(url);
     return res;
   } catch (error) {
     console.log(error);
@@ -47,7 +61,33 @@ export const postFreeData = async ({ obj }) => {
     const header = { headers: { "Content-Type": "multipart/form-data" } };
 
     const url = `${SERVER_URL}/api/board`;
-    const res = await jwtAxios.get(url, obj, header);
+    const res = await jwtAxios.post(url, obj, header);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 게시글 수정
+export const putFreeData = async ({ obj }) => {
+  try {
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+
+    const url = `${SERVER_URL}/api/board`;
+    const res = await jwtAxios.put(url, obj, header);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+// 게시글 삭제
+export const deleteFreeData = async iboard => {
+  try {
+    const url = `${SERVER_URL}/api/board/${iboard}`;
+
+    const res = await jwtAxios.delete(url);
     return res;
   } catch (error) {
     console.log(error);

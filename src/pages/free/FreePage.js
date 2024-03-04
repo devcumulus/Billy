@@ -6,15 +6,12 @@ import {
   FreeMain,
   FreePageStyle,
   FreeSearchForm,
-  PaginationButton,
-  PaginationContainer,
+  PaginationBlue,
   SearchSection,
   SortWrap,
 } from "../../styles/free/FreePageStyle";
 import { useNavigate } from "react-router-dom";
 import { getFreeList } from "../../api/free/free_api";
-import { usePagination, useTable } from "react-table";
-import { PaginationContent } from "../../styles/admin/AdminReportPageStyle";
 
 // search 카테고리
 const searchCate = [
@@ -22,16 +19,16 @@ const searchCate = [
     id: 1,
     title: "제목",
   },
+  // {
+  //   id: 2,
+  //   title: "내용",
+  // },
   {
     id: 2,
-    title: "내용",
-  },
-  {
-    id: 3,
     title: "제목+내용",
   },
   {
-    id: 4,
+    id: 3,
     title: "닉네임",
   },
 ];
@@ -163,9 +160,10 @@ const FreePage = () => {
   const [page, setPage] = useState(1); // 페이지네이션해야함!!!!!!
 
   const [freeList, setFreeList] = useState([]);
+  const [freeLength, setFreeLength] = useState([]);
 
   const freeListData = async () => {
-    await getFreeList({ page, search, type, sort, setFreeList });
+    await getFreeList({ page, search, type, sort, setFreeList, setFreeLength });
   };
   useEffect(() => {
     freeListData();
@@ -233,6 +231,12 @@ const FreePage = () => {
                 placeholder="검색어를 입력하세요"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    setSearch(inputValue);
+                  }
+                }}
               ></input>
               <button
                 type="button"
@@ -274,10 +278,10 @@ const FreePage = () => {
             <button onClick={moveToRegister}>글쓰기</button>
           </BtSection>
           <div style={{ textAlign: "center", margin: "20px 0" }}>
-            <PaginationContent
+            <PaginationBlue
               current={page}
               onChange={handlePageChange}
-              // total={reportLength}
+              total={freeLength}
               pageSize={12}
             />
           </div>

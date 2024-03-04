@@ -83,6 +83,7 @@ export const SearchDiv = styled.div`
       span {
         line-height: 1.6;
         font-size: 12px;
+        cursor: pointer;
       }
     }
 `

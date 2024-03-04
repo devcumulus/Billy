@@ -262,28 +262,32 @@ const AdminReportPage = ({ activeBtn }) => {
   }, [page, div, search, category, state]);
 
   // 데이터 연동(신고 수락 or 반려)
-  // [type, setType] = useState(null)
-  // const handleClickOk = () => {
-  //   setType(1)
-  // }
-  // const handleClickNo = () => {
-  //   setType(-1)
-  // }
+  const [type, setType] = useState(null);
+  const [idispute, setIdispute] = useState(null);
+  const handleClickOk = () => {
+    setType(1);
+    setContentYetModal(false);
+  };
+  const handleClickNo = () => {
+    setType(-1);
+    setContentYetModal(false);
+  };
 
-  // useEffect(() => {
-  //   const stateData = async() => {
-  //     await postDispute(idispute, type)
-  //   }
-  //   stateData()
-  // },[idispute, type])
+  useEffect(() => {
+    const stateData = async () => {
+      await postDispute(idispute, type);
+    };
+    stateData();
+  }, [idispute, type]);
 
   // 상태변경 or 상태확인 버튼 클릭
   const [contentYetModal, setContentYetModal] = useState(false);
   const [contentDoneModal, setContentDoneModal] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState(null);
 
-  const handleClickYet = detail => {
+  const handleClickYet = (detail, idispute) => {
     setSelectedDetail(detail);
+    setIdispute(idispute);
     setContentYetModal(true);
   };
   const closeContentYetModal = () => {
@@ -310,6 +314,8 @@ const AdminReportPage = ({ activeBtn }) => {
           <ReportYetContent
             onClose={closeContentYetModal}
             detail={selectedDetail}
+            Bt_No={handleClickNo}
+            Bt_Ok={handleClickOk}
           />
           <ModalBackground />
         </>
@@ -405,16 +411,18 @@ const AdminReportPage = ({ activeBtn }) => {
               }}
             >
               <tr>
-                <td>{item.uid}</td>
-                <td>{item.nick}</td>
+                <td>{item.reportedUserUid}</td>
+                <td>{item.reportedUserNick}</td>
                 <td style={{ cursor: "pointer" }}>{item.category}</td>
                 <td>{item.createdAt}</td>
-                <td>{item.ireporter}</td>
+                <td>{item.reporterUid}</td>
                 <td>{item.penalty}</td>
                 <td>{item.status} </td>
                 <td>
                   {item.status === "대기중" ? (
-                    <button onClick={() => handleClickYet(item.detail)}>
+                    <button
+                      onClick={() => handleClickYet(item.detail, item.idispute)}
+                    >
                       확인
                     </button>
                   ) : (
