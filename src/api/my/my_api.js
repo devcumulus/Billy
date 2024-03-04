@@ -12,7 +12,7 @@ const failPostDatas = () => {
 
 
 
-export const getMyRental = async (page,status,role) => {
+export const getMyRental = async (role,status,page) => {
   try {
     const url = `${path}/prod?role=${role}&status=${status}&page=${page}`;
     const res = await jwtAxios.get(url);
@@ -56,9 +56,9 @@ export const getProdReview = async () => {
   }
 }
 
-export const getMyBoard = async (page) => {
+export const getMyBoard = async () => {
   try {
-    const url = `${path}/board?page=${page}`;
+    const url = `${path}/board?`;
     const res = await jwtAxios.get(url);
     return res.data;
   } catch (error) {
@@ -125,6 +125,50 @@ export const patchDispute = async (idispute) => {
 export const getReserve = async (role,page) => {
   try {
     const url = `${path}/reserve?role=${role}&page=${page}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const getProd = async (page) => {
+  try {
+    const url = `${path}/prod2?page=${page}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const deleteMyBoard = async (iboard) => {
+  try {
+    const url = `${path2}/board/${iboard}`
+    const res = await jwtAxios.delete(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/");
+  }
+}
+
+export const getCode = async (code) => {
+  try {
+    const url = `${path2}/pay/code?code=${code}`
+    const res = await jwtAxios.get(url);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    failPostDatas("/")
+  }
+}
+
+export const getPaymentData = async (ipayment) => {
+  try {
+    const url = `${path2}/pay/${ipayment}`
     const res = await jwtAxios.get(url);
     return res.data;
   } catch (error) {

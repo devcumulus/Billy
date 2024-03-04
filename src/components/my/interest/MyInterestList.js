@@ -10,7 +10,7 @@ import { ModalBackground } from "../../joinpopup/JoinPopUp";
 
 const MyInterestList = () => {
   const [data, setData] = useState([]);
-  const [viewMore, setViewMore] = useState(3);
+  const [viewMore, setViewMore] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState();
 
@@ -31,7 +31,7 @@ const MyInterestList = () => {
     try {
       const favResult = await getFav(iproduct);
 
-      const updatedResult = await getMyInterest(1);
+      const updatedResult = await getMyInterest(viewMore);
       setData(updatedResult);
 
     } catch (error) {
@@ -40,7 +40,7 @@ const MyInterestList = () => {
   };
 
   const handleLoadMore = () => {
-    setViewMore((prevViewMore) => prevViewMore + 3);
+    setViewMore((prevViewMore) => prevViewMore + 1);
   };
 
   const handleDeleteClick = (item) => {
@@ -66,7 +66,7 @@ const MyInterestList = () => {
         <div>
         </div>
       </MyListTop>
-      {data && data.slice(0, viewMore).map((item, index) => (
+      {data && data.map((item, index) => (
         <React.Fragment key={index}>
             <MyListMid>
               <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>

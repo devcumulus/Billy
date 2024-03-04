@@ -120,7 +120,7 @@ const MyReportPage = ({activeBtn}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getMyDispute(pageNum);
+        const result = await getMyDispute(1);
         setData(result.disputes);
       } catch (error) {
         console.error(error);

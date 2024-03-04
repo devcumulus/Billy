@@ -31,7 +31,7 @@ const MyReservationModal = ({ closeModal, onConfirm }) => {
         />
         <BtSection width={"380px"} mgtop={"50px"}>
           <CancelBt onClick={closeModal}>닫기</CancelBt>
-          <SaveBt onClick={onConfirm}>확인</SaveBt>
+          <SaveBt onClick={onConfirm(selectCode)}>확인</SaveBt>
         </BtSection>
       </LoginBox>
     </ReservationDiv>

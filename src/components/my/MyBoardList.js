@@ -5,9 +5,12 @@ import {
   MyManagementBt,
   MyManagementBtHover,
 } from "../../styles/my/MyList";
-import { getMyBoard } from "../../api/my/my_api";
+import { deleteMyBoard, getMyBoard } from "../../api/my/my_api";
 import { useTable, usePagination } from "react-table";
-import { DetailsContainer, EllipsisDiv, PaginationButton, PaginationContainer, TrContaineer } from "../../styles/my/MyTable";
+import { DetailsContainer, PaginationButton, PaginationContainer, TrContaineer } from "../../styles/my/MyTable";
+import MyModal from "./interest/MyModal";
+import { ModalBackground } from "../joinpopup/JoinPopUp";
+import { Link } from "react-router-dom";
 
 const contentData = {
   "list": [
@@ -35,6 +38,8 @@ const contentData = {
 const MyBoardList = ({ activeBtn }) => {
   const [data, setData] = useState([]);
   const [expandedRowIndex, setExpandedRowIndex] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState();
 
   const columns  = React.useMemo(
     () => [
@@ -82,7 +87,7 @@ const MyBoardList = ({ activeBtn }) => {
     {
       columns,
       data, // data 속성을 useState로부터 받아온 데이터로 설정
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0,pageSize: 10},
     },
     usePagination
   );
@@ -93,7 +98,7 @@ const MyBoardList = ({ activeBtn }) => {
       try {
         let result;
         if (activeBtn === "등록 게시글") {
-          result = await getMyBoard(1);
+          result = await getMyBoard();
         } 
         setData(result.list)
         // setData(contentData.list)
@@ -105,8 +110,48 @@ const MyBoardList = ({ activeBtn }) => {
     fetchData();
   }, [activeBtn]);
 
+  const handleDeleteBoardClick = async (iboard) => {
+    try {
+      const favResult = await deleteMyBoard(iboard);
+
+      const updatedResult = await getMyBoard(1);
+      setData(updatedResult.list);
+
+    } catch (error) {
+      console.error("Error deleteBoard:", error);
+    }
+  };
+
+  const handleDeleteClick = (row) => {
+    setShowModal(true);
+    setItemToDelete(row.original);
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+  };
+
+  const handleConfirm = async () => {
+    if (itemToDelete) {
+      await handleDeleteBoardClick(itemToDelete.iboard);
+      setShowModal(false);
+    }
+  };
+
   return (
     <MyListDiv>
+      {showModal && (
+        <>
+        <MyModal onCancel={handleCancel} onConfirm={handleConfirm}  
+        txt={
+          <>
+            이 게시글을  <br />
+            삭제하시겠습니까?
+          </>
+        }/>
+        <ModalBackground></ModalBackground>
+        </>
+      )}
       <MyListTop>
         {activeBtn === "등록 게시글" && <h2>등록 게시글</h2>}
       </MyListTop>
@@ -173,8 +218,10 @@ const MyBoardList = ({ activeBtn }) => {
               <tr>
                 <td colSpan={columns.length}>
                   <DetailsContainer show={isRowExpanded} content={"end"}>
-                    <MyManagementBt>수정</MyManagementBt>
-                    <MyManagementBtHover>삭제</MyManagementBtHover>
+                    <Link to={`/free/modify?iboard=${row.original.iboard}`}>
+                      <MyManagementBt>수정</MyManagementBt>
+                    </Link>
+                    <MyManagementBtHover onClick={()=>handleDeleteClick(row)}>삭제</MyManagementBtHover>
                   </DetailsContainer>
                 </td>
               </tr>

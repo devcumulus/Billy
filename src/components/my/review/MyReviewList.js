@@ -32,7 +32,7 @@ const contentData = [
     nick: "바보준서",
     prodPic:"/pic/user/1/7a4ae1ef-0df7-4f29-9e9e-57a8b1ff238b.jpg",
     loginedUserPic: "/pic/user/1/7a4ae1ef-0df7-4f29-9e9e-57a8b1ff238b.jpg",
-    icategory: {
+    categories: {
       imainCategory: "1",
       isubCategory: "1",
     },
@@ -56,7 +56,7 @@ const contentData = [
     nick: "바보준서",
     prodPic:"/pic/user/1/7a4ae1ef-0df7-4f29-9e9e-57a8b1ff238b.jpg",
     loginedUserPic: "/pic/user/1/7a4ae1ef-0df7-4f29-9e9e-57a8b1ff238b.jpg",
-    icategory: {
+    categories: {
       imainCategory: "1",
       isubCategory: "1",
     },
@@ -84,10 +84,10 @@ const contentData2 = [
 
 const MyReviewList = ({ activeBtn }) => {
   const [data, setData] = useState([]);
-  const [viewMore, setViewMore] = useState(3);
+  const [viewMore, setViewMore] = useState(1);
 
   const handleLoadMore = () => {
-    setViewMore(prevViewMore => prevViewMore + 3);
+    setViewMore(prevViewMore => prevViewMore + 1);
   };
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const MyReviewList = ({ activeBtn }) => {
                     </MyReviewTxt>
                   </div>
                   <MyReviewTitle>
-                    <Link to={`/details/${item.icategory.imainCategory}/${item.icategory.isubCategory}/${item.iproduct}`}>
+                    <Link to={`/details/${item.categories.imainCategory}/${item.categories.isubCategory}/${item.iproduct}`}>
                       <button>
                         {item.title}
                         <img src="/images/mytitle_button.svg" alt="상세 정보로 이동" />

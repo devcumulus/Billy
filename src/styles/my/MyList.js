@@ -49,7 +49,7 @@ export const MyListMid = styled.div`
   margin-top: 2.3rem;
   height: 12rem;
   width: 98rem;
-  a > h2 {
+  h2, a > h2 {
     position: absolute;
     top: 4rem;
     right: 40rem;
@@ -60,6 +60,7 @@ export const MyListMid = styled.div`
   a {
     display: flex;
     gap: 2rem;
+    cursor: pointer;
   }
 `;
 
@@ -98,7 +99,7 @@ export const MyListMidTxt = styled.div`
   }
   p {
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 400;
     height: 2.5rem;
   }
   span {

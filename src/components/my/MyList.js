@@ -14,22 +14,43 @@ import {
 } from "../../styles/my/MyList";
 import ReviewForm from "../details/ReviewForm";
 import MyMoreButton from "./MyMoreButton";
-import { getMyRental } from "../../api/my/my_api";
-import { Link } from "react-router-dom";
+import { getMyRental, getPaymentData } from "../../api/my/my_api";
+import { ModalBackground } from "../joinpopup/JoinPopUp";
+import MyPayment from "./MyPayment";
 
 const MyList = ({ activeBtn }) => {
   const [activeButton, setActiveButton] = useState(true);
   const [data, setData] = useState([]);
-  const [viewMore, setViewMore] = useState(3);
+  const [viewMore, setViewMore] = useState(1);
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
 
   const handleButtonClick = buttonType => {
     setActiveButton(buttonType);
+    setViewMore(1);
   };
 
-  const handleLoadMore = () => {
-    setViewMore(prevViewMore => prevViewMore + 3);
+  const handleLoadMore = async () => {
+    try {
+      let result;
+      if (activeBtn === "대여중" && activeButton === true) {
+        result = await getMyRental(1, 1, viewMore + 1);
+      } else if (activeBtn === "대여중" && activeButton === false) {
+        result = await getMyRental(2, 1, viewMore + 1);
+      } else if (activeBtn === "대여 완료" && activeButton === true) {
+        result = await getMyRental(1, -1, viewMore + 1);
+        result = result.filter(item => item.status === "EXPIRED");
+      } else if (activeBtn === "대여 완료" && activeButton === false) {
+        result = await getMyRental(2, -1, viewMore + 1);
+        result = result.filter(item => item.status === "EXPIRED");
+      }
+      setData(prevData => [...prevData, ...result]);
+      setViewMore(prevViewMore => prevViewMore + 1);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const openReviewForm = paymentId => {
@@ -37,20 +58,34 @@ const MyList = ({ activeBtn }) => {
     setIsReviewFormOpen(true);
   };
 
+  const openModal = async (item) => {
+    try {
+      const paymentResult = await getPaymentData(item);
+      setPaymentData(paymentResult);
+      setShowModal(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    setShowModal(false);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         let result;
         if (activeBtn === "대여중" && activeButton === true) {
-          result = await getMyRental(1, 1, 1);
+          result = await getMyRental(1, 1, viewMore);
         } else if (activeBtn === "대여중" && activeButton === false) {
-          result = await getMyRental(2, 1, 1);
+          result = await getMyRental(2, 1, viewMore);
         } else if (activeBtn === "대여 완료" && activeButton === true) {
-          result = await getMyRental(1, -1, 1);
-          result = result.filter(item => item.istatus === 1);
+          result = await getMyRental(1, -1, viewMore);
+          result = result.filter(item => item.status === "EXPIRED");
         } else if (activeBtn === "대여 완료" && activeButton === false) {
-          result = await getMyRental(2, -1, 1);
-          result = result.filter(item => item.istatus === 1);
+          result = await getMyRental(2, -1, viewMore);
+          result = result.filter(item => item.status === "EXPIRED");
         }
         setData(result);
       } catch (error) {
@@ -61,8 +96,16 @@ const MyList = ({ activeBtn }) => {
     fetchData();
   }, [activeButton, activeBtn]);
 
+
+
   return (
     <MyListDiv>
+      {showModal && (
+        <>
+        <MyPayment data={paymentData} onConfirm={handleConfirm}/>
+        <ModalBackground></ModalBackground>
+        </>
+      )}
       <MyListTop>
         {activeBtn === "대여중" ? <h2>대여중</h2> : <h2>대여완료</h2>}
         <div>
@@ -81,14 +124,14 @@ const MyList = ({ activeBtn }) => {
         </div>
       </MyListTop>
       {data &&
-        data.slice(0, viewMore).map((item, index) => (
+        data.map((item, index) => (
           <React.Fragment key={index}>
             {activeBtn === "대여중" ? (
                 <MyListMid>
-                  <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>
+                  <a onClick={() => openModal(item.ipayment)}>
                     <MyListMidImg>
                       <img
-                        src={`/pic/${item.productStoredPic}`}
+                        src={`/pic/${item.proStoredPic}`}
                         alt={item.title}
                       />
                     </MyListMidImg>
@@ -97,7 +140,7 @@ const MyList = ({ activeBtn }) => {
                         <h2>{item.title}</h2>
                       </div>
                       <div>
-                        <p>{item.price} 원</p>
+                        <p>{item.totalPrice} 원</p>
                       </div>
                       <div>
                         <span>
@@ -106,24 +149,24 @@ const MyList = ({ activeBtn }) => {
                         </span>
                       </div>
                     </MyListMidTxt>
-                  </Link>
+                  </a>
                   <MyListMidLast location={"center"} size={"1.2rem"}>
                     <p>거래자</p>
                     <MyListProfileImg>
-                      <img src={`/pic/${item.userStoredPic}`} />
+                      <img src={`/pic/${item.userPic}`} />
                     </MyListProfileImg>
-                    <span>{item.targetNick}</span>
+                    <span>{item.nick}</span>
                   </MyListMidLast>
                 </MyListMid>
             ) : (
               <>
                 <MyListMid>
-                  <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>
+                  <a onClick={() => openModal(item.ipayment)}> 
                     <MyListMidEnd />
                     {activeButton === true ? <h2>반 납 완 료</h2> : <h2>대 여 완 료</h2>}
                     <MyListMidImg>
                       <img
-                        src={`/pic/${item.productStoredPic}`}
+                        src={`/pic/${item.proStoredPic}`}
                         alt={item.ipayment}
                       />
                     </MyListMidImg>
@@ -132,7 +175,7 @@ const MyList = ({ activeBtn }) => {
                         <h2>{item.title}</h2>
                       </div>
                       <div>
-                        <p>{item.price} 원 </p>
+                        <p>{item.totalPrice} 원 </p>
                       </div>
                       <div>
                         <span>
@@ -141,13 +184,13 @@ const MyList = ({ activeBtn }) => {
                         </span>
                       </div>
                     </MyListMidTxt>
-                  </Link>
+                  </a>
                   <MyListMidLast location={"center"} size={"1.2rem"}>
                     <p>거래자</p>
                     <MyListProfileImg>
-                      <img src={`/pic/${item.userStoredPic}`} />
+                      <img src={`/pic/${item.userPic}`} />
                     </MyListProfileImg>
-                    <span>{item.targetNick}</span>
+                    <span>{item.nick}</span>
                   </MyListMidLast> 
                 </MyListMid>
                 <MyReviewDiv>
@@ -157,18 +200,17 @@ const MyList = ({ activeBtn }) => {
                     </button>
                   )}
                   {activeButton === false && (
-                     <Link to={`/details/${item.icategory.mainCategory}/${item.icategory.subCategory}/${item.iproduct}`}>
+                    //  <Link to={`/details/${item.categories.mainCategory}/${item.categories.subCategory}/${item.iproduct}`}>
                         <button>
                           <p>리뷰 보기</p>
                         </button>
-                    </Link>
+                    // </Link>
                   )}
                 </MyReviewDiv>
               </>
             )}
           </React.Fragment>
         ))}
-
       <MyListBottom>
         <MyMoreButton handleLoadMore={handleLoadMore} />
       </MyListBottom>
