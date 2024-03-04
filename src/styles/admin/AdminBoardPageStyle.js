@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Pagination } from "antd";
 export const BoardWrap = styled.div`
   text-align: center;
   .move,
@@ -34,8 +33,6 @@ export const HeaderWrap = styled.div`
 
   .header-title {
     display: flex;
-    /* text-align: center; */
-    /* justify-content: center; */
   }
   .title {
     font-size: 24px;
@@ -47,7 +44,6 @@ export const HeaderWrap = styled.div`
   }
   .search-wrap {
     margin-left: 350px;
-    form {
       position: relative;
       display: flex;
       select {
@@ -88,7 +84,6 @@ export const HeaderWrap = styled.div`
         padding-left: 10px;
       }
     }
-  }
   .bt-wrap {
     display: flex;
     margin-top: 8px;

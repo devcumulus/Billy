@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BoardWrap, HeaderWrap } from "../../styles/admin/AdminBoardPageStyle";
 import { deleteProduct, getAllProducts } from "../../api/admin/admin_board_api";
+import { BoardWrap, HeaderWrap } from "../../styles/admin/AdminBoardPageStyle";
 import { PaginationContent } from "../../styles/admin/AdminReportPageStyle";
 
 const boardData = [
@@ -29,8 +29,8 @@ const initBoardData = {
       iproduct: 0,
       iuser: 0,
       nick: "string",
-      mainCategory: 0,
-      subCategory: 0,
+      mainCategory: 2,
+      subCategory: 1,
       pricePerDay: 0,
       view: 0,
       createdAt: "2024-02-27T11:23:41.089Z",
@@ -39,128 +39,163 @@ const initBoardData = {
   ],
 };
 
+const category = [
+  {
+    mainCategory: "스마트 기기",
+    subCategory: [
+      { id: 1, title: "스마트 워치" },
+      { id: 2, title: "태블릿" },
+      { id: 3, title: "갤럭시" },
+      { id: 4, title: "아이폰" },
+    ],
+  },
+  {
+    mainCategory: "PC / 노트북",
+    subCategory: [
+      { id: 1, title: "노트북" },
+      { id: 2, title: "PC" },
+      { id: 3, title: "마우스" },
+      { id: 4, title: "키보드" },
+    ],
+  },
+  {
+    mainCategory: "영상 / 카메라",
+    subCategory: [
+      { id: 1, title: "빔프로젝터" },
+      { id: 2, title: "셋톱박스" },
+      { id: 3, title: "카메라" },
+      { id: 4, title: "캠코더" },
+      { id: 5, title: "DSLR" },
+    ],
+  },
+  {
+    mainCategory: "음향",
+    subCategory: [
+      { id: 1, title: "스피커" },
+      { id: 2, title: "이어폰" },
+      { id: 3, title: "헤드폰" },
+      { id: 4, title: "마이크" },
+    ],
+  },
+  {
+    mainCategory: "게임 기기",
+    subCategory: [
+      { id: 1, title: "플레이스테이션" },
+      { id: 2, title: "닌텐도" },
+      { id: 3, title: "Wii" },
+      { id: 4, title: "XBOX" },
+      { id: 5, title: "기타" },
+    ],
+  },
+];
+const SEARCH_OPTIONS = ["전체", "닉네임", "카테고리"];
+
+const SEARCH_OPTIONS_TEXT = [
+  "------------",
+  "닉네임을 입력해주세요",
+  "카테고리를 입력해주세요",
+];
+
 const AdminBoardPage = () => {
   // 전체 게시물 데이터
   const [boardAllData, setBoardAllData] = useState([]);
-  // console.log("boardAllData", boardAllData);
-
   const [page, setPage] = useState(1);
-  const [type, setType] = useState();
-  const [limit, setLimit] = useState(15);
-
-  const [boardLength, setBoardLength] = useState([]);
-
-  const searchOptions = ["전체", "닉네임", "카테고리"];
-  const [selectedSearchOption, setSelectedSearchOption] = useState("전체"); // 선택된 검색 옵션 상태
+  const [selectedSearchOption, setSelectedSearchOption] = useState(0); // 선택된 검색 옵션 상태
+  const [inputValue, setInputValue] = useState(""); // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색어 상태
-  const [filteredData, setFilteredData] = useState([]); // 필터링된 데이터 상태 추가
-  // 최신순, 조회순 정렬
-  const [sortType, setSortType] = useState(0);
+  // const [sortType, setSortType] = useState(0); // 최신순, 조회순 정렬
 
   // 백엔드에서 제공하는 sort 값을 받아오는 함수
-  const getSort = sortType => {
-    if (sortType === 1) {
-      return "조회수"; // 예시로 '조회수 많은순 내림차순'을 반환
-    } else {
-      return "최신순"; // 기본값은 최신순
-    }
-  };
+  // const getSort = sortType => {
+  //   // 예시로 '조회수 많은순 내림차순'을 반환
+  //   if (sortType === 1) return "조회순";
+  //   else return "최신순"; // 기본값은 최신순
+  // };
+  const successFn = res => setBoardAllData(res);
 
-  useEffect(() => {
-    const sort = getSort(sortType);
-    getAllProducts(page, successFn, errorFn, sort);
-  }, [page, sortType]);
+  const errorFn = res => alert(`${res.message} \n 에러코드(${res.errorCode})`);
 
-  const successFn = res => {
-    console.log("성공했을때", res);
-    setBoardAllData(res);
-    setBoardLength(res)
-    // setFilteredData(res.products)
-  };
-  const errorFn = res => {
-    // console.log("실패", res);
-    alert(`${res.message} \n 에러코드(${res.errorCode})`);
-  };
-
-  const getLength = () => {
-    return boardData.length;
-  };
-  const totalPage = Math.ceil(getLength / limit);
-
-  // 페이지 번호를 조정하여 2페이지 이상이 생성되지 않도록 막음
-  if (page > totalPage) {
-    setPage(totalPage);
-  }
-
-  const handlePageChange = (value, pageNum, page, limit, totalPage) => {
+  const handlePageChange = (value, page, totalPage) => {
+    console.log(value);
     if (value === "first") {
+      getAllProducts(1, successFn, errorFn);
       setPage(1);
     } else if (value === "prev") {
       if (page !== 1) {
+        getAllProducts(page - 1, successFn, errorFn);
         setPage(page - 1);
       }
     } else if (value === "next") {
       if (page !== totalPage) {
+        getAllProducts(page + 1, successFn, errorFn);
         setPage(page + 1);
       }
     } else if (value === "last") {
+      getAllProducts(totalPage, successFn, errorFn);
       setPage(totalPage);
     } else {
+      getAllProducts(value, successFn, errorFn);
       setPage(value);
     }
   };
 
-  // 한 페이지당 10개의 항목을 가져오는 함수
-  const getPageItems = () => {
-    const startIndex = (page - 1) * 15;
-    const endIndex = startIndex + 15;
-    return filteredData.slice(startIndex, endIndex);
+  const handleSearchOptionChange = e => setSelectedSearchOption(e.target.value);
+
+  const handleSearchKeywordChange = e => setInputValue(e.target.value);
+
+  const handleSearchSubmit = () => {
+    getAllProducts(1, successFn, errorFn, selectedSearchOption, inputValue);
+    setSearchKeyword(inputValue);
+    setPage(1);
   };
 
-  // useEffect(() => {
-  //   // console.log("페이지 변경됨:", page);
-  // }, [page]);
-  
-
-  const handleSearchOptionChange = e => {
-    setSelectedSearchOption(e.target.value);
-    // 선택된 검색 옵션에 따라 검색 유형을 설정
-    if (e.target.value === "닉네임") {
-      setType(1);
-    } else if (e.target.value === "카테고리") {
-      setType(2);
+  const handleClickDelete = async iproduct => {
+    try {
+      const reason = 1;
+      const res = await deleteProduct(iproduct, reason, errorFn);
+      getAllProducts(
+        page,
+        successFn,
+        errorFn,
+        selectedSearchOption,
+        inputValue,
+      );
+      setSearchKeyword(inputValue);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-
-  const handleSearchKeywordChange = e => {
-    setSearchKeyword(e.target.value);
+  const getSortedData = sortType => {
+    if (sortType === 0) {
+      if (selectedSearchOption != 0 && inputValue) {
+        getAllProducts(1, successFn, errorFn, selectedSearchOption, inputValue);
+      } else {
+        getAllProducts(1, successFn, errorFn);
+      }
+    } else if (sortType === 1) {
+      if (selectedSearchOption != 0 && inputValue) {
+        getAllProducts(
+          1,
+          successFn,
+          errorFn,
+          selectedSearchOption,
+          inputValue,
+          sortType,
+        );
+      } else {
+        // getAllProducts(1, successFn, errorFn, sortType);
+      }
+    }
   };
 
-  const handleSearchSubmit = e => {
-    // e.preventDefault();
-    const filtered =  boardAllData.products.filter(item => {
-      // 검색어가 포함된 항목만 필터링하여 반환
-      if (typeof item.subCategory !== "string" || !item.subCategory) return false;
-      return (
-        item.subCategory
-          .toLowerCase()
-          .includes(searchKeyword.toLowerCase()) ||
-        // item.rentalPrice.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        item.nick.toLowerCase().includes(searchKeyword.toLowerCase())
-        // 필터링 조건을 필요에 따라 추가
-      );
-    });
-    setFilteredData(filtered);
-  };
-  // console.log(filteredData);
+  useEffect(() => {
+    console.log("인풋밸류", inputValue, "서치키워드", searchKeyword);
+  }, [inputValue, searchKeyword]);
+  useEffect(() => {
+    getAllProducts(page, successFn, errorFn);
+  }, []);
 
-  const handleClickDelete = (iproduct) => {
-    const reason = 1;
-    deleteProduct(iproduct, reason, successFn, errorFn);
-  };
-
-  
   return (
     <BoardWrap>
       <HeaderWrap>
@@ -169,40 +204,32 @@ const AdminBoardPage = () => {
           <div className="total">총 {boardAllData.totalDisputeCount}개</div>
         </div>
         <div className="search-wrap">
-          <form>
-            <select
-              onChange={handleSearchOptionChange}
-              value={selectedSearchOption}
-            >
-              {searchOptions.map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder={`${
-                selectedSearchOption === "전체"
-                  ? "검색어를 입력하세요."
-                  : selectedSearchOption === "카테고리"
-                  ? "카테고리를 입력하세요."
-                  : selectedSearchOption + "을 입력하세요."
-              }`}
-              value={selectedSearchOption === "전체" ? "--" : searchKeyword}
-              onChange={handleSearchKeywordChange}
-              disabled={selectedSearchOption === "전체"}
-            />
-            <button onClick={handleSearchSubmit} type="submit">
-              <img src="/images/admin/search.svg" />
-            </button>
-          </form>
+          <select
+            onChange={handleSearchOptionChange}
+            value={selectedSearchOption}
+          >
+            {SEARCH_OPTIONS.map((option, index) => (
+              <option key={option} value={index}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder={SEARCH_OPTIONS_TEXT[selectedSearchOption]}
+            value={selectedSearchOption === "전체" ? "--" : inputValue}
+            onChange={handleSearchKeywordChange}
+            disabled={selectedSearchOption === 0}
+          />
+          <button onClick={handleSearchSubmit} type="submit">
+            <img src="/images/admin/search.svg" />
+          </button>
         </div>
         <div className="bt-wrap">
           <div>
-            <button onClick={() => setSortType(0)}>최신순</button>
+            <button onClick={() => getSortedData(0)}>최신순</button>
             <img src="/images/admin/line.svg" />
-            <button onClick={() => setSortType(1)}>조회순</button>
+            <button onClick={() => getSortedData(1)}>조회순</button>
           </div>
         </div>
       </HeaderWrap>
@@ -234,7 +261,13 @@ const AdminBoardPage = () => {
               >
                 <tr className="board-data">
                   <td>{item.iproduct}</td>
-                  <td>{item.subCategory}</td>
+                  <td>
+                    {
+                      category[item.mainCategory - 1].subCategory[
+                        item.subCategory - 1
+                      ].title
+                    }
+                  </td>
                   <td>{item.pricePerDay}</td>
                   <td>{item.nick}</td>
                   <td>{item.view}</td>
@@ -245,7 +278,14 @@ const AdminBoardPage = () => {
                   </td>
                   <td>
                     {item.productManage}
-                    <button className="delete" onClick={e => {handleClickDelete(item.iproduct)}}>삭제</button>
+                    <button
+                      className="delete"
+                      onClick={e => {
+                        handleClickDelete(item.iproduct);
+                      }}
+                    >
+                      삭제
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -253,12 +293,10 @@ const AdminBoardPage = () => {
           ))}
       </table>
       <div>
-        
         <PaginationContent
           current={page}
           onChange={handlePageChange}
           total={boardAllData.totalDisputeCount}
-          // size={Math.floor(reportLength / 12) + 1}
           pageSize={12}
         />
       </div>

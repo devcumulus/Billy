@@ -27,115 +27,119 @@ const initFreeBoardData = {
     }
   ]
 }
+const SEARCH_OPTIONS = ["전체", "닉네임", "제목"];
+
+const SEARCH_OPTIONS_TEXT = [
+  "------------",
+  "닉네임을 입력해주세요",
+  "제목을 입력해주세요",
+];
+
 
 const AdminFreeBoardPage = () => {
   // 전체 자유게시판 데이터
   const [freeBoardAllData, setFreeBoardAllData] = useState([]);
   const [page, setPage] = useState(1);
-  const [type, setType] = useState();
-  const [limit, setLimit] = useState(15);
-
-  
-  const searchOptions = ["전체", "닉네임", "카테고리"];
-  const [selectedSearchOption, setSelectedSearchOption] = useState("전체"); // 선택된 검색 옵션 상태
+  const [selectedSearchOption, setSelectedSearchOption] = useState(0); // 선택된 검색 옵션 상태
+  const [inputValue, setInputValue] = useState(""); // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색어 상태
-  const [filteredData, setFilteredData] = useState([]); // 필터링된 데이터 상태 추가
-  // 최신순, 조회순 정렬
-  const [sortType, setSortType] = useState(0);
-
-  // 백엔드에서 제공하는 sort 값을 받아오는 함수
-  const getSort = sortType => {
-    if (sortType === 1) {
-      return "조회수"; // 예시로 '조회수 많은순 내림차순'을 반환
-    } else {
-      return "최신순"; // 기본값은 최신순
-    }
-  };
-
-  useEffect(() => {
-    const sort = getSort(sortType);
-    getFreeBoard(page, successFn, errorFn, sort);
-  }, [page, sortType]);
 
   const successFn = res => {
-    console.log("성공했을때", res);
     setFreeBoardAllData(res);
-    // setFilteredData(res.products)
+    console.log("성공했을때", res);
   };
   const errorFn = res => {
-    // console.log("실패", res);
+    console.log("실패", res);
     alert(`${res.message} \n 에러코드(${res.errorCode})`);
   };
 
-  const getLength = () => {
-    return freeBoardAllData.length;
-  }
-  const totalPage = Math.ceil(getLength() / limit)
+  // const getLength = () => {
+  //   return freeBoardAllData.length;
+  // }
+  // const totalPage = Math.ceil(getLength() / limit)
 
-  const handlePageChange = (value, pageNum, page, limit, totalPage) => {
+  const handlePageChange = (value, page, totalPage) => {
+    console.log(value);
     if (value === "first") {
+      getFreeBoard(1, successFn, errorFn)
       setPage(1);
     } else if (value === "prev") {
       if (page !== 1) {
+        getFreeBoard(page - 1, successFn, errorFn)
         setPage(page - 1);
       }
     } else if (value === "next") {
       if (page !== totalPage) {
+        getFreeBoard(page + 1, successFn, errorFn)
         setPage(page + 1);
       }
     } else if (value === "last") {
+      getFreeBoard(totalPage, successFn, errorFn)
       setPage(totalPage);
     } else {
+      getFreeBoard(value, successFn, errorFn)
       setPage(value);
     }
   };
 
-  const getPageItems = () => {
-    const startIndex = (page - 1) * 15;
-    const endIndex = startIndex + 15;
-    return boardData.slice(startIndex, endIndex);
-  };
   
-    useEffect(() => {
-      console.log("페이지 변경됨:", page);
-    }, [page]);
-  
-    const handleSearchOptionChange = e => {
-      setSelectedSearchOption(e.target.value);
-      // 선택된 검색 옵션에 따라 검색 유형을 설정
-      if (e.target.value === "닉네임") {
-        setType(1);
-      } else if (e.target.value === "카테고리") {
-        setType(2);
-      }
-    };
-  
-  
-    const handleSearchKeywordChange = e => {
-      setSearchKeyword(e.target.value);
-    };
-  
-    const handleSearchSubmit = e => {
-      // e.preventDefault();
-      const filtered =  freeBoardAllData.boards.filter(item => {
-        // 검색어가 포함된 항목만 필터링하여 반환
-        if (typeof item.subCategory !== "string" || !item.subCategory) return false;
-        return (
-          item.subCategory
-            .toLowerCase()
-            .includes(searchKeyword.toLowerCase()) ||
-          // item.rentalPrice.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-          item.nick.toLowerCase().includes(searchKeyword.toLowerCase())
-          // 필터링 조건을 필요에 따라 추가
-        );
-      });
-      setFilteredData(filtered);
-    };
+  const handleSearchOptionChange = e => setSelectedSearchOption(e.target.value);
 
-    const handleClickDelete = (iboard) => {
+  const handleSearchKeywordChange = e => setInputValue(e.target.value);
+
+  const handleSearchSubmit = () => {
+    getFreeBoard(1, successFn, errorFn, selectedSearchOption, inputValue);
+    setSearchKeyword(inputValue);
+    setPage(1);
+  };
+
+  const handleClickDelete = async iboard => {
+    try {
       const reason = 1;
-      deleteFreeBoard(iboard, reason, successFn, errorFn);
-    };
+      const res = await deleteFreeBoard(iboard, reason, errorFn);
+      getFreeBoard(
+        page,
+        successFn,
+        errorFn,
+        selectedSearchOption,
+        inputValue,
+      );
+      setSearchKeyword(inputValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSortedData = sortType => {
+    if (sortType === 0) {
+      if (selectedSearchOption != 0 && inputValue) {
+        getFreeBoard(1, successFn, errorFn, selectedSearchOption, inputValue);
+      } else {
+        getFreeBoard(1, successFn, errorFn);
+      }
+    } else if (sortType === 1) {
+      if (selectedSearchOption != 0 && inputValue) {
+        getFreeBoard(
+          1,
+          successFn,
+          errorFn,
+          selectedSearchOption,
+          inputValue,
+          sortType,
+        );
+      } else {
+        // getAllProducts(1, successFn, errorFn, sortType);
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log("인풋밸류", inputValue, "서치키워드", searchKeyword);
+  }, [inputValue, searchKeyword]);
+  useEffect(() => {
+    getFreeBoard(page, successFn, errorFn);
+  }, []);
+  
 
   return (
     <BoardWrap>
@@ -145,40 +149,32 @@ const AdminFreeBoardPage = () => {
                 <div className='total'>총 {freeBoardAllData.totalBoardCount}개</div>
             </div>
             <div className="search-wrap">
-          <form>
             <select
               onChange={handleSearchOptionChange}
               value={selectedSearchOption}
             >
-              {searchOptions.map(option => (
-                <option key={option} value={option}>
+              {SEARCH_OPTIONS.map((option, index) => (
+                <option key={option} value={index}>
                   {option}
                 </option>
               ))}
             </select>
             <input
-              type="text"
-              placeholder={`${
-                selectedSearchOption === "전체"
-                  ? "검색어를 입력하세요."
-                  : selectedSearchOption === "카테고리"
-                  ? "카테고리를 입력하세요."
-                  : selectedSearchOption + "을 입력하세요."
-              }`}
-              value={selectedSearchOption === "전체" ? "--" : searchKeyword}
-              onChange={handleSearchKeywordChange}
-              disabled={selectedSearchOption === "전체"}
-            />
+            type="text"
+            placeholder={SEARCH_OPTIONS_TEXT[selectedSearchOption]}
+            value={selectedSearchOption === "전체" ? "--" : inputValue}
+            onChange={handleSearchKeywordChange}
+            disabled={selectedSearchOption === 0}
+          />
             <button onClick={handleSearchSubmit} type="submit">
               <img src="/images/admin/search.svg" />
             </button>
-          </form>
         </div>
             <div className="bt-wrap">
               <div>
-                <button onClick={() => setSortType(0)}>최신순</button>
+                <button onClick={() => getSortedData(0)}>최신순</button>
                 <img src="/images/admin/line.svg" />
-                <button onClick={() => setSortType(1)}>조회순</button>
+                <button onClick={() => getSortedData(1)}>조회순</button>
               </div>
             </div>
         </HeaderWrap>
@@ -188,6 +184,7 @@ const AdminFreeBoardPage = () => {
           >
             <tr>
               <th>게시글 번호</th>
+              <th>제목</th>
               <th>작성자</th>
               <th>조회수</th>
               <th>등록일</th>
@@ -208,6 +205,7 @@ const AdminFreeBoardPage = () => {
               >
               <tr className='board-data'>
                 <td>{item.iboard}</td>
+                <td>{item.title}</td>
                 <td>{item.nick}</td>
                 <td>{item.view}</td>
                 <td>{item.createdAt}</td>
@@ -228,7 +226,6 @@ const AdminFreeBoardPage = () => {
           current={page}
           onChange={handlePageChange}
           total={freeBoardAllData.totalBoardCount}
-          // size={Math.floor(reportLength / 12) + 1}
           pageSize={12}
         />
       </div>
