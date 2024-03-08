@@ -98,7 +98,7 @@ export const ChatBoxContent = styled.div`
   max-width: 100%;
   max-height: 550px;
   /* min-height: 550px; */
-  height: 540px;
+  /* height: 540px; */
   box-sizing: border-box;
   background-color: #fff;
   z-index: 5;
