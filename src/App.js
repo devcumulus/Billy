@@ -169,6 +169,22 @@ const App = () => {
           }
         ></Route>
         <Route
+          path="/payment/success/:orderId"
+          element={
+            <Suspense fallback={<Loading />}>
+              <LazyPayPage />
+            </Suspense>
+          }
+        ></Route>
+        <Route
+          path="/payment/cancel"
+          element={
+            <Suspense fallback={<Loading />}>
+              <LazyPayPage />
+            </Suspense>
+          }
+        ></Route>
+        <Route
           path="/write/"
           element={
             <Suspense fallback={<Loading />}>

@@ -10,18 +10,44 @@ import {
   SearchOptionSelect,
 } from "../../styles/admin/AdminReportPageStyle";
 
+const searchOptions = [
+  {
+    id: 2,
+    title: "닉네임",
+  },
+  {
+    id: 3,
+    title: "아이디",
+  },
+];
+const membershipStatusOptions = [
+  {
+    id: 1,
+    title: "전체",
+  },
+  {
+    id: 2,
+    title: "정상",
+  },
+  {
+    id: 3,
+    title: "정지",
+  },
+];
+
 const AdminMemberPage = ({ activeBtn }) => {
-  const searchOptions = ["전체", "이름", "아이디"];
-  const membershipStatusOptions = ["전체", "정상", "정지"];
+  const [type, setType] = useState(2);
+  const [state, setState] = useState(null);
+  const [totalUserCount, setTotalUserCount] = useState([]);
+
   const reasonOptions = ["이유1", "이유2", "이유3"]; // 이유 옵션 추가
   const [memberData, setMemberData] = useState([]);
-  const [selectedSearchOption, setSelectedSearchOption] = useState("전체");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, selectedSearchOption, searchKeyword]);
+  }, [currentPage, type, searchKeyword, state]);
 
   const convertSearchTypeToNumber = type => {
     switch (type) {
@@ -49,20 +75,17 @@ const AdminMemberPage = ({ activeBtn }) => {
 
   const fetchData = async () => {
     try {
-      const searchTypeNumber = convertSearchTypeToNumber(selectedSearchOption);
       const data = await getProducts(
         currentPage,
-        searchTypeNumber,
+        type,
         searchKeyword,
+        state,
+        setTotalUserCount,
       );
       setMemberData(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
-
-  const handleSearchOptionChange = e => {
-    setSelectedSearchOption(e.target.value);
   };
 
   const handleSearchKeywordChange = e => {
@@ -78,6 +101,8 @@ const AdminMemberPage = ({ activeBtn }) => {
     try {
       const reasonNumber = convertReasonToNumber(reason);
       const deletedUser = await deleteUser(userId, reasonNumber);
+      await fetchData()
+
       if (deletedUser) {
         console.log("회원 탈퇴 성공:", deletedUser);
       } else {
@@ -86,6 +111,7 @@ const AdminMemberPage = ({ activeBtn }) => {
     } catch (error) {
       console.error("회원 탈퇴 실패:", error);
     }
+
   };
 
   return (
@@ -94,31 +120,24 @@ const AdminMemberPage = ({ activeBtn }) => {
         <h1>{activeBtn}</h1>
         <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <MemberSearchForm>
-            <SearchOptionSelect
-              onChange={handleSearchOptionChange}
-              value={selectedSearchOption}
-            >
-              {searchOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
+            <SearchOptionSelect onChange={e => setType(e.target.value)}>
+              {searchOptions.map(item => (
+                <option key={item.id} value={item.id}>
+                  {item.title}
                 </option>
               ))}
             </SearchOptionSelect>
             <MemberSearchWord
-              placeholder={`${
-                selectedSearchOption === "전체"
-                  ? "검색어를 입력하세요"
-                  : selectedSearchOption + "을 입력하세요"
-              }`}
+              placeholder={`검색어를 입력하세요`}
               value={searchKeyword}
               onChange={handleSearchKeywordChange}
             />
             <MemberSearchBt onClick={handleSearchSubmit} />
           </MemberSearchForm>
-          <select>
-            {membershipStatusOptions.map((option, index) => (
-              <option key={index} value={index + 1}>
-                {option}
+          <select onChange={e => setState(e.target.value)}>
+            {membershipStatusOptions.map(item => (
+              <option key={item.id} value={item.id}>
+                {item.title}
               </option>
             ))}
           </select>
@@ -161,7 +180,7 @@ const AdminMemberPage = ({ activeBtn }) => {
                     color: member.penalty <= -50 ? "#B6000B" : "#000",
                   }}
                 >
-                  {member.penalty > -50 ? "정상" : "정지"}
+                  {member.status == "ACTIVATED" ? "정상" : "정지"}
                 </span>
               </td>
               <td style={tableCellStyle}>
@@ -179,9 +198,9 @@ const AdminMemberPage = ({ activeBtn }) => {
 
       <PaginationContent
         current={currentPage}
-        total={100}
+        total={totalUserCount}
         onChange={page => setCurrentPage(page)}
-        pageSize={10}
+        pageSize={12}
         showSizeChanger={false}
         style={{ marginTop: "20px", textAlign: "center" }}
       />

@@ -334,7 +334,7 @@ const UserProfile = () => {
                         <PostDesc>
                           <div className="post-info-title">{item.title}</div>
                           <div className="post-info-price">{item.rentalPrice.toLocaleString()}</div>
-                          <div className="post-info-date">{item.rentalStartDate}</div>
+                          <div className="post-info-date">{new Date(item.rentalStartDate).toLocaleString()}</div>
                         </PostDesc>
                       </div>
                       <ProfileWrap>

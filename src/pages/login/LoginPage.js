@@ -170,12 +170,12 @@ const LoginPage = () => {
             style={{
               display: "flex",
               justifyContent: "center",
-              gap: "30px",
+              gap: "50px",
               paddingRight: "30px",
             }}
           >
-            <li><Link to={kakaoLogin}>카카오로그인</Link></li>
-            <DivisionLine></DivisionLine>
+            {/* <li><Link to={kakaoLogin}>카카오로그인</Link></li>
+            <DivisionLine></DivisionLine> */}
             <li onClick={handleIdFind}>아이디 찾기</li>
             {idFindModal && (
               <>

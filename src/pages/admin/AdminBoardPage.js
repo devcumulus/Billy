@@ -89,7 +89,9 @@ const category = [
     ],
   },
 ];
-const SEARCH_OPTIONS = ["전체", "닉네임", "카테고리"];
+const SEARCH_OPTIONS = [
+  
+  "닉네임", "카테고리"];
 
 const SEARCH_OPTIONS_TEXT = [
   "검색어를 입력해주세요",
@@ -253,7 +255,8 @@ const AdminBoardPage = () => {
                   <td>{item.pricePerDay.toLocaleString()}</td>
                   <td>{item.nick}</td>
                   <td>{item.view}</td>
-                  <td>{new Date(item.createdAt).toLocaleString()}</td>                  <td>
+                  <td>{new Date(item.createdAt).toLocaleString()}</td>                  
+                  <td>
                     {item.productInquiry}
                     <button 
                     className="move"

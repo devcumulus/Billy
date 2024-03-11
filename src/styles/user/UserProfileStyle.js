@@ -70,7 +70,7 @@ export const ProfileImg = styled.div`
 `
 
 export const UserName = styled.div`
-    font-size: 20px;
+    font-size: 25px;
     padding-top:20px;
     margin-left: 20px;
 `
@@ -78,7 +78,7 @@ export const UserName = styled.div`
 export const Rating = styled.div`
         padding-top: 55px;
     >div {
-        font-size: 16px;
+        font-size: 18px;
         color: #777;
     }
     .rating-score {
@@ -90,11 +90,11 @@ export const Rating = styled.div`
     }
 `
 export const Demerit = styled.div`
-    font-size: 16px;
+    font-size: 18px;
     color: #777;
     padding-top: 55px;
     .demerit-score {
-        width: 70px;
+        width: 50px;
         display: flex;
         justify-content: space-between;
         font-size: 25px;
@@ -156,7 +156,8 @@ export const PostImg = styled.div`
 export const PostDesc = styled.div`
     padding-top: 15px;
 .post-info-title {
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
     color: #777;
 }
 .post-info-price {
@@ -165,8 +166,9 @@ export const PostDesc = styled.div`
 }
 .post-info-date {
     padding-top: 15px;
-    font-size: 12px;
-    color: #777;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
 }
 `
 
@@ -182,6 +184,6 @@ export const ProfileWrap = styled.div`
         border-radius: 35px;
     }
     .user-name {
-        font-size: 12px;
+        font-size: 16px;
     }
 `

@@ -20,47 +20,46 @@ const KakaoRedirectPage = () => {
 
   // 인증코드로 Access Token 요청하기
   useEffect(() => {
-    getAccessToken(authCode).then(accessToken => {
+    getAccessToken(authCode).then(async accessToken => {
+      // async keyword added
       console.log("access Token", accessToken);
       // 개인 정보 호출
-      getMemberWithAccessToken(accessToken).then(memberInfo => {
+      getMemberWithAccessToken(accessToken).then(async memberInfo => {
+        // async keyword added
         // API 백엔드 서버로 로그인을 시도합니다.
         dispatch(login(memberInfo));
 
         // 사용자의 닉네임과 이메일을 가져옵니다.
         const nickname = memberInfo["properties"]["nickname"];
         const email = memberInfo["kakao_account"]["email"];
-
         const uniqueID = memberInfo.id;
         console.log("Unique ID: ", uniqueID);
         console.log("Nickname: ", nickname);
         console.log("Email: ", email);
 
-        // 기존회원 유무 확인
-        const IdOverlap = () => {
-          const obj = {
-            div: 2,
-            uid: uniqueID,
-            nick: "nickname",
-          };
-          idOverlapPost(
-            obj,
-            () => {
-              idPostSuccess();
-            },
-            idPostFail,
-          );
-        };
+        // const idPostSuccess = async () => {
+        //   navigate(`/join/kakao?UniqueID=${uniqueID}`);
+        // };
+        // const idPostFail = async () => {
+        //   navigate(`/`);
+        // };
 
-        const idPostSuccess = () => {
-            navigate(`/join/kakao?UniqueID=${uniqueID}`)
-        }
-        const idPostFail = () => {
-            navigate(``)
+        // 기존회원 유무 확인
+        const obj = {
+          div: 2,
+          uid: uniqueID,
+          nick: "nickname",
+        };
+        await idOverlapPost(obj);
+        try {
+            navigate(`/join/kakao?uniqueID=${uniqueID}`);
+        } catch (error) {
+            navigate(`/`);
         }
       });
     });
   }, [authCode]);
+
   return (
     <div>
       <h1>카카오 리다이렉트 페이지</h1>

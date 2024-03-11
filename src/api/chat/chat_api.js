@@ -38,7 +38,7 @@ export const getChat = async (ichat, page) => {
     const result = await jwtAxios.get(url);
 
     if (result.status === 200) {
-      return 1;
+      return result.data;
     }
   } catch (error) {
     console.error(error);

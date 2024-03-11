@@ -201,7 +201,8 @@ const handlePageChange = _tempPage => {
                 <td>{item.title}</td>
                 <td>{item.nick}</td>
                 <td>{item.view}</td>
-                <td>{new Date(item.createdAt).toLocaleString()}</td>                <td>{item.postInquiry}
+                <td>{new Date(item.createdAt).toLocaleString()}</td>                
+                <td>{item.postInquiry}
                 <td>{item.postManage}</td>
                   <button className='move' onClick={() => moveToDetail(item.iboard)}>이동</button>
                 </td>

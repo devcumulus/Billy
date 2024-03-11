@@ -63,7 +63,7 @@ export const MoreWrap = styled.div`
     grid-gap: 30px;
 
     .desc-wrap {
-      line-height: 30px;
+      line-height: 33px;
       text-align: left;
       .desc-title {
         width: 300px;
@@ -99,6 +99,7 @@ export const MoreWrap = styled.div`
         right: 0;
         color: #777;
         font-size: 15px;
+        font-weight: 400;
       }
     }
   }

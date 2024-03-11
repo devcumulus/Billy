@@ -42,7 +42,6 @@ const AdminChatHistoryPage = () => {
   const getLength = function () {
     return chatHistoryData.length;
   };
-  // const totalPage = Math.ceil(getLength() / limit);
 
   function handlePageChange(value) {
     if (value === "&laquo;") {
@@ -118,7 +117,7 @@ const AdminChatHistoryPage = () => {
                 }}
               >
                 <tr className="board-data">
-                  <td>{item.ichat}</td>
+                  <td>{index + 1}</td>
                   <td>{item.category}</td>
                   <td>{item.nick}</td>
                   <td>{new Date(item.createdAt).toLocaleString()}</td>

@@ -1,4 +1,3 @@
-// import axios from "axios";
 import axios from "axios";
 import { SERVER_URL } from "../config";
 // 앱 등록시 Rest 키 값(절대 오픈 금지)
@@ -39,6 +38,7 @@ export const getAccessToken = async authCode => {
   const accessToken = res.data.access_token;
   return accessToken;
 };
+
 // Access Token 으로 회원정보 가져오기
 export const getMemberWithAccessToken = async accessToken => {
   const response = await fetch("https://kapi.kakao.com/v2/user/me", {
@@ -55,11 +55,19 @@ export const getMemberWithAccessToken = async accessToken => {
     throw new Error("Failed to get member info");
   }
 };
-// export const getMemberWithAccessToken = async accessToken => {
-//   console.log("백엔드에 회원 등록을 위한 액세스 토큰 전달 ", accessToken);
-//   const res = await axios.get(
-//     `${SERVER_URL}/api/user/kakao?accessToken=${accessToken}`,
-//   );
 
-//   return res.data;
-// };
+// 카카오 로그아웃
+export const kakaoLogout = async accessToken => {
+  const response = await fetch("https://kapi.kakao.com/v1/user/logout", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (response.ok) {
+    console.log("Logout successful");
+    document.cookie = "cookieName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  } else {
+    console.log("Logout failed");
+  }
+};

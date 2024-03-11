@@ -287,7 +287,7 @@ const AdminReportPage = ({ activeBtn }) => {
 
   // 상태변경 or 상태확인 버튼 클릭
   const [contentYetModal, setContentYetModal] = useState(false);
-  const [contentDoneModal, setContentDone] = useState(false);
+  const [contentDoneModal, setContentDoneModal] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState(null);
 
   const handleClickYet = (detail, idispute) => {

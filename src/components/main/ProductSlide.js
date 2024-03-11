@@ -132,7 +132,7 @@ const ProductSlide = ({ btList, title, desc, id, data }) => {
                         <div className="desc-ad">{item.addr}</div>
                         <div className="view">조회수{item.view}</div>
                       </div>
-                      {item.hashTags.map((tagData, tagIndex) => (
+                      {item.hashTags.slice(0, 3).map((tagData, tagIndex) => (
                         <span key={tagIndex} className="hash-tag">{tagData.tag}</span>
                       ))}
                     </div>

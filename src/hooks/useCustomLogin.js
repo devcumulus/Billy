@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { loginPostAsync, logout } from "../slices/loginSlice";
+import { kakaoLogout } from "../api/login/kakao_api";
 
 const useCustomLogin = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const useCustomLogin = () => {
   // 로그아웃 기능
   const doLogout = () => {
     dispatch(logout());
+    kakaoLogout();
   };
   // 패스이동 기능
   const moveToPath = path => {

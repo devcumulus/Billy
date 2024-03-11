@@ -143,9 +143,10 @@ const MainMorePage = () => {
   const fetchData = async (pageNum, _sortType) => {
     try {
       let res = await getMoreProduct(pageNum,parseMainCategory,parseSubCategory,_sortType);
-      // if(isLogin) {
-      //   res = await getLoginMoreProduct();
-      // }
+      if(isLogin) {
+        res = await getLoginMoreProduct(pageNum,parseMainCategory,parseSubCategory,_sortType);
+      }
+      console.log(isLogin)
       setDatas(res);
       console.log(res);
     } catch (error) {
@@ -312,7 +313,7 @@ const MainMorePage = () => {
                     <div className="desc-ad">{item.addr}</div>
                     <div className="view">조회수{item.view}</div>
                   </div>
-                  {item.hashTags.map((tagData, tagIndex) => (
+                  {item.hashTags.slice(0, 3).map((tagData, tagIndex) => (
                         <span key={tagIndex} className="hash-tag">{tagData.tag}</span>
                       ))}
                 </div>

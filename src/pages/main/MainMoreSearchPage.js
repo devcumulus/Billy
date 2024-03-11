@@ -160,7 +160,6 @@ const MainMoreSearchPage = () => {
     }
   };
   const [datas, setDatas] = useState(state.result);
-  
 
   // 지역 카테고리 선택
   const [regionValue, setRegionValue] = useState("");
@@ -170,7 +169,9 @@ const MainMoreSearchPage = () => {
 
   const handleRegionChange = e => {
     const selectedRegionValueId = parseInt(e.target.value);
-    const selectedOption = region.find(item => item.id === selectedRegionValueId);
+    const selectedOption = region.find(
+      item => item.id === selectedRegionValueId,
+    );
     setRegionValue(selectedOption ? selectedOption.title : "");
     if (selectedOption) {
       const selectedDistrictValueId = selectedRegionValueId - 1;
@@ -183,7 +184,8 @@ const MainMoreSearchPage = () => {
   const handleDistrictChange = e => {
     const selectedRegionValueId = parseInt(e.target.value);
     const selectedOption = selectedDistrict.find(
-      item => item.id === selectedRegionValueId);
+      item => item.id === selectedRegionValueId,
+    );
     setDistrictValue(selectedOption ? selectedOption.title : "");
   };
 
@@ -191,14 +193,16 @@ const MainMoreSearchPage = () => {
   useEffect(() => {
     if (!regionValue && !districtValue) {
       setAddr(null);
-    } if (regionValue && !districtValue) {
+    }
+    if (regionValue && !districtValue) {
       setAddr(regionValue);
-    } if (regionValue && districtValue) {
+    }
+    if (regionValue && districtValue) {
       setAddr(`${regionValue}_${districtValue}`);
     }
   }, [regionValue, districtValue]);
 
-  console.log(addr)
+  console.log(addr);
 
   // 데이터연동(페이지네이션)
   const [pageNum, setPageNum] = useState(1);
@@ -229,7 +233,7 @@ const MainMoreSearchPage = () => {
     if (!sortType && addr) fetchData(pageNum, null, addr);
     if (sortType && !addr) fetchData(pageNum, sortType, null);
     if (sortType && addr) fetchData(pageNum, sortType, addr);
-}, [pageNum, sortType, addr]);
+  }, [pageNum, sortType, addr]);
 
   // useEffect(() => {
   //   const regionData = datas.filter(item =>
@@ -315,7 +319,11 @@ const MainMoreSearchPage = () => {
                   전체
                 </option>
                 {selectedDistrict.map(item => {
-                  return <option key={item.id} value={item.id}>{item.title}</option>;
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.title}
+                    </option>
+                  );
                 })}
               </select>
             </div>
@@ -349,8 +357,15 @@ const MainMoreSearchPage = () => {
                   <div className="desc-price">
                     {item.rentalPrice.toLocaleString()}
                   </div>
-                  <div className="desc-addr">{item.addr}</div>
-                  <div className="view">조회수{item.view}</div>
+                  <div className="ad-view-wrap">
+                    <div className="desc-ad">{item.addr}</div>
+                    <div className="view">조회수{item.view}</div>
+                  </div>
+                  {item.hashTags.map((tagData, tagIndex) => (
+                    <span key={tagIndex} className="hash-tag">
+                      {tagData.tag}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
