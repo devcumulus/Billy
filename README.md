@@ -12,7 +12,8 @@
 이점을 활용하여 사용하지 않는 제품을 보유한 사람들과 필요한 이용자를 연결하여 상호 간 대여 기회를 제공합니다.
  
   ## 프로젝트 영상 
-![시연영상](https://github.com/devcumulus/Billy/assets/148113369/0cec8006-df3f-46d6-8a52-45975018dbf0)
+![시연영상](https://github.com/devcumulus/Billy/assets/148113369/2d665386-db67-48f4-b9a1-771bf3857a19)
+
 
 
 
