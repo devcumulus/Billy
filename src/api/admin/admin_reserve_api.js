@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import { jwtAxios } from "../../util/jwtUtil";
 import { SERVER_URL } from "../config";
 

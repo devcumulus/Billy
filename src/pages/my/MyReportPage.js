@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import React, { useEffect, useState } from 'react'
 import { MyListDiv, MyListTop } from '../../styles/my/MyList'
 import { useTable, usePagination } from 'react-table';

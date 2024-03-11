@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import React from "react";
 import MyReservationList from "../../components/my/reservation/MyReservationList";
 

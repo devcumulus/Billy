@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import React, { useEffect, useState } from "react";
 import { MyListBottom, MyListDiv, MyListMid, MyListMidImg, MyListMidLast, MyListMidTxt, MyListTop, MyListTopButton } from "../../../styles/my/MyList";
 import MyMoreButton from "../MyMoreButton";

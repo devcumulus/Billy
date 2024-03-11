@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import styled from '@emotion/styled'
 import { Common } from '../CommonStyles';
 

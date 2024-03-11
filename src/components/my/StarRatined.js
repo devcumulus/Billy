@@ -1,5 +1,4 @@
-// Star.js
-
+// 담당자: 최배근
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 

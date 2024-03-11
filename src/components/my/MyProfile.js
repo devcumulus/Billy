@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { Common } from "../../styles/CommonStyles";
