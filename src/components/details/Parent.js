@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React, { useState } from "react";
 import Modal from "react-modal";
 import StarRating from "./StarRating";

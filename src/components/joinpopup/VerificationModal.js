@@ -1,7 +1,18 @@
+// 담당자: 사공은진
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { IdBox, LoginBox, Logo, LogoZone } from "../../styles/login/LoginPageStyle";
-import { BtSection, CancelBt, SaveBt, VerifiBt } from "../../styles/join/JoinPageStyle";
+import {
+  IdBox,
+  LoginBox,
+  Logo,
+  LogoZone,
+} from "../../styles/login/LoginPageStyle";
+import {
+  BtSection,
+  CancelBt,
+  SaveBt,
+  VerifiBt,
+} from "../../styles/join/JoinPageStyle";
 import { verificationGet, verificationPost } from "../../api/join/join_api";
 
 const VerificationStyle = styled.div`
@@ -18,8 +29,13 @@ const VerificationStyle = styled.div`
   border-radius: 10px;
 `;
 
-const VerificationModal = ({ closeModal, onConfirm, setVerificationId, verificationId }) => {
-  const [resultOk, setResultOk] = useState(false)
+const VerificationModal = ({
+  closeModal,
+  onConfirm,
+  setVerificationId,
+  verificationId,
+}) => {
+  const [resultOk, setResultOk] = useState(false);
   const [userData, setUserData] = useState({
     userName: "",
     userPhone: "",
@@ -28,7 +44,7 @@ const VerificationModal = ({ closeModal, onConfirm, setVerificationId, verificat
 
   const handleChange = (fieldName, value) => {
     let sanitizedValue;
-  
+
     if (fieldName === "userPhone" || fieldName === "userBirthday") {
       const numRegex = /^[0-9]*$/;
       if (!numRegex.test(value)) {
@@ -42,14 +58,14 @@ const VerificationModal = ({ closeModal, onConfirm, setVerificationId, verificat
       }
       sanitizedValue = value;
     }
-  
+
     setUserData(prevState => ({
       ...prevState,
       [fieldName]: sanitizedValue,
     }));
   };
 
-  const handleVerifiConfirm = async (userData) => {
+  const handleVerifiConfirm = async userData => {
     if (!userData.userName || !userData.userPhone || !userData.userBirthday) {
       return;
     }
@@ -72,45 +88,45 @@ const VerificationModal = ({ closeModal, onConfirm, setVerificationId, verificat
       </LogoZone>
       <LoginBox height={"340px"} mgbtm={"50px"}>
         {resultOk ? (
-          <p>
-          본인인증 완료해주세요. 
-          </p>
+          <p>본인인증 완료해주세요.</p>
         ) : (
           <p>
-          본인인증을 위해 <br />
-          정보 입력을 해주세요.
+            본인인증을 위해 <br />
+            정보 입력을 해주세요.
           </p>
         )}
         <IdBox
           type="text"
           placeholder="이름 예) 홍길동"
           value={userData.userName}
-          onChange={(e) => handleChange("userName", e.target.value)}
+          onChange={e => handleChange("userName", e.target.value)}
         />
         <IdBox
           type="text"
           placeholder="휴대폰 번호 예) 01000000000"
           value={userData.userPhone}
-          onChange={(e) => handleChange("userPhone", e.target.value)}
+          onChange={e => handleChange("userPhone", e.target.value)}
         />
         <IdBox
           type="number"
           placeholder="생일 예) 20240301"
           value={userData.userBirthday}
-          onChange={(e) => handleChange("userBirthday", e.target.value)}
+          onChange={e => handleChange("userBirthday", e.target.value)}
         />
 
         <BtSection width={"380px"}>
           {resultOk ? (
-              <VerifiBt onClick={()=> onConfirm(verificationId)}>본인 확인 완료</VerifiBt>
-            ) : (
-              <>
-                <CancelBt onClick={closeModal}>닫기</CancelBt>
-                <SaveBt onClick={() => handleVerifiConfirm(userData)}>
-                  확인
-                </SaveBt>
-              </>
-            )}
+            <VerifiBt onClick={() => onConfirm(verificationId)}>
+              본인 확인 완료
+            </VerifiBt>
+          ) : (
+            <>
+              <CancelBt onClick={closeModal}>닫기</CancelBt>
+              <SaveBt onClick={() => handleVerifiConfirm(userData)}>
+                확인
+              </SaveBt>
+            </>
+          )}
         </BtSection>
       </LoginBox>
     </VerificationStyle>

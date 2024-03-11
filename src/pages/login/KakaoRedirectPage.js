@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -52,9 +53,9 @@ const KakaoRedirectPage = () => {
         };
         await idOverlapPost(obj);
         try {
-            navigate(`/join/kakao?uniqueID=${uniqueID}`);
+          navigate(`/join/kakao?uniqueID=${uniqueID}`);
         } catch (error) {
-            navigate(`/`);
+          navigate(`/`);
         }
       });
     });

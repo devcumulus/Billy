@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getMyUser } from "../../api/my/my_api";

@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useState } from "react";
 import Layout from "../../layouts/Layout";
 import DaumPostcode from "react-daum-postcode";
@@ -50,10 +51,14 @@ const JoinKakaoPage = () => {
       uid: "userId123",
       nick: nickname,
     };
-    nickOverlapPost(obj, () => {
-      setIsValid(2); 
-      nickPostSuccess();
-    }, nickPostFail);
+    nickOverlapPost(
+      obj,
+      () => {
+        setIsValid(2);
+        nickPostSuccess();
+      },
+      nickPostFail,
+    );
   };
   const NickOverlapBt = e => {
     e.preventDefault();
@@ -135,13 +140,12 @@ const JoinKakaoPage = () => {
     mode: "onChange",
   });
 
-  
   const searchParams = new URLSearchParams(location.search);
-  const accessToken  = searchParams.get("accessToken");
+  const accessToken = searchParams.get("accessToken");
   const userId = accessToken.substring(0, 8);
   const startIndex = accessToken.length - 8;
   const password = accessToken.substring(startIndex);
-//   console.log("userId",userId,"password",password)
+  //   console.log("userId",userId,"password",password)
 
   const [photo, setPhoto] = useState("");
   const nickname = watch("nickname");
@@ -150,7 +154,6 @@ const JoinKakaoPage = () => {
   const [restAddress, setRestAddress] = useState("");
   const [isValid, setIsValid] = useState(0);
   const email = watch("email");
-
 
   const handleChangeAddress = e => {
     setAddress(e.target.value);
@@ -165,14 +168,14 @@ const JoinKakaoPage = () => {
   const [resultOk, setResultOk] = useState(false);
   const [verifiData, setVerifiData] = useState();
   const [verifiResultModal, setVerifiResultModal] = useState(false);
-   
+
   const verifiResultonConfirm = () => {
     setVerifiResultModal(true);
-  }
+  };
 
   const verifiResultClose = () => {
     setVerifiResultModal(false);
-  }
+  };
 
   const verificationConfirm = () => {
     setVerificationModal(true);
@@ -181,11 +184,11 @@ const JoinKakaoPage = () => {
     setVerificationModal(false);
   };
 
-  const onVerifiConfirm = async (id) => {
+  const onVerifiConfirm = async id => {
     try {
       let result;
       result = await verificationGet(id);
-      
+
       if (result) {
         setVerifiData(result);
         setVerificationModal(false);
@@ -196,8 +199,8 @@ const JoinKakaoPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-  
+  };
+
   // 데이터 연동(회원가입)
   const handleSubmitJoin = async () => {
     const formData = new FormData();
@@ -236,7 +239,7 @@ const JoinKakaoPage = () => {
     }
 
     try {
-      joinPost({obj: formData});
+      joinPost({ obj: formData });
       navigate(`/join/step_3?nick=${nickname}`);
     } catch (error) {
       console.log(error);
@@ -284,17 +287,22 @@ const JoinKakaoPage = () => {
 
       {verificationModal && (
         <>
-          <VerificationModal closeModal={closeVerificationModal} 
-          onConfirm={onVerifiConfirm} 
-          verificationId={verificationId}
-          setVerificationId={setVerificationId}/>
+          <VerificationModal
+            closeModal={closeVerificationModal}
+            onConfirm={onVerifiConfirm}
+            verificationId={verificationId}
+            setVerificationId={setVerificationId}
+          />
           <ModalBackground></ModalBackground>
         </>
       )}
 
       {verifiResultModal && (
         <>
-          <VerificationOk closeModal={verifiResultClose} verifiData={verifiData}/>
+          <VerificationOk
+            closeModal={verifiResultClose}
+            verifiData={verifiData}
+          />
           <ModalBackground></ModalBackground>
         </>
       )}
@@ -399,14 +407,24 @@ const JoinKakaoPage = () => {
                   {...register("phoneNumber")}
                 />
                 {resultOk === true ? (
-                  <ConfirmBt width={"130px"} type="button"
-                  onClick={()=> {verifiResultonConfirm()}}>
+                  <ConfirmBt
+                    width={"130px"}
+                    type="button"
+                    onClick={() => {
+                      verifiResultonConfirm();
+                    }}
+                  >
                     본인 결과 확인
                   </ConfirmBt>
                 ) : (
-                  <ConfirmBt width={"130px"} type="button"
-                  onClick={()=> {verificationConfirm()}}>
-                     본인 인증 확인
+                  <ConfirmBt
+                    width={"130px"}
+                    type="button"
+                    onClick={() => {
+                      verificationConfirm();
+                    }}
+                  >
+                    본인 인증 확인
                   </ConfirmBt>
                 )}
               </JoinElementInput>

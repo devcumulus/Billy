@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import styled from "@emotion/styled";
 import React from "react";
 
@@ -24,7 +25,7 @@ const JoinPopUp = ({ txt, txt2, onConfirm }) => {
     display: flex;
 
     flex-direction: column;
-    text-align:center;
+    text-align: center;
     justify-content: center;
     align-items: center;
     gap: 30px;

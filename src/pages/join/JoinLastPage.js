@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useState } from "react";
 import Layout from "../../layouts/Layout";
 import {
@@ -11,7 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const JoinLastPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // URL에서 닉네임 매개변수 추출
   const [nickname, setNickname] = useState("");
   useEffect(() => {

@@ -1,3 +1,4 @@
+// 담당자: 김경민
 import React from "react";
 import { PulseLoader } from "react-spinners";
 

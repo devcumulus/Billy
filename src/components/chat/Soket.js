@@ -1,3 +1,4 @@
+//담당장 : 박준서
 import { Client } from "@stomp/stompjs";
 
 const client = new Client({

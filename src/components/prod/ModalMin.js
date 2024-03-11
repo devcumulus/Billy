@@ -1,3 +1,4 @@
+//담당자: 김경민
 import React, { useState } from "react";
 import { BT, Detail, MidalCovers } from "../../styles/prod/mdalStylecss";
 

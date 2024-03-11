@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React, { useState } from "react";
 import Modal from "react-modal";
 import StarRating from "./StarRating";
@@ -26,7 +27,14 @@ const CancelButton = styled.button`
 
 const SubmitButton = styled(CancelButton)``;
 
-const ReviewFormModify = ({ isOpen, onRequestClose, contents, ireview, rating, setData }) => {
+const ReviewFormModify = ({
+  isOpen,
+  onRequestClose,
+  contents,
+  ireview,
+  rating,
+  setData,
+}) => {
   const [review, setReview] = useState(contents);
   const [ratingModify, setRatingModify] = useState(rating);
 

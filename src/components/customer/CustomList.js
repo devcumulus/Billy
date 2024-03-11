@@ -1,3 +1,4 @@
+// 담당자: 최배근
 import React, { useState } from "react";
 import { MYListDivs, MyListDiv } from "../../styles/my/MyList";
 import styled from "@emotion/styled";

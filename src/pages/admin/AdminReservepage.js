@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useState } from "react";
 import {
   PaginationContent,
@@ -5,7 +6,10 @@ import {
   ReportTitle,
 } from "../../styles/admin/AdminReportPageStyle";
 import { ModalBackground } from "../../components/joinpopup/JoinPopUp";
-import { deleteIrefund, getAdminReserve } from "../../api/admin/admin_reserve_api";
+import {
+  deleteIrefund,
+  getAdminReserve,
+} from "../../api/admin/admin_reserve_api";
 import AdminReserve from "../../components/admin/AdminReserve";
 
 const accidentCate = [
@@ -31,7 +35,7 @@ const AdminReservePage = ({ activeBtn }) => {
   const [reserveList, setReserveList] = useState([]);
   const [reserveLength, setReserveLength] = useState([]);
   const [state, setState] = useState(null);
-  const [showModal,setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState();
   const [page, setPage] = useState(1);
 
@@ -40,66 +44,64 @@ const AdminReservePage = ({ activeBtn }) => {
   };
 
   const reserveListData = async () => {
-    await getAdminReserve(
-    page,
-    state,
-    setReserveList,
-    setReserveLength,
-    );
+    await getAdminReserve(page, state, setReserveList, setReserveLength);
   };
-    
+
   useEffect(() => {
     reserveListData();
   }, [page, state]);
 
-    const handleSatus = (irefund) => {
-      setShowModal(true);
-      setItemToDelete(irefund);
-    }
+  const handleSatus = irefund => {
+    setShowModal(true);
+    setItemToDelete(irefund);
+  };
 
-    const handleCancel = async () => {
-      if (itemToDelete) {
-        await handleReserveButton(itemToDelete, -1);
-        setShowModal(false);
-      }
-    };
-    const handleConfirm = async () => {
-      if (itemToDelete) {
-        await handleReserveButton(itemToDelete, 1);
-        setShowModal(false);
-      }
-    };
-
-    const handleReserveButton = async (irefund,div) => {
-      try {
-        const deleteReserve = await deleteIrefund(irefund,div);
-        
-      } catch (error) {
-        console.error("Error deleteIrefund:", error);
-      }
-      reserveListData();
-    };
-
-    const closeModal = () => {
+  const handleCancel = async () => {
+    if (itemToDelete) {
+      await handleReserveButton(itemToDelete, -1);
       setShowModal(false);
     }
+  };
+  const handleConfirm = async () => {
+    if (itemToDelete) {
+      await handleReserveButton(itemToDelete, 1);
+      setShowModal(false);
+    }
+  };
 
-    const formatNumberWithCommas = (number) => {
-      return number.toLocaleString();
-    };
+  const handleReserveButton = async (irefund, div) => {
+    try {
+      const deleteReserve = await deleteIrefund(irefund, div);
+    } catch (error) {
+      console.error("Error deleteIrefund:", error);
+    }
+    reserveListData();
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const formatNumberWithCommas = number => {
+    return number.toLocaleString();
+  };
 
   return (
     <>
       {showModal && (
         <>
-        <AdminReserve onCancel={handleCancel} onConfirm={handleConfirm} onClose={closeModal}
-        txt={
-          <>
-            이 내역을  <br />
-            환불하시겠습니까?
-          </>
-        }/>
-        <ModalBackground></ModalBackground>
+          <AdminReserve
+            onCancel={handleCancel}
+            onConfirm={handleConfirm}
+            onClose={closeModal}
+            txt={
+              <>
+                이 내역을 <br />
+                환불하시겠습니까?
+              </>
+            }
+          />
+          <ModalBackground></ModalBackground>
         </>
       )}
       <ReportTitle>
@@ -140,7 +142,7 @@ const AdminReservePage = ({ activeBtn }) => {
               }}
             >
               <tr>
-                <td>{index+1}</td>
+                <td>{index + 1}</td>
                 <td>{item.uid}</td>
                 <td>{item.nick}</td>
                 <td>{new Date(item.createdAt).toLocaleString()}</td>
@@ -154,14 +156,16 @@ const AdminReservePage = ({ activeBtn }) => {
                     ? "반려됨"
                     : ""}
                 </td>
-                <td>{item.status === 1 && item.status === -1
-                    ? ""
-                    : item.status === 0
-                    ? <button onClick={() => handleSatus(item.irefund)}>
-                        확인
-                      </button>
-                    : "확인(완)"}
-                  
+                <td>
+                  {item.status === 1 && item.status === -1 ? (
+                    ""
+                  ) : item.status === 0 ? (
+                    <button onClick={() => handleSatus(item.irefund)}>
+                      확인
+                    </button>
+                  ) : (
+                    "확인(완)"
+                  )}
                 </td>
               </tr>
             </tbody>

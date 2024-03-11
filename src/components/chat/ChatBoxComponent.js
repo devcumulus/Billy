@@ -1,3 +1,4 @@
+//담당장 : 박준서
 import React, { useState, useEffect, useRef } from "react";
 import {
   ChatBoxContainer,
@@ -203,16 +204,16 @@ const ChatBoxComponent = ({ selectedProfile, chatTextArr }) => {
                   <ChatMessageWrapper
                     key={index}
                     style={
-                      message.isSender == selectedProfile.otherPersonIuser
-                        ? { textAlign: "start" }
-                        : { textAlign: "end" }
+                      message.isSender === selectedProfile.otherPersonIuser
+                        ? { textAlign: "start" } // 오른쪽 정렬
+                        : { textAlign: "end" } // 왼쪽 정렬
                     }
                   >
                     <ChatMessage
                       style={
-                        message.isender == selectedProfile.otherPersonIuser
-                          ? { background: "#e6e6fa" }
-                          : { background: "#fafad2" }
+                        message.isSender === selectedProfile.otherPersonIuser
+                          ? { background: "#e6e6fa", alignSelf: "flex-end" } // 오른쪽 정렬
+                          : { background: "#fafad2", alignSelf: "flex-start" } // 왼쪽 정렬
                       }
                     >
                       {message.text}
