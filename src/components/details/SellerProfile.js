@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React from "react";
 import {
   SellerProfileContainer,

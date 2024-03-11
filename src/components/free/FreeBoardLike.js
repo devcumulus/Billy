@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useState } from "react";
 import { getLike } from "../../api/free/free_api";
 
@@ -7,11 +8,11 @@ function FreeBoardLike({ isLiked, iboard }) {
   useEffect(() => {
     setLiked(isLiked);
   }, [isLiked]);
-  
-  const toggleLike = async (e) => {
+
+  const toggleLike = async e => {
     try {
       // 상태 업데이트를 이전 값에 의존하지 않도록 함수형 업데이트를 사용합니다.
-      e.stopPropagation()
+      e.stopPropagation();
       setLiked(prevLiked => !prevLiked);
 
       // 찜 상태에 따라 API를 호출하여 찜 기능을 처리합니다.

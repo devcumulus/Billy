@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React, { useState } from "react";
 import Modal from "react-modal";
 import StarRating from "./StarRating";
@@ -25,7 +26,7 @@ const CancelButton = styled.button`
 `;
 
 const SubmitButton = styled(CancelButton)``;
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const ReviewForm = ({ isOpen, onRequestClose, ipayment }) => {
   const [rating, setRating] = useState(0);
@@ -61,7 +62,6 @@ const ReviewForm = ({ isOpen, onRequestClose, ipayment }) => {
     setRating(0);
     setReview("");
   };
-  
 
   return (
     <Modal

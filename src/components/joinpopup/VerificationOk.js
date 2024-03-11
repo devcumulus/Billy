@@ -1,7 +1,18 @@
+// 담당자: 사공은진
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { IdBox, LoginBox, Logo, LogoZone } from "../../styles/login/LoginPageStyle";
-import { BtSection, CancelBt, SaveBt, VerifiBt } from "../../styles/join/JoinPageStyle";
+import {
+  IdBox,
+  LoginBox,
+  Logo,
+  LogoZone,
+} from "../../styles/login/LoginPageStyle";
+import {
+  BtSection,
+  CancelBt,
+  SaveBt,
+  VerifiBt,
+} from "../../styles/join/JoinPageStyle";
 import { verificationGet, verificationPost } from "../../api/join/join_api";
 
 const VerificationStyle = styled.div`
@@ -19,16 +30,13 @@ const VerificationStyle = styled.div`
 `;
 
 const VerificationOk = ({ closeModal, verifiData }) => {
-    
   return (
     <VerificationStyle>
       <LogoZone>
         <Logo src="/images/logo.svg" style={{ marginBottom: "20px" }} />
       </LogoZone>
       <LoginBox height={"340px"} mgbtm={"50px"}>
-          <p>
-          본인인증을 완료하였습니다.
-          </p>
+        <p>본인인증을 완료하였습니다.</p>
         <IdBox
           type="text"
           placeholder="이름 예) 홍길동"
@@ -46,7 +54,7 @@ const VerificationOk = ({ closeModal, verifiData }) => {
         />
 
         <BtSection width={"380px"}>
-        <VerifiBt onClick={closeModal}>본인 확인 완료</VerifiBt>
+          <VerifiBt onClick={closeModal}>본인 확인 완료</VerifiBt>
         </BtSection>
       </LoginBox>
     </VerificationStyle>

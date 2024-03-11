@@ -1,3 +1,4 @@
+// 담당자 : 사공은진
 import _ from "lodash";
 
 export const returnPaginationRagne = (totalPage, page, limit, siblings) => {

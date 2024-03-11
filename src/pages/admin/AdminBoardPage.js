@@ -1,3 +1,4 @@
+//
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteProduct, getAllProducts } from "../../api/admin/admin_board_api";
@@ -89,7 +90,9 @@ const category = [
     ],
   },
 ];
+
 const SEARCH_OPTIONS = ["전체", "닉네임", "카테고리"];
+
 
 const SEARCH_OPTIONS_TEXT = [
   "검색어를 입력해주세요",
@@ -100,15 +103,17 @@ const SEARCH_OPTIONS_TEXT = [
 const AdminBoardPage = () => {
   const navigate = useNavigate();
   const moveToDetail = (mainCategory, subCategory, iproduct) => {
-    navigate(`/details?mc=${mainCategory}&sc=${subCategory}&productId=${iproduct}`)
-  }
+    navigate(
+      `/details?mc=${mainCategory}&sc=${subCategory}&productId=${iproduct}`,
+    );
+  };
   // 전체 게시물 데이터
   const [boardAllData, setBoardAllData] = useState([]);
   const [page, setPage] = useState(1);
   const [selectedSearchOption, setSelectedSearchOption] = useState(0); // 선택된 검색 옵션 상태
   const [inputValue, setInputValue] = useState(""); // 검색어 상태
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색어 상태
-  
+
   const successFn = res => setBoardAllData(res);
 
   const errorFn = res => alert(`${res.message} \n 에러코드(${res.errorCode})`);
@@ -118,14 +123,13 @@ const AdminBoardPage = () => {
     setPage(_tempPage);
     getAllProducts(
       _tempPage,
-      successFn, 
-      errorFn, 
-      selectedSearchOption, 
+      successFn,
+      errorFn,
+      selectedSearchOption,
       inputValue,
-      sortType
-      );
+      sortType,
+    );
   };
-
 
   const handleSearchOptionChange = e => setSelectedSearchOption(e.target.value);
 
@@ -136,7 +140,7 @@ const AdminBoardPage = () => {
     setSearchKeyword(inputValue);
     setPage(1);
   };
-  
+
   // 게시글 삭제
   const handleClickDelete = async iproduct => {
     const confirmDelete = window.confirm("해당 게시물을 삭제하시겠습니까?");
@@ -167,7 +171,7 @@ const AdminBoardPage = () => {
       errorFn,
       selectedSearchOption,
       inputValue,
-      newSortType // 변경된 정렬 상태를 함께 전달
+      newSortType, // 변경된 정렬 상태를 함께 전달
     );
   };
 
@@ -253,12 +257,23 @@ const AdminBoardPage = () => {
                   <td>{item.pricePerDay.toLocaleString()}</td>
                   <td>{item.nick}</td>
                   <td>{item.view}</td>
-                  <td>{new Date(item.createdAt).toLocaleString()}</td>                  <td>
+
+                  <td>{new Date(item.createdAt).toLocaleString()}</td>
+                  <td>
+
                     {item.productInquiry}
-                    <button 
-                    className="move"
-                    onClick={() => moveToDetail(item.mainCategory,item.subCategory,item.iproduct)}
-                    >이동</button>
+                    <button
+                      className="move"
+                      onClick={() =>
+                        moveToDetail(
+                          item.mainCategory,
+                          item.subCategory,
+                          item.iproduct,
+                        )
+                      }
+                    >
+                      이동
+                    </button>
                   </td>
                   <td>
                     {item.productManage}
@@ -282,7 +297,7 @@ const AdminBoardPage = () => {
           onChange={handlePageChange}
           total={boardAllData.totalDisputeCount}
           pageSize={12}
-          style={{paddingTop: "30px"}}
+          style={{ paddingTop: "30px" }}
         />
       </div>
     </BoardWrap>

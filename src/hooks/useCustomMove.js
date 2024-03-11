@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React from "react";
 
 import {
@@ -7,12 +8,11 @@ import {
 } from "react-router-dom";
 
 export const getNum = (value, basic) => {
-    if (!value) {
-      return basic;
-    }
-    return value;
-  };
-
+  if (!value) {
+    return basic;
+  }
+  return value;
+};
 
 const useCustomMove = () => {
   const navigate = useNavigate();
@@ -43,7 +43,6 @@ const useCustomMove = () => {
   const sc = urlSearchParams.get("sc")
     ? parseInt(urlSearchParams.get("sc"))
     : "";
-
 
   // 쿼리스트링 만들기
   const queryStrDefault = createSearchParams({
@@ -88,8 +87,6 @@ const useCustomMove = () => {
   };
 
   return { moveToList, moveToModify, moveToRead, sort, search, page, mc, sc };
-
- 
 };
 
 export default useCustomMove;

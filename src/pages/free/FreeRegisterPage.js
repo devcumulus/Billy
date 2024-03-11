@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Layout from "../../layouts/Layout";
 import {
@@ -48,7 +49,6 @@ const FreeRegisterPage = () => {
     const arr = image.filter((item, index) => index !== _index);
     setImage(arr);
   };
-
 
   // 데이터 연동(게시글 등록)
   const [title, setTitle] = useState("");
@@ -159,10 +159,7 @@ const FreeRegisterPage = () => {
             <ImageMap>
               {image.map((item, index) => (
                 <div key={index} onClick={() => removeImgList(index)}>
-                  <img
-                    src={item}
-                    alt=""
-                  />
+                  <img src={item} alt="" />
                 </div>
               ))}
             </ImageMap>

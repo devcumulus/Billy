@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Layout from "../../layouts/Layout";
@@ -67,7 +68,7 @@ const LoginPage = () => {
   const handleJoin = () => {
     navigate(`/join/step_1`);
   };
-  const successFn = async(result) => {
+  const successFn = async result => {
     {
       result.auth == 1 ? moveToPath("/") : moveToPath("/admin");
     }
@@ -103,8 +104,8 @@ const LoginPage = () => {
   const closeLoginModal = () => {
     setLoginFail(false);
   };
-    // 카카오 로그인
-    const kakaoLogin = getKakaoLoginLink()
+  // 카카오 로그인
+  const kakaoLogin = getKakaoLoginLink();
   return (
     <Layout>
       {idFail && (

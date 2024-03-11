@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useState } from "react";
 import {
   MainMenu,
@@ -83,29 +84,28 @@ const MenuTab = () => {
         <MainMenu key={item.id}>
           <MainMenuList>{item.title}</MainMenuList>
           <SubMenuList>
-            {subCate[item.id - 1]
-              .map(listItem => (
-                <li
-                  key={listItem.id}
-                  title={listItem.title}
-                  onClick={() => {
-                    // navigate(`/more/1/${item.id}/${listItem.id}`,{ state: { title: listItem.title }});
-                    navigate(`/more?mc=${item.id}&sc=${listItem.id}&page=1`, {
-                      state: { title: listItem.title },
-                    });
-                    window.location.reload(); // 페이지 이동 후 화면 갱신
-                  }}
-                  onMouseEnter={() => handleCategoryHover(listItem.title)}
-                  onMouseLeave={handleCategoryLeave}
-                  style={
-                    activeCategory === listItem.title
-                      ? { color: "#2C39B5", fontWeight: "500" }
-                      : {}
-                  }
-                >
-                  {listItem.title}
-                </li>
-              ))}
+            {subCate[item.id - 1].map(listItem => (
+              <li
+                key={listItem.id}
+                title={listItem.title}
+                onClick={() => {
+                  // navigate(`/more/1/${item.id}/${listItem.id}`,{ state: { title: listItem.title }});
+                  navigate(`/more?mc=${item.id}&sc=${listItem.id}&page=1`, {
+                    state: { title: listItem.title },
+                  });
+                  window.location.reload(); // 페이지 이동 후 화면 갱신
+                }}
+                onMouseEnter={() => handleCategoryHover(listItem.title)}
+                onMouseLeave={handleCategoryLeave}
+                style={
+                  activeCategory === listItem.title
+                    ? { color: "#2C39B5", fontWeight: "500" }
+                    : {}
+                }
+              >
+                {listItem.title}
+              </li>
+            ))}
           </SubMenuList>
         </MainMenu>
       ))}

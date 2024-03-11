@@ -1,3 +1,4 @@
+//담당장 : 박준서
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled"; // 이모션에서 styled를 불러옵니다.
 import { Link } from "react-router-dom";

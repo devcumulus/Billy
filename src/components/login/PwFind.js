@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import styled from "@emotion/styled";
 import React from "react";
 import { IdBox, LoginBox, Logo } from "../../styles/login/LoginPageStyle";

@@ -1,3 +1,4 @@
+// 담당자: 박준서
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 

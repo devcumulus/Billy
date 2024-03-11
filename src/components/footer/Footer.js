@@ -1,8 +1,16 @@
+// 담당자: 사공은진
 import React from "react";
-import { FooterBottom, FooterLogo, FooterMain, FooterMainContact, FooterMainInfo, FooterStyle, FooterTop } from "../../styles/footer/FooterStyle";
+import {
+  FooterBottom,
+  FooterLogo,
+  FooterMain,
+  FooterMainContact,
+  FooterMainInfo,
+  FooterStyle,
+  FooterTop,
+} from "../../styles/footer/FooterStyle";
 
 const Footer = () => {
-
   return (
     <FooterStyle>
       <FooterTop>

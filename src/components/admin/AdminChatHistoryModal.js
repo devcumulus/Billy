@@ -1,16 +1,17 @@
+// 담당자 : 박소연
 import styled from "@emotion/styled";
 
 const AdminChatHistoryModal = ({ toggleModal }) => {
   return (
     <>
       <ModalOverlay onClick={toggleModal} />
-        <ModalContainer>
+      <ModalContainer>
         <div className="modal-content">
           <h2>신고된 채팅 내역</h2>
           <div className="chat-wrap">
             <div className="admin-profile-wrap">
               <div className="admin-chat-content">
-              <p>안녕하세요. 저희 거래는 어디서 할까요?</p>
+                <p>안녕하세요. 저희 거래는 어디서 할까요?</p>
               </div>
               <div className="profile-wrap">
                 <div className="admin-profile">
@@ -34,7 +35,7 @@ const AdminChatHistoryModal = ({ toggleModal }) => {
           <div className="chat-wrap">
             <div className="admin-profile-wrap">
               <div className="admin-chat-content">
-              <p>안녕하세요. 저희 거래는 어디서 할까요?</p>
+                <p>안녕하세요. 저희 거래는 어디서 할까요?</p>
               </div>
               <div className="profile-wrap">
                 <div className="admin-profile">
@@ -56,7 +57,7 @@ const AdminChatHistoryModal = ({ toggleModal }) => {
             </div>
           </div>
         </div>
-        
+
         <div>
           <div className="close-modal-wrap">
             <button className="close-modal" onClick={toggleModal}>
@@ -64,7 +65,7 @@ const AdminChatHistoryModal = ({ toggleModal }) => {
             </button>
           </div>
         </div>
-        </ModalContainer>
+      </ModalContainer>
     </>
   );
 };
@@ -115,7 +116,7 @@ const ModalContainer = styled.div`
     right: 20px;
     .admin-chat-content {
       width: 500px;
-      >p {
+      > p {
         padding-top: 12px;
       }
     }
@@ -125,7 +126,6 @@ const ModalContainer = styled.div`
       border: 1px solid #777;
       border-radius: 25px;
       margin-left: 20px;
-      
     }
     .admin-profile > img {
       width: 48px;
@@ -138,12 +138,11 @@ const ModalContainer = styled.div`
     right: 80px;
     width: 450px;
     height: 50px;
-    border: 2px solid #E9E9E9;
+    border: 2px solid #e9e9e9;
     border-radius: 10px;
     background-color: #ffe6e6;
     font-size: 17px;
     color: #555;
-  
   }
   .user-profile-wrap {
     position: absolute;
@@ -153,37 +152,35 @@ const ModalContainer = styled.div`
     top: 130px;
     left: 20px;
     .user-nick {
-        font-size: 14px;
-      }
+      font-size: 14px;
+    }
     .user-profile {
       width: 50px;
       height: 50px;
       border: 1px solid #777;
       border-radius: 25px;
       margin-right: 20px;
-      
     }
     .user-profile > img {
       width: 50px;
       height: 50px;
       border-radius: 25px;
     }
-    
   }
   .user-chat-content {
     top: 120px;
     left: 80px;
     width: 450px;
     height: 50px;
-    border: 2px solid #E9E9E9;
+    border: 2px solid #e9e9e9;
     border-radius: 10px;
     font-size: 17px;
     color: #555;
-    >p {
+    > p {
       padding-top: 12px;
     }
   }
-  
+
   .close-modal-wrap {
     position: absolute;
     justify-content: center;
@@ -207,7 +204,6 @@ const ModalContainer = styled.div`
     .close-modal:hover {
       background-color: #fff;
       border: 1.5px solid #777;
-      
     }
   }
 `;

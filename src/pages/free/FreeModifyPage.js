@@ -1,3 +1,4 @@
+// 담당자: 사공은진
 import React, { useEffect, useState } from "react";
 import Layout from "../../layouts/Layout";
 import {
@@ -39,21 +40,22 @@ const FreeModifyPage = () => {
   };
 
   // 삭제할 이미지 pk값 저장
-  const [ipics,setIpics] = useState([])
+  const [ipics, setIpics] = useState([]);
 
   const removeImgList = _index => {
     const removedImg = image[_index];
     const arr = image.filter((item, index) => index !== _index);
 
-    const match = freeData.pic.find(pic => pic.boardPic === removedImg.boardPic);
+    const match = freeData.pic.find(
+      pic => pic.boardPic === removedImg.boardPic,
+    );
     if (match) {
       setIpics(prevIpics => [...prevIpics, match.ipics]);
     }
 
     setImage(arr);
   };
-  console.log(ipics)
-
+  console.log(ipics);
 
   // 데이터 연동(게시글 불러오기)
   const searchParams = new URLSearchParams(location.search);
@@ -103,7 +105,10 @@ const FreeModifyPage = () => {
       ipics: ipicsToUse,
     };
 
-    formData.append("dto", new Blob([JSON.stringify(dto)], { type: "application/json" }));
+    formData.append(
+      "dto",
+      new Blob([JSON.stringify(dto)], { type: "application/json" }),
+    );
     formData.append("dto", dto);
 
     const sendImagData = image.filter(item => typeof item === "string");
