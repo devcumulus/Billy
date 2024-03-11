@@ -97,7 +97,7 @@ export const MoreWrap = styled.div`
       }
       .hash-tag {
         right: 0;
-        color: #777;
+        color: #2c39b5;
         font-size: 15px;
         font-weight: 400;
       }

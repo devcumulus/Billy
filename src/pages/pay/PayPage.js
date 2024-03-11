@@ -20,7 +20,7 @@ import {
   BtnPay,
   Overlay,
 } from "../../styles/details/DetailsComponentStyles";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Layout from "../../layouts/Layout";
 import { SideBar } from "../../components/SideBar";
 import Mytitle from "../../components/my/Mytitle";
@@ -72,6 +72,11 @@ const PayPage = () => {
       console.error("카카오페이 결제 과정에서 오류가 발생했습니다.", error);
     }
   };
+
+  const { orderId } = useParams();
+  const queryParams = new URLSearchParams(window.location.search);
+  const pgToken = queryParams.get("pg_token");
+
 
   const handlePayment = async () => {
   };
