@@ -11,7 +11,10 @@
 전자제품과 생활가전의 종류 및 필요성의 증가로 1인당 제품 구매 비용이 증가 하고 있습니다. <br/>
 이점을 활용하여 사용하지 않는 제품을 보유한 사람들과 필요한 이용자를 연결하여 상호 간 대여 기회를 제공합니다.
  
-  
+  ## 2차,3차 프로젝트 영상     
+<a heerf="https://www.youtube-nocookie.com/embed/lkNmm3b1l8Q?si=Fk6HrjzT9Noibb4l" target"_blank">
+시연 영상 바로가기
+</a>  
 
 
 ## 프론트엔드 팀원 구성
@@ -79,6 +82,7 @@
     <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 🏅 Stats </h2> <div align= "center"> <img src="https://github-readme-stats.vercel.app/api?username=devcumulus&bg_color=180,000000,&title_color=000000&text_color=000000"
          />  </div> 
     </div>
-## 2차 프로젝트 영상
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/lkNmm3b1l8Q?si=Fk6HrjzT9Noibb4l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+     
+
