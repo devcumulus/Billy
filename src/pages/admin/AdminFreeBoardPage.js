@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BoardWrap, HeaderWrap } from '../../styles/admin/AdminBoardPageStyle'
-import Pagination from '../../components/Pagination'
 import { deleteFreeBoard, getFreeBoard } from '../../api/admin/admin_board_api'
 import { PaginationContent } from '../../styles/admin/AdminReportPageStyle'
 
