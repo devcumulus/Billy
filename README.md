@@ -1,5 +1,5 @@
 
-<div align= "center"> 
+<div align= "left"> 
     <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 프론트엔드 - 백엔드 협업 2차 프로젝트 </h2>  
     <div style="font-weight: 700; font-size: 15px; text-align: center; color: #c9d1d9;"> IT기기 제품대여 서비스 </div> 
     <br/>
