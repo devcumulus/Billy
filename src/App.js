@@ -43,16 +43,10 @@ const LazyFreeRegisterPage = lazy(() =>
 const LazyFreeModifyPage = lazy(() => import("./pages/free/FreeModifyPage"));
 const LazyFreeDetailsPage = lazy(() => import("./pages/free/FreeDetailsPage"));
 
-const LazyCustomerPage = lazy(() =>
-  import("./pages/Customer/CustomerServicePage"),
-);
 const LazyErrorPage = lazy(() => import("./pages/ErrorPage"));
 //등록
 const LazyWrite = lazy(() => import("./pages/prod/Write"));
 const LazyModify = lazy(() => import("./pages/prod/Modify"));
-//기업등록
-const LazyEnterprise = lazy(() => import("./pages/promootion/EnterpriseWrite"));
-const LazyModifyu = lazy(() => import("./pages/prod/Modify"));
 
 const App = () => {
   return (
@@ -66,17 +60,7 @@ const App = () => {
             </Suspense>
           }
         ></Route>
-        {/* 수정페이지 추후삭제 */}
         <Route
-          path="/Modify"
-          element={
-            <Suspense fallback={<Loading />}>
-              <LazyModifyu />
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          // path="/more/:id/:subid/:page"
           path="/more"
           element={
             <Suspense fallback={<Loading />}>
@@ -201,14 +185,6 @@ const App = () => {
           }
         ></Route>
         <Route
-          path="/enterprise"
-          element={
-            <Suspense fallback={<Loading />}>
-              <LazyEnterprise />
-            </Suspense>
-          }
-        ></Route>
-        <Route
           path="/details"
           element={
             <Suspense fallback={<Loading />}>
@@ -269,14 +245,6 @@ const App = () => {
           element={
             <Suspense fallback={<Loading />}>
               <LazyFreeDetailsPage />
-            </Suspense>
-          }
-        ></Route>
-        <Route
-          path="/customer"
-          element={
-            <Suspense fallback={<Loading />}>
-              <LazyCustomerPage />
             </Suspense>
           }
         ></Route>

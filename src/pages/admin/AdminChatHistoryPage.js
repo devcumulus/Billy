@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BoardWrap, HeaderWrap } from "../../styles/admin/AdminBoardPageStyle";
-import Pagination from "../../components/Pagination";
 import { Modal } from "../../styles/admin/AdminChatHistoryStyle";
 import { getChatHistory } from "../../api/admin/admin_board_api";
 import { PaginationContent } from "../../styles/admin/AdminReportPageStyle";
