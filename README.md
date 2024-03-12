@@ -54,9 +54,14 @@
   * 3차 : 마이 페이지, SSE 실시간 알림, 회원가입-본인인증(토스)
   * 그외 : 2차 Figma 담당 , 3차 담당 페이지 Figma 
  
+<div align="center">
+  
+|  곽민성  |  최지은  |  박유민  |  황예지  |
+| :---: | :---: | :---: | :---: |
+|   <img width="165" alt="스크린샷 2024-02-16 오후 6 46 02" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/39e1fd63-b069-4669-a451-73bf59ff731a">|  <img width="165" alt="스크린샷 2024-02-16 오후 6 42 50" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/62d6fdf9-3aaa-4fc0-a140-7cfceaa7fc98"> | <img width="165" alt="스크린샷 2024-02-16 오후 6 44 03" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/60786360-5a50-4399-9569-ad6e83b44d7c"> | <img width="165" alt="스크린샷 2024-02-16 오후 6 45 27" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/7373952d-7fa9-4183-9a09-eaa2372a107c"> |
+| [hhshhhskk](https://github.com/hhshhhskk) | [zdmszdms](https://github.com/zdmszdms) | [Umingoo](https://github.com/Umingoo) | [rillyyy](https://github.com/rillyyy) | 
 
-    
-
+</div>
     <div align= "left">
     <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 🛠️ Tech Stacks </h2> <br> 
     <div style="margin: 0 auto; text-align: center;" align= "center"> <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
