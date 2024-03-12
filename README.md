@@ -74,17 +74,10 @@
     </div>
     <div align= "left">
 <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 🧑‍💻 Contact me </h2> <br> 
-<table style="width: 100%;">
-  <tbody>
-    <tr>
-      <td align="center"><a href=""><img src="" width="300px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="300px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="300px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="300px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="300px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-    </tr>
-  </tbody>
-</table>
+## Team
+|<img src="https://avatars.githubusercontent.com/u/148113369?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197786?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197722?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197702?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148067779?v=4" width="150" height="150"/>|
+|:-:|:-:|:-:|:-:|:-:|
+|cumulus<br/>[@devcumulus](https://github.com/devcumulus)|[@soyeon0504](https://github.com/soyeon0504)|[@eunjin40](https://github.com/eunjin40)|김시우<br/>[@BenedictBenjamin](https://github.com/BenedictBenjamin)|[@devstrcat](https://github.com/devstrcat)|
 
 <div align= "left">  </div>  <br> 
     <div align= "left">  </div> 
