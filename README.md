@@ -77,7 +77,7 @@
 
 |<img src="https://avatars.githubusercontent.com/u/148113369?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197786?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197722?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197702?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148067779?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|:-:|
-|박준서<br/>[@devcumulus](https://github.com/devcumulus)|박소연[@soyeon0504](https://github.com/soyeon0504)|사공은진<br/>[@eunjin40](https://github.com/eunjin40)|김시우<br/>[@BenedictBenjamin](https://github.com/BenedictBenjamin)|최배근[@devstrcat](https://github.com/devstrcat)|
+|박준서<br/>[@devcumulus](https://github.com/devcumulus)|박소연<br/>[@soyeon0504](https://github.com/soyeon0504)|사공은진<br/>[@eunjin40](https://github.com/eunjin40)|김시우<br/>[@BenedictBenjamin](https://github.com/BenedictBenjamin)|최배근<br/>[@devstrcat](https://github.com/devstrcat)|
 
 <div align= "left">  </div>  <br> 
     <div align= "left">  </div> 
