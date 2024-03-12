@@ -1,4 +1,4 @@
-// 담당자: 사공은진
+// 담당자: 최배근
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import {

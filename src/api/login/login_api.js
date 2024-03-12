@@ -55,3 +55,15 @@ export const idPost = async (obj, setUserList) => {
     console.log("error");
   }
 };
+
+// 비밀번호 변경
+export const pwPatch = async obj => {
+  try {
+    const url = `${SERVER_URL}/api/user/pw`;
+
+    const res = await axios.patch(url, obj);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

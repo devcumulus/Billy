@@ -49,6 +49,7 @@ const LoginPage = () => {
   };
   // 아이디 찾기 버튼 클릭
   const [idFindModal, setIdFindModal] = useState(false);
+  const [verificationId, setVerificationId] = useState("");
   const handleIdFind = () => {
     setIdFindModal(true);
   };
@@ -171,7 +172,7 @@ const LoginPage = () => {
             style={{
               display: "flex",
               justifyContent: "center",
-              gap: "50px",
+              gap: "30px",
               paddingRight: "30px",
             }}
           >
@@ -180,29 +181,27 @@ const LoginPage = () => {
             <li onClick={handleIdFind}>아이디 찾기</li>
             {idFindModal && (
               <>
-                <IdFind closeModal={closeIdFindModal} />
+                <IdFind
+                  closeModal={closeIdFindModal}
+                  verificationId={verificationId}
+                  setVerificationId={setVerificationId}
+                />
                 <ModalBackground></ModalBackground>
               </>
             )}
             <DivisionLine></DivisionLine>
-            {/* <li onClick={handlePwFind}>비밀번호 변경</li>
+            <li onClick={handlePwFind}>비밀번호 변경</li>
             {pwFindModal && (
               <>
-                <PwFind closeModal={closePwFindModal} />
-                <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background: "rgba(0, 0, 0, 0.5)",
-                zIndex: 999,
-              }}
-            ></div>
+                <PwFind
+                  closeModal={closePwFindModal}
+                  verificationId={verificationId}
+                  setVerificationId={setVerificationId}
+                />
+                <ModalBackground></ModalBackground>
               </>
             )}
-            <DivisionLine></DivisionLine> */}
+            <DivisionLine></DivisionLine>
             <li onClick={handleJoin}>회원가입</li>
           </div>
         </LoginBox>
