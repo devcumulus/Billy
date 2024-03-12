@@ -11,7 +11,7 @@ export const JoinBox = styled.form`
   /* height: 700px; */
   border-radius: 10px;
   border: 1px solid #2c39b5;
-  margin: ${props => props.margin ? props.margin : "0 auto 100px"};
+  margin: ${props => (props.margin ? props.margin : "0 auto 100px")};
   padding: 60px 90px;
 `;
 
@@ -126,11 +126,11 @@ export const JoinAddressInput = styled.div`
     line-height: normal;
   }
 `;
-export const ShowPasswordBt =styled.button`
-background: transparent;
-border: none;
-width: 0px;
-height: 0px;
+export const ShowPasswordBt = styled.button`
+  background: transparent;
+  border: none;
+  width: 0px;
+  height: 0px;
 `;
 export const ShowPasswordImg = styled.img`
   width: 20px !important;
@@ -140,7 +140,7 @@ export const ShowPasswordImg = styled.img`
   cursor: pointer;
 `;
 export const ConfirmBt = styled.button`
-  width: ${props => props.width ? props.width : "105px"};
+  width: ${props => (props.width ? props.width : "105px")};
   height: 36px;
   border-radius: 5px;
   border: 1px solid #2c39b5;
