@@ -74,6 +74,7 @@
     </div>
     <div align= "left">
 <h2 style="border-bottom: 1px solid #21262d; color: #c9d1d9;"> 🧑‍💻 Contact me </h2> <br> 
+
 ## Team
 |<img src="https://avatars.githubusercontent.com/u/148113369?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197786?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197722?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148197702?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/148067779?v=4" width="150" height="150"/>|
 |:-:|:-:|:-:|:-:|:-:|
